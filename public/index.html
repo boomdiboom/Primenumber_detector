@@ -133,7 +133,7 @@
 <section id="cockpit" aria-label="비행 시뮬레이터 · flight simulator">
   <div class="brand">
     <h1><span lang="ko">소수 탐사 비행체</span><span lang="en">Prime Flight</span></h1>
-    <span class="ver">SPEC v4.1</span>
+    <span class="ver">SPEC v4.2</span>
     <button id="btn-lang" aria-label="언어 전환 · switch language"><span lang="ko">EN</span><span lang="en">한국어</span></button>
     <p><span lang="ko">창 [x, x+w] 안에 소수가 하나도 없으면 추락한다. 이 기체는 쌍둥이 소수를 계기로 읽고,
        거듭제곱으로 자기 고도를 측정하며, 사막을 만나면 지수 양력으로 살아남는다.
@@ -174,7 +174,7 @@
       <button id="btn-reset"><span lang="ko">리셋</span><span lang="en">Reset</span></button>
       <label><span lang="ko">기체</span><span lang="en">Craft</span>
         <select id="sel-model">
-          <option value="v41">v4.1 완전체</option>
+          <option value="v41">v4.2 완전체</option>
           <option value="origin">초기 모델 (±2)</option>
         </select>
       </label>
@@ -253,7 +253,7 @@
       <em>Exponential lift</em> — in an emergency, w grows ×1.045 per step (with a minimum of +4 at low
       altitude). Linear lift has finite
       coverage; exponential lift swallows any depth in log time.</span></p>
-    <button class="try" data-preset="cruise"><span lang="ko">실험 2 — v4.1 순항 (바닥선이 0.87에 착지하는 과정)</span><span lang="en">Experiment 2 — v4.1 cruise (watch the floor settle at 0.87)</span></button>
+    <button class="try" data-preset="cruise"><span lang="ko">실험 2 — v4.2 순항 (바닥선이 0.87에 착지하는 과정)</span><span lang="en">Experiment 2 — v4.2 cruise (watch the floor settle at 0.87)</span></button>
     <button class="try" data-preset="desert4"><span lang="ko">실험 3 — 깊이 4 사막 주입 (비상 계통의 구조 작업)</span><span lang="en">Experiment 3 — inject a depth-4 desert (the emergency systems at work)</span></button>
 
     <div class="stamp"><span lang="ko">일지 v2–v3 · 점근 임계곱</span><span lang="en">LOG v2–v3 · THE ASYMPTOTIC CRITICAL PRODUCT</span></div>
@@ -262,12 +262,14 @@
       자원이고, 증명된 최대 간격 q<sup>0.525</sup>를 덮는 조건에서
       <em>θ·β·c = 1.05</em>라는 점근 임계곱이 성립한다. 위 다이얼로 β를 낮춰보라 —
       살아남으려면 r이 정확히 식만큼 뜨거워져야 한다. 이 곱은 목표 수학의 게이지이기도 하다:
-      크라메르가 증명되면 ~0, 리만 가설이면 1.0, 현행 무조건 증명이면 1.05.</span><span lang="en">Floor β,
+      크라메르가 증명되면 ~0, 리만 가설이면 1.0, BHP(점근·문턱 미계산)면 1.05,
+      문턱 없는 명시적 정리면 1.978.</span><span lang="en">Floor β,
       alarm threshold θ and lift constant c are not independent. The runway θβ·ln²x/2 is a resource
       all three share, and covering the proven maximal gap q<sup>0.525</sup> forces the asymptotic
       critical product <em>θ·β·c = 1.05</em>. Try lowering β with the dial above — to survive, r must heat
       up by exactly what the formula demands. The product is also a gauge of the target mathematics:
-      ~0 if Cramér were proven, 1.0 under the Riemann Hypothesis, 1.05 under today's unconditional proof.</span></p>
+      ~0 if Cramér were proven, 1.0 under the Riemann Hypothesis, 1.05 under BHP (asymptotic,
+      threshold uncomputed), 1.978 under the threshold-free explicit theorem.</span></p>
     <button class="try" data-preset="mega10"><span lang="ko">실험 4 — 깊이 10 + 최악 배치 (기하 경보의 진가)</span><span lang="en">Experiment 4 — depth 10 + worst layout (the geometric alarm earns its keep)</span></button>
     <button class="try" data-preset="mega10-origin"><span lang="ko">실험 5 — 같은 공격을 초기 모델에게</span><span lang="en">Experiment 5 — the same attack on the initial model</span></button>
 
@@ -277,45 +279,49 @@
       <tr><th><span lang="ko">측정 도구</span><span lang="en">Instrument</span></th><th><span lang="ko">다음 소수 범위</span><span lang="en">Range to next prime</span></th><th><span lang="ko">성격</span><span lang="en">Nature</span></th></tr>
       <tr><td><span lang="ko">기체 순항 바닥</span><span lang="en">Craft cruise floor</span></td><td class="hl">0.87·ln²q ≈ 1,494</td><td><span lang="ko">통계 측정 (유도값)</span><span lang="en">statistical measurement (derived)</span></td></tr>
       <tr><td><span lang="ko">실제 관측 최대 간격</span><span lang="en">Largest observed gap</span></td><td>1,476</td><td><span lang="ko">자연의 답</span><span lang="en">nature's answer</span></td></tr>
-      <tr><td><span lang="ko">기체 보증 엔벨로프</span><span lang="en">Craft guarantee envelope</span></td><td class="hl">≈ 7×10¹³</td><td><span lang="ko">간격 ≤ q<sup>0.525</sup> 배치 전체 생존</span><span lang="en">survives all placements with gaps ≤ q<sup>0.525</sup></span></td></tr>
+      <tr><td><span lang="ko">기체 보증 엔벨로프 (경제 모드)</span><span lang="en">Craft guarantee envelope (economy)</span></td><td class="hl">≈ 7×10¹³</td><td><span lang="ko">간격 ≤ q<sup>0.525</sup> 배치 전체 생존</span><span lang="en">survives all placements with gaps ≤ q<sup>0.525</sup></span></td></tr>
+      <tr><td><span lang="ko">기체 보증 엔벨로프 (무조건 모드)</span><span lang="en">Craft guarantee envelope (unconditional)</span></td><td class="hl">≈ 4×10¹⁹</td><td><span lang="ko">간격 ≤ 90·q<sup>89/90</sup> 배치 전체 생존; 미계산 상수 없음</span><span lang="en">survives gaps ≤ 90·q<sup>89/90</sup>; no uncomputed constants</span></td></tr>
       <tr><td><span lang="ko">리만 가설</span><span lang="en">Riemann Hypothesis</span></td><td>√q·ln q ≈ 4.1×10¹⁰</td><td><span lang="ko">조건부 증명</span><span lang="en">conditional proof</span></td></tr>
       <tr><td><span lang="ko">무조건 증명 (BHP)</span><span lang="en">Unconditional proof (BHP)</span></td><td>q<sup>0.525</sup> ≈ 2.8×10⁹</td><td><span lang="ko">현행 수학의 확정 상한</span><span lang="en">current mathematics' firm ceiling</span></td></tr>
     </table></div>
     <p><span lang="ko">순항 측정은 리만 가설의 구간보다 2천만 배 타이트하다 — 단 전자는 10¹⁸까지의 통계이고
-      후자는 모든 q에 대한 보증서다. 반면 보증 엔벨로프는 두 천장을 모두 넘으므로, 기체는
-      <em>간격이 q<sup>0.525</sup>를 넘지 않는 모든 배치에서 생존한다</em> — 실제 소수열은 충분히 큰
-      범위에서 BHP 정리에 의해 이 조건을 만족한다. 남은 잔글씨 하나: BHP의 명시적 문턱이
-      확보되지 않아 완전한 무조건 증명은 아직 아니다. 그것이 이 설계의 정직한 최종 성적표다.</span><span lang="en">The
+      후자는 모든 q에 대한 보증서다. 반면 보증 엔벨로프는 두 천장을 모두 넘는다. 경제 모드(×1.045)의
+      보증은 BHP의 미계산 문턱 x₀에 기대지만, 조종석의 r 다이얼을 1.07로 올린 <em>무조건 모드는
+      문턱 없는 명시적 정리(간격 ≤ 90·q<sup>89/90</sup>, 모든 q)만으로 4×10¹⁸ 위 전 구간을
+      덮는다</em> — 상수 하나로 미계산 상수 의존이 사라진다. 그것이 이 설계의 최종 성적표다.</span><span lang="en">The
       cruise measurement is twenty million times tighter than the Riemann Hypothesis interval —
       though the former is statistics up to 10¹⁸ and the latter a warranty for every q. The
-      guarantee envelope, meanwhile, clears both ceilings, so the craft <em>survives every placement
-      whose gaps stay within q<sup>0.525</sup></em> — a condition the real primes satisfy, on
-      sufficiently large ranges, by the BHP theorem. One line of fine print remains: BHP's explicit
-      threshold has not been secured, so the complete unconditional proof is not yet closed. That is
-      this design's honest final report card.</span></p>
+      guarantee envelope, meanwhile, clears both ceilings. The economy mode (×1.045) leans on BHP's
+      uncomputed threshold x₀ — but turn the cockpit's r dial to 1.07 and the <em>unconditional mode
+      covers the entire range above 4×10¹⁸ by a threshold-free explicit theorem alone
+      (gap ≤ 90·q<sup>89/90</sup>, every q)</em> — one constant removes every uncomputed dependence.
+      That is this design's final report card.</span></p>
 
-    <div class="stamp"><span lang="ko">일지 v4.1 · 원장 마감</span><span lang="en">LOG v4.1 · LEDGER CLOSED</span></div>
+    <div class="stamp"><span lang="ko">일지 v4.1–v4.2 · 원장 마감</span><span lang="en">LOG v4.1–v4.2 · LEDGER CLOSED</span></div>
     <h2><span lang="ko">커스텀 숫자 0개</span><span lang="en">Zero hand-tuned numbers</span></h2>
     <p><span lang="ko">여정의 끝에서 모든 상수는 출처를 갖게 됐다. 유도값 셋 — β는 쌍둥이 평형 μ*/(2C₂)에서,
-      θ와 r은 점근 임계곱에서. 해석 가능한 다이얼 셋 — γ = 1/8(오염 치유율), η = 1/3(측정 위생 여유),
+      θ와 r은 점근 임계곱에서(무조건 모드는 1.978, r = 1.07). 해석 가능한 다이얼 셋 — γ = 1/8(오염 치유율), η = 1/3(측정 위생 여유),
       트리거 비율 1/3(안전 마진). 뿌리는 정확히 둘이다: 쌍둥이 소수의 통계와, 해석적 정수론의
       최전선인 BHP 지수. 후자가 언젠가 개선되면 이 기체의 비상 다이얼도 함께 내려간다 —
       부품 하나가 미해결 문제의 진척도 게이지인 셈이다.</span><span lang="en">At journey's end every
       constant has a pedigree. Three derived values — β from the twin equilibrium μ*/(2C₂), θ and r
-      from the asymptotic critical product. Three interpretable dials — γ = 1/8 (contamination healing rate),
+      from the asymptotic critical product (1.978 and r = 1.07 in the unconditional mode). Three
+      interpretable dials — γ = 1/8 (contamination healing rate),
       η = 1/3 (measurement hygiene margin), trigger ratio 1/3 (safety margin). Exactly two roots:
       the statistics of twin primes, and the BHP exponent at the frontier of analytic number theory.
       If the latter ever improves, this craft's emergency dials turn down with it — one of its parts
       is a progress gauge for an open problem.</span></p>
-    <p class="fine"><span lang="ko">이 페이지의 시뮬레이터는 보고서의 v4.1 사양을 그대로 구현했으며, 브라우저에서
+    <p class="fine"><span lang="ko">이 페이지의 시뮬레이터는 보고서의 v4.2 사양을 그대로 구현했으며(기본값은
+      경제 모드 r=1.045), 브라우저에서
       3×10⁷까지의 실제 소수를 체로 걸러 사용한다. 여기 결과는 통계적 관측이지 증명이 아니다 —
       밀도 0의 예외를 공집합으로 바꾸는 일은 여전히 증명만이 할 수 있고, 그 벽이 이 이야기의
-      마지막 문장이다. 전체 설계·유도·실험 기록: <a href="report.html">설계와 실험 보고서 (v4.1)</a>.</span><span lang="en">The
-      simulator on this page implements the report's v4.1 specification as written, sieving real
+      마지막 문장이다. 전체 설계·유도·실험 기록: <a href="report.html">설계와 실험 보고서 (v4.2)</a>.</span><span lang="en">The
+      simulator on this page implements the report's v4.2 specification as written (defaulting to
+      economy mode, r = 1.045), sieving real
       primes up to 3×10⁷ in your browser. What you see here is statistical observation, not proof —
       turning a density-zero set of exceptions into the empty set is something only proof can do,
       and that wall is the last sentence of this story. Full design, derivations and experiments:
-      <a href="report.html">Design &amp; Experiment Report (v4.1)</a>.</span></p>
+      <a href="report.html">Design &amp; Experiment Report (v4.2)</a>.</span></p>
 
     <footer><span lang="ko">소수 탐사 비행체 프로젝트 · 시뮬레이션은 사용자 기기에서만 실행됩니다.</span><span lang="en">Prime Flight project · the simulation runs entirely on your device.</span></footer>
   </div>
@@ -328,7 +334,7 @@ const STR={
   ko:{
     title:'소수 탐사 비행체 — 인터랙티브 항행일지',
     run:'시작',stop:'정지',
-    modelV41:'v4.1 완전체',modelOrigin:'초기 모델 (±2)',
+    modelV41:'v4.2 완전체',modelOrigin:'초기 모델 (±2)',
     gammaMem:'0 (기억 전용)',
     sieving:'소수 체 준비 중… (3×10⁷)',
     ready:ms=>`체 완료 (${ms}ms). 시작을 누르거나 항행일지의 실험 버튼을 사용하세요.`,
@@ -342,7 +348,7 @@ const STR={
   en:{
     title:'Prime Flight — an interactive flight log',
     run:'Start',stop:'Pause',
-    modelV41:'v4.1 full craft',modelOrigin:'initial model (±2)',
+    modelV41:'v4.2 full craft',modelOrigin:'initial model (±2)',
     gammaMem:'0 (memory only)',
     sieving:'Sieving primes… (3×10⁷)',
     ready:ms=>`Sieve ready (${ms} ms). Press Start, or use the experiment buttons in the log below.`,
