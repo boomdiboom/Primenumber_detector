@@ -239,7 +239,7 @@
       편향을 공제하고 1/8만 반영한다(치유 8세대).
       <em>기하 경보</em> — 창 앞쪽 1/4이 비면 무조건 비상. 소수 배치와 무관하게 유예 3w/8스텝이
       보장되는, 통계가 아니라 기하가 주는 경보다.
-      <em>지수 양력</em> — 비상 시 w를 1.045배씩 키운다. 선형 양력의 커버 용량은 유한하지만
+      <em>지수 양력</em> — 비상 시 w를 1.045배씩 키운다(저고도에서는 최소 +4). 선형 양력의 커버 용량은 유한하지만
       지수 양력은 어떤 깊이든 log 시간에 삼킨다.</span><span lang="en"><em>Cluster sensor</em> —
       prime triplets and quadruplets fold into a single density signal.
       <em>Self-similar eye</em> — meeting a power m^k, the craft reads the base and measures its own
@@ -250,21 +250,22 @@
       <em>Geometric alarm</em> — if the front quarter of the window is empty, emergency, unconditionally.
       A grace of 3w/8 steps is guaranteed regardless of prime placement — an alarm given by geometry,
       not statistics.
-      <em>Exponential lift</em> — in an emergency, w grows ×1.045 per step. Linear lift has finite
+      <em>Exponential lift</em> — in an emergency, w grows ×1.045 per step (with a minimum of +4 at low
+      altitude). Linear lift has finite
       coverage; exponential lift swallows any depth in log time.</span></p>
     <button class="try" data-preset="cruise"><span lang="ko">실험 2 — v4.1 순항 (바닥선이 0.87에 착지하는 과정)</span><span lang="en">Experiment 2 — v4.1 cruise (watch the floor settle at 0.87)</span></button>
     <button class="try" data-preset="desert4"><span lang="ko">실험 3 — 깊이 4 사막 주입 (비상 계통의 구조 작업)</span><span lang="en">Experiment 3 — inject a depth-4 desert (the emergency systems at work)</span></button>
 
-    <div class="stamp"><span lang="ko">일지 v2–v3 · 보존량</span><span lang="en">LOG v2–v3 · THE CONSERVED QUANTITY</span></div>
-    <h2><span lang="ko">세 개의 다이얼, 하나의 보존량</span><span lang="en">Three dials, one conserved quantity</span></h2>
+    <div class="stamp"><span lang="ko">일지 v2–v3 · 점근 임계곱</span><span lang="en">LOG v2–v3 · THE ASYMPTOTIC CRITICAL PRODUCT</span></div>
+    <h2><span lang="ko">세 개의 다이얼, 하나의 점근 임계곱</span><span lang="en">Three dials, one asymptotic critical product</span></h2>
     <p><span lang="ko">바닥 β, 경보 문턱 θ, 양력 상수 c는 독립이 아니다. 활주로 θβ·ln²x/2가 셋이 공유하는
       자원이고, 증명된 최대 간격 q<sup>0.525</sup>를 덮는 조건에서
-      <em>θ·β·c = 1.05</em>라는 보존량이 성립한다. 위 다이얼로 β를 낮춰보라 —
+      <em>θ·β·c = 1.05</em>라는 점근 임계곱이 성립한다. 위 다이얼로 β를 낮춰보라 —
       살아남으려면 r이 정확히 식만큼 뜨거워져야 한다. 이 곱은 목표 수학의 게이지이기도 하다:
       크라메르가 증명되면 ~0, 리만 가설이면 1.0, 현행 무조건 증명이면 1.05.</span><span lang="en">Floor β,
       alarm threshold θ and lift constant c are not independent. The runway θβ·ln²x/2 is a resource
-      all three share, and covering the proven maximal gap q<sup>0.525</sup> forces the conserved
-      quantity <em>θ·β·c = 1.05</em>. Try lowering β with the dial above — to survive, r must heat
+      all three share, and covering the proven maximal gap q<sup>0.525</sup> forces the asymptotic
+      critical product <em>θ·β·c = 1.05</em>. Try lowering β with the dial above — to survive, r must heat
       up by exactly what the formula demands. The product is also a gauge of the target mathematics:
       ~0 if Cramér were proven, 1.0 under the Riemann Hypothesis, 1.05 under today's unconditional proof.</span></p>
     <button class="try" data-preset="mega10"><span lang="ko">실험 4 — 깊이 10 + 최악 배치 (기하 경보의 진가)</span><span lang="en">Experiment 4 — depth 10 + worst layout (the geometric alarm earns its keep)</span></button>
@@ -276,28 +277,32 @@
       <tr><th><span lang="ko">측정 도구</span><span lang="en">Instrument</span></th><th><span lang="ko">다음 소수 범위</span><span lang="en">Range to next prime</span></th><th><span lang="ko">성격</span><span lang="en">Nature</span></th></tr>
       <tr><td><span lang="ko">기체 순항 바닥</span><span lang="en">Craft cruise floor</span></td><td class="hl">0.87·ln²q ≈ 1,494</td><td><span lang="ko">통계 측정 (유도값)</span><span lang="en">statistical measurement (derived)</span></td></tr>
       <tr><td><span lang="ko">실제 관측 최대 간격</span><span lang="en">Largest observed gap</span></td><td>1,476</td><td><span lang="ko">자연의 답</span><span lang="en">nature's answer</span></td></tr>
-      <tr><td><span lang="ko">기체 보증 엔벨로프</span><span lang="en">Craft guarantee envelope</span></td><td class="hl">≈ 7×10¹³</td><td><span lang="ko">배치 무관 생존 내성</span><span lang="en">placement-independent survival</span></td></tr>
+      <tr><td><span lang="ko">기체 보증 엔벨로프</span><span lang="en">Craft guarantee envelope</span></td><td class="hl">≈ 7×10¹³</td><td><span lang="ko">간격 ≤ q<sup>0.525</sup> 배치 전체 생존</span><span lang="en">survives all placements with gaps ≤ q<sup>0.525</sup></span></td></tr>
       <tr><td><span lang="ko">리만 가설</span><span lang="en">Riemann Hypothesis</span></td><td>√q·ln q ≈ 4.1×10¹⁰</td><td><span lang="ko">조건부 증명</span><span lang="en">conditional proof</span></td></tr>
       <tr><td><span lang="ko">무조건 증명 (BHP)</span><span lang="en">Unconditional proof (BHP)</span></td><td>q<sup>0.525</sup> ≈ 2.8×10⁹</td><td><span lang="ko">현행 수학의 확정 상한</span><span lang="en">current mathematics' firm ceiling</span></td></tr>
     </table></div>
     <p><span lang="ko">순항 측정은 리만 가설의 구간보다 2천만 배 타이트하다 — 단 전자는 10¹⁸까지의 통계이고
-      후자는 모든 q에 대한 보증서다. 반면 보증 엔벨로프는 두 천장을 모두 넘으므로, 기체의
-      영생은 미증명 추측이 아니라 <em>이미 증명된 수학에만 의존한다.</em> 그것이 이 설계의
-      최종 성적표다.</span><span lang="en">The cruise measurement is twenty million times tighter than
-      the Riemann Hypothesis interval — though the former is statistics up to 10¹⁸ and the latter a
-      warranty for every q. The guarantee envelope, meanwhile, clears both ceilings, so the craft's
-      immortality rests <em>only on mathematics already proven.</em> That is this design's final
-      report card.</span></p>
+      후자는 모든 q에 대한 보증서다. 반면 보증 엔벨로프는 두 천장을 모두 넘으므로, 기체는
+      <em>간격이 q<sup>0.525</sup>를 넘지 않는 모든 배치에서 생존한다</em> — 실제 소수열은 충분히 큰
+      범위에서 BHP 정리에 의해 이 조건을 만족한다. 남은 잔글씨 하나: BHP의 명시적 문턱이
+      확보되지 않아 완전한 무조건 증명은 아직 아니다. 그것이 이 설계의 정직한 최종 성적표다.</span><span lang="en">The
+      cruise measurement is twenty million times tighter than the Riemann Hypothesis interval —
+      though the former is statistics up to 10¹⁸ and the latter a warranty for every q. The
+      guarantee envelope, meanwhile, clears both ceilings, so the craft <em>survives every placement
+      whose gaps stay within q<sup>0.525</sup></em> — a condition the real primes satisfy, on
+      sufficiently large ranges, by the BHP theorem. One line of fine print remains: BHP's explicit
+      threshold has not been secured, so the complete unconditional proof is not yet closed. That is
+      this design's honest final report card.</span></p>
 
     <div class="stamp"><span lang="ko">일지 v4.1 · 원장 마감</span><span lang="en">LOG v4.1 · LEDGER CLOSED</span></div>
     <h2><span lang="ko">커스텀 숫자 0개</span><span lang="en">Zero hand-tuned numbers</span></h2>
     <p><span lang="ko">여정의 끝에서 모든 상수는 출처를 갖게 됐다. 유도값 셋 — β는 쌍둥이 평형 μ*/(2C₂)에서,
-      θ와 r은 보존량에서. 해석 가능한 다이얼 셋 — γ = 1/8(오염 치유율), η = 1/3(측정 위생 여유),
+      θ와 r은 점근 임계곱에서. 해석 가능한 다이얼 셋 — γ = 1/8(오염 치유율), η = 1/3(측정 위생 여유),
       트리거 비율 1/3(안전 마진). 뿌리는 정확히 둘이다: 쌍둥이 소수의 통계와, 해석적 정수론의
       최전선인 BHP 지수. 후자가 언젠가 개선되면 이 기체의 비상 다이얼도 함께 내려간다 —
       부품 하나가 미해결 문제의 진척도 게이지인 셈이다.</span><span lang="en">At journey's end every
       constant has a pedigree. Three derived values — β from the twin equilibrium μ*/(2C₂), θ and r
-      from the conserved quantity. Three interpretable dials — γ = 1/8 (contamination healing rate),
+      from the asymptotic critical product. Three interpretable dials — γ = 1/8 (contamination healing rate),
       η = 1/3 (measurement hygiene margin), trigger ratio 1/3 (safety margin). Exactly two roots:
       the statistics of twin primes, and the BHP exponent at the frontier of analytic number theory.
       If the latter ever improves, this craft's emergency dials turn down with it — one of its parts
