@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8">
+<html lang="ko" data-lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>소수 탐사 비행체 — 설계와 실험 보고서 (v4.1)</title>
 <meta name="description" content="소수 간격 문제를 동역학계로 번역한 탐사 프로젝트의 설계 사양과 실험 기록 전문 (v4.1).">
@@ -10,6 +10,7 @@
 <meta property="og:locale" content="ko_KR">
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%88%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<script>(function(){var l='ko';try{var s=localStorage.getItem('pf-lang');if(s==='en'||s==='ko')l=s}catch(e){}var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l);})();</script>
 <style>
 :root{--paper:#EDEFF4;--ink:#1C2333;--dim:#5A6178;--line:#D4D8E3;--amber:#B0651A;
 --mono:ui-monospace,'Cascadia Mono',Consolas,monospace;}
@@ -19,8 +20,14 @@ font-family:-apple-system,'Segoe UI','Noto Sans KR','Malgun Gothic',sans-serif}
 main{max-width:78ch;margin:0 auto;padding:48px 20px 90px}
 .top{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--dim);
 border-bottom:3px solid #FFB454;padding-bottom:10px;margin-bottom:28px;
-display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .top a{color:var(--amber);text-decoration:none}
+.topright{display:flex;gap:12px;align-items:center}
+#btn-lang{background:transparent;color:var(--amber);border:1px solid #D8B98F;
+font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:2px 10px;border-radius:3px;cursor:pointer}
+#btn-lang:hover{background:var(--amber);color:#fff}
+html[data-lang="en"] [lang="ko"]{display:none!important}
+html[data-lang="ko"] [lang="en"]{display:none!important}
 h1{font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em;line-height:1.25}
 h2{margin-top:56px;font-size:clamp(19px,2.4vw,24px);letter-spacing:-.01em;
 border-bottom:1px solid var(--line);padding-bottom:6px}
@@ -41,176 +48,176 @@ h2{margin-top:44px}
 pre{padding:12px 10px;font-size:12px}
 }
 </style></head><body><main>
-<div class="top"><span>PRIME FLIGHT · REPORT v4.1</span><a href="./">← 인터랙티브 항행일지</a></div>
-<h1>소수 탐사 비행체 — 설계 사양과 실험 보고서</h1>
-<p>이 문서는 "소수 q의 다음 소수는 어디까지 가면 반드시 있는가"라는 질문을 동역학계로 번역한 탐사 프로젝트의 최종 기록이다. 출발점은 확률 모형에서 유도한 크라메르급 추측(간격 &lt; 1.6·ln²q)이었고, 종착점은 다섯 개의 계통을 갖춘 적응형 비행체와 그 비행체의 생존이 증명된 수학에만 의존한다는 무조건 보증 명제다. 모든 주장 옆에는 그것을 뒷받침한 실험이 붙어 있다.</p>
+<div class="top"><span>PRIME FLIGHT · REPORT v4.1</span><span class="topright"><a href="./"><span lang="ko">← 인터랙티브 항행일지</span><span lang="en">← interactive flight log</span></a><button id="btn-lang" aria-label="언어 전환 · switch language"><span lang="ko">EN</span><span lang="en">한국어</span></button></span></div>
+<h1><span lang="ko">소수 탐사 비행체 — 설계 사양과 실험 보고서</span><span lang="en">Prime Flight — Design Specification and Experiment Report</span></h1>
+<p><span lang="ko">이 문서는 "소수 q의 다음 소수는 어디까지 가면 반드시 있는가"라는 질문을 동역학계로 번역한 탐사 프로젝트의 최종 기록이다. 출발점은 확률 모형에서 유도한 크라메르급 추측(간격 &lt; 1.6·ln²q)이었고, 종착점은 다섯 개의 계통을 갖춘 적응형 비행체와 그 비행체의 생존이 증명된 수학에만 의존한다는 무조건 보증 명제다. 모든 주장 옆에는 그것을 뒷받침한 실험이 붙어 있다.</span><span lang="en">This document is the final record of a project that translated the question "how far, at most, can the next prime after q be?" into a dynamical system. It began with a Cramér-class conjecture derived from a probabilistic model (gap &lt; 1.6·ln²q); it ends with an adaptive craft of five subsystems and an unconditional guarantee that the craft's survival depends only on proven mathematics. Beside every claim sits the experiment that backs it.</span></p>
 <hr />
-<h2>1. 문제 정의</h2>
-<p>비행체는 상태 (x, w)를 가진다. x는 현재 좌표, w는 창(고도)이고, 창 [x, x+w] 안의 소수 밀집 신호를 읽어 w를 조정하며 x를 2씩 전진한다. 창 안에 소수가 하나도 없는 순간이 사망이다. 따라서 "비행체가 영원히 산다"는 명제는 "모든 q에 대해 다음 소수가 창 안에 있다"는 간격 상계 명제와 동치이며, 창의 스케일이 곧 이 모델이 측정하는 소수의 다음 범위가 된다.</p>
-<p>소수 정리에 의해 x 근처 소수 밀도는 1/ln x, 쌍둥이 소수 쌍 밀도는 하디–리틀우드 상수를 포함해 약 1.32/ln²x다. 쌍둥이를 온도계로 쓰는 순간 창의 평형 스케일은 자동으로 ln²x에 맞춰지며, 이것이 초기 확률 모형에서 1.6·ln²q가 튀어나온 근본 이유다. 이 스케일은 리만 가설이 주는 간격 상계 √q·ln q보다 지수적으로 타이트하고, 그만큼 증명은 리만 가설보다 어렵다. 또한 마이어 정리(1985)는 (ln x)^λ 스케일 구간에서 소수 밀도가 예측치를 상수배로 벗어나는 일이 무한히 자주 일어남을 보증하므로, 어떤 국소 피드백도 사막을 예감할 수 없다. 이 정리가 전체 설계의 제1 제약이다: 생존은 예측이 아니라 바닥과 비상 대응에서 나와야 한다.</p>
-<p>깊이의 표준 단위는 비율 gap/ln²x다. 인류가 실제 소수에서 관측한 최대값은 0.9206 (간격 1132, p ≈ 1.69×10¹⁵)이다.</p>
+<h2><span lang="ko">1. 문제 정의</span><span lang="en">1. Problem definition</span></h2>
+<p><span lang="ko">비행체는 상태 (x, w)를 가진다. x는 현재 좌표, w는 창(고도)이고, 창 [x, x+w] 안의 소수 밀집 신호를 읽어 w를 조정하며 x를 2씩 전진한다. 창 안에 소수가 하나도 없는 순간이 사망이다. 따라서 "비행체가 영원히 산다"는 명제는 "모든 q에 대해 다음 소수가 창 안에 있다"는 간격 상계 명제와 동치이며, 창의 스케일이 곧 이 모델이 측정하는 소수의 다음 범위가 된다.</span><span lang="en">The craft carries state (x, w): x its position, w its window (altitude). It reads prime-density signals inside the window [x, x+w], adjusts w, and advances x by 2. The moment the window contains no prime, it dies. "The craft lives forever" is therefore equivalent to the gap upper-bound statement "for every q the next prime lies within the window" — the window's scale is exactly the next-prime range this model measures.</span></p>
+<p><span lang="ko">소수 정리에 의해 x 근처 소수 밀도는 1/ln x, 쌍둥이 소수 쌍 밀도는 하디–리틀우드 상수를 포함해 약 1.32/ln²x다. 쌍둥이를 온도계로 쓰는 순간 창의 평형 스케일은 자동으로 ln²x에 맞춰지며, 이것이 초기 확률 모형에서 1.6·ln²q가 튀어나온 근본 이유다. 이 스케일은 리만 가설이 주는 간격 상계 √q·ln q보다 지수적으로 타이트하고, 그만큼 증명은 리만 가설보다 어렵다. 또한 마이어 정리(1985)는 (ln x)^λ 스케일 구간에서 소수 밀도가 예측치를 상수배로 벗어나는 일이 무한히 자주 일어남을 보증하므로, 어떤 국소 피드백도 사막을 예감할 수 없다. 이 정리가 전체 설계의 제1 제약이다: 생존은 예측이 아니라 바닥과 비상 대응에서 나와야 한다.</span><span lang="en">By the prime number theorem the density near x is 1/ln x; twin-pair density, including the Hardy–Littlewood constant, is about 1.32/ln²x. The moment twins are used as a thermometer, the window's equilibrium scale locks onto ln²x by itself — the root reason 1.6·ln²q fell out of the initial probabilistic model. This scale is exponentially tighter than the Riemann Hypothesis gap bound √q·ln q, and the proof correspondingly harder than RH. Moreover, Maier's theorem (1985) guarantees that on (ln x)^λ-scale intervals the prime density strays from prediction by constant factors infinitely often, so no local feedback can foresee a desert. That theorem is the design's first constraint: survival must come from floors and emergency response, not from prediction.</span></p>
+<p><span lang="ko">깊이의 표준 단위는 비율 gap/ln²x다. 인류가 실제 소수에서 관측한 최대값은 0.9206 (간격 1132, p ≈ 1.69×10¹⁵)이다.</span><span lang="en">The standard unit of depth is the ratio gap/ln²x. The largest value ever observed in the real primes is 0.9206 (gap 1132, p ≈ 1.69×10¹⁵).</span></p>
 <hr />
-<h2>2. 기체 아키텍처 — 다섯 계통</h2>
-<h3>2.1 순항 피드백</h3>
-<p>창 안의 밀집 신호 개수 T에 따라 w를 조정한다: T=0이면 +2, T=1이면 유지, T≥2이면 −2. 이 규칙 단독(초기 모델)의 실효 평형은 푸아송 계산으로 μ* ≈ 1.14, 실소수 기준 w* ≈ 0.86·ln²x다. 평형이 관측 최대 사막 0.921보다 낮고, 더 치명적으로는 쌍둥이 밀집 지대에서 창이 최솟값까지 붕괴한 직후 평범한 간격에 추락하는 붕괴 사망이 지배적이다. 실소수 10³→1.19×10⁹ 전 구간에서 209,527회 사망했다. 수축 속도(−2/스텝)가 순항 속도와 같아 회복이 지형을 못 따라잡는 구조적 결함이며, 이후의 모든 계통은 이 결함을 다른 각도에서 보완한다.</p>
-<h3>2.2 성단 센서</h3>
-<p>쌍둥이·삼중·사중 소수 성단을 밀집 신호 1개로 통합한다. 구현은 억제 규칙 하나로 끝난다: 쌍 (p, p+2)는 창 안에 쌍 (p−6, p−4)가 존재하면 세지 않는다. 간격 2·2 연쇄는 3의 배수 제약으로 불가능하므로 p−6만 검사하면 사슬 전체가 첫 쌍 하나로 접힌다. 단독 효과는 사망 −11% (209,527 → 186,948)에 그쳤는데, T≥2의 주범이 희귀한 성단(밀도 ~ln⁻⁴x)이 아니라 서로 떨어진 쌍 2개의 동시 진입(확률 ~(w/ln²x)²)이기 때문이다. 그러나 이 센서는 어드버서리 실험에서 결정적 방어 가치를 보였다: 간격 2 소수 사슬은 쌍둥이 쌍을 대량 생산해 창 붕괴를 유도하는 공격인데, 사슬 억제가 이를 신호 1개로 무력화한다.</p>
-<h3>2.3 자기유사 눈과 회귀 바닥</h3>
-<p>비행체는 거듭제곱 m^k를 만나면 밑 m을 읽는다. ln(m^k) = k·ln m이므로 밑에서의 자기 고도 기억으로 예상고도 E = k²·w(m)을 계산할 수 있다 — 로그 계산 장치 없이 자기유사성만으로 ln²x 스케일을 부트스트랩하는 항법이다. 핵심 교훈 두 가지가 실험에서 나왔다.</p>
-<p>첫째, 측정을 일회성 넛지(평균으로 당기기)로 쓰면 ±2 피드백이 이완 시간 안에 보정을 지워 효과가 0.1%에 그친다. 측정값은 다음 거듭제곱까지 유지되는 바닥(sample-and-hold)으로 기록해야 하며, 연속 제곱수 사이 ln²x의 변화량이 ~4·ln x/√x로 무시 가능하므로 측정값은 다음 측정까지 낡지 않는다. 이 형태(바닥 = E 고정 상속)만으로 실소수 전 구간과 기록 사막 7곳에서 사망 0을 달성했다.</p>
-<p>둘째, 고정 상속은 기록 시점의 초과분 ε을 100% 물려받아 바닥이 세대마다 ε씩 자가 팽창한다(관측 평균 1.302·ln²). 처방은 회귀 갱신 — 바닥 ← (E + 현재 고도)/2. 밑수 값이 한 세대 전의 낮은 바닥이라 하향 견인이 생기고 표류가 δ = ε/3으로 줄며, ε 자체가 바닥 상승에 따라 e^(−1.32f)로 급감하므로 잔여 표류는 ln ln ln x 스케일 — 사실상 수렴이다. 실소수 실측에서 바닥이 1.298 (10⁵) → 1.061 (10⁸)로 스스로 하강한 뒤 [약 1.03, 1.36] 대역에서 진동함이 확인됐다. 부작용으로 평균 고도는 소폭 상승하는데(바닥이 낮아진 만큼 요동의 여지가 커짐), 안전 마진의 총량이 바닥에서 요동으로 재배치된 것이다. 랜덤 우주 쌍대 비교에서 회귀 바닥은 고정 상속보다 사막 조우 시 최소 마진을 약 3.5배 개선했다(고정 상속은 단일 측정의 잡음을 그대로 바닥에 반영해 한 차례 0.998까지 추락). 평균으로의 회귀는 나쁜 측정의 잡음을 죽이는 저역 필터로 기능한다.</p>
-<h3>2.4 스케일 트리거</h3>
-<p>비상 감지 조건은 P ≤ 0.4·ln x다 (P는 창 안 소수 개수). 순항 시 P ≈ 1.5·ln x이므로 절대값 트리거(예: P ≤ 2)는 스케일 대비 점점 늦게 울리는 반면, 이 비율 트리거는 유예 시간이 ~0.2·ln²x 스텝으로 스케일과 함께 자란다. 오발률은 푸아송 체르노프 경계로 스텝당 x^(−0.57) — x가 클수록 멱법칙으로 조용해지는 스케일-자유 경보다. 메가사막 실험에서 양력을 +8로 고정한 채 트리거만 절대값에서 비율로 바꿔도 생존 깊이가 3에서 4+로 올라, 트리거가 양력보다 먼저 병목임이 분리 검증됐다.</p>
-<h3>2.5 지수 양력과 기하 경보 (v2: 두 상수 모두 유도값으로 교체)</h3>
-<p>비상 시 양력은 지수형이다. 선형 양력의 커버 용량은 양력률 × 유예시간으로 유한하지만(가산 +0.1·ln²x조차 깊이 ~7이 천장), 지수 양력은 앞전이 지수 가속해 커버 시간이 log(깊이)로 압축된다. 메가사막 매트릭스에서 깊이 10·ln²x를 생존한 유일한 형태다.</p>
-<p>비율 트리거의 유예는 통계적 가정 — 사막 직전 소수들이 통상 간격으로 깔려 있음 — 에 의존한다. 최악 배치(쌍둥이 고정 접근로 + 간격 2 초밀집 클러스터)에서는 유예가 7스텝으로 붕괴해 지수 양력조차 깊이 4에서 사망했다. 최종 방어는 기하 경보다: 가장 오른쪽 소수 R이 R ≤ x + θ·w이면 무조건 비상. 사망까지 뒷전이 반드시 θw를 이동해야 하므로 유예 ≥ θw/2 스텝이 소수 배치와 무관하게 보장된다 — 통계가 아니라 기하가 주는 정리급 경보다. 이 경보를 단 기체는 동일 최악 배치에서 전 깊이 생존했다.</p>
-<p>초기 버전은 양력 ×1.1, 문턱 θ=1/4을 손맛으로 골랐다. v2에서 두 상수 모두 목표 수학에서 유도하고 임계까지 실측했다.</p>
-<p>양력률: 유예 θw₀/2 안에 증명된 최대 간격 G = q^0.525를 덮는 조건 w₀·r^(θw₀/2) ≥ G에서 ln r_min = (2/(θw₀))·ln(G/w₀). θ=1/4일 때 이 함수는 q ≈ 10⁹~10¹²에서 정점 1.0746을 찍고 점근적으로 1 + 3.5/ln q → 1로 소멸한다 — 유예(~ln²q)가 커버리지 로그(~0.525·ln q)를 앞지르기 때문이다. BHP 한계급 사막(깊이 q^0.525 ≈ 46.7·ln², x=10⁸, 최악 배치)에 성장률 격자를 통과시킨 결과 사망/생존 경계가 1.070과 1.075 사이에서 실측되어 예측 1.0746을 0.5% 이내로 확인했고, 사망 케이스들이 정확히 유예 스텝 수(51)를 전부 소진하고 추락해 유예 하한이 보수적 추정이 아니라 타이트한 경계이며 어드버서리가 그 경계를 달성하는 최적 공격임이 함께 확인됐다.</p>
-<p>경보 문턱: θ를 올리면 유예가 늘어 필요 양력 상수가 c(θ) = 0.875/θ로 줄지만, 오경보(창 앞쪽 (1−θ)w 공백) 비율이 스텝당 ~x^(−1.2(1−θ))로 늘어난다. 임계율 스캔은 세 문턱(1/4, 1/2, 3/4)에서 모두 예측(1.0746 / 1.0366 / 1.0243)을 사망·생존 사이에 꽂아 0.875/θ 법칙을 확정했고, 순항 비용 측정은 θ=3/4까지 오경보 2×10⁻⁴, 고도 인플레이션 +0.1%로 사실상 무료이며 θ=7/8에서 이론이 예측한 상시점등 상전이의 초입(오경보 25배 급증, 인플레이션 +1.4%)이 관측됨을 보였다. 안정 조건을 풀면 점근 최적은 θ*(q) = 1 − Θ(ln ln q / ln q)로 1에 접근하며, 양력 상수의 증명 가능한 바닥은 c_floor = 2×0.525/1.2 = 0.875다.</p>
-<p>최종 채택값: 문턱 θ = 3/4, 양력 r = 1.03 (균일; 임계 정점 1.025 + 여유) 또는 스케줄형 r(q) = 1 + 0.9/ln q. 초기값 대비 양력률 3.3배 타이트, 순항 비용 증가 +0.1%.</p>
-<p>비용은 구조적으로 0이다. 랜덤 우주 10개 쌍대 재비행에서 비상 점화는 우주당 245~461스텝 / 15억 스텝(3×10⁻⁵%)이었고, 평균 고도와 바닥 캐스케이드는 소수점 셋째 자리까지 무변화였다. 비상 채널과 보정 채널의 동시 발생 기대값이 우주당 ~2×10⁻⁴회라, 수렴성 보존이 근사가 아니라 채널 디커플링에 의한 구조적 성질이다.</p>
-<h3>2.6 바닥계수의 유도와 보존량 (v3)</h3>
-<p>바닥계수 β (w₀ = β·ln²q)는 구형 설계에서 사막 limsup 상수(관측 0.921, 크라메르 1 대 그랜빌 1.123 논쟁)를 덮어야 하는 생존 상수였고, 초기값 1.2는 그 손맛이었다. v2에서 사막 생존이 비상 계통으로 이관되면서 β의 지위가 바뀐다. 커버리지 항등식을 β 일반형으로 쓰면 커버리지 = q^(θβc/2)이고, BHP 목표에서</p>
-<p>θ · β · c = 2 × 0.525 = 1.05  (보존량)</p>
-<p>바닥·경보 문턱·양력 상수의 곱이 목표 수학으로 고정된 보존량이 된다. 활주로 θβ·ln²q/2가 세 다이얼이 공유하는 자원이므로, 바닥을 낮추면 유예가 짧아져 버너가 정확히 식만큼 뜨거워져야 한다. 이 결합은 세 바닥(β = 1.2, 0.86, 0.6)에서 예측 임계율(1.0243, 1.0372, 1.0587)이 모두 실측 사망/생존 경계 사이에 위치함으로써 확정됐다. 순항계수 변경이 비상 계통 재조정을 강제하는가라는 질문의 답은 "그렇다, 닫힌 식으로"다. 부차 결합도 둘 있다: 비율 트리거 문턱은 순항 P ≈ β·ln x의 비율(0.33β·ln x)로 따라가야 하고, 경보 정숙성은 β(1−θ)가 충분히 커야 한다.</p>
-<p>생존이 β에 최솟값을 강제하지 않게 되면서 β는 순수 경제학 다이얼이 된다. 경제학 스윕(크라메르 모형, β = 1.3 → 0.5)에서 평균 고도는 1.594 → 1.016으로 단조 감소했고 전 구간 사망 0이었다 — 오경보 벽이 조잡한 경계 예측보다 한참 왼쪽에 있어 시험 범위 안에서 U-곡선 바닥이 나타나지 않았다(각주: 저β 구간은 궤도이탈 감쇠 상수의 영향이 섞여 있고, 모형에는 쌍둥이 상수 1.32가 없어 실소수와 평형 위치가 다르다). 채택값은 최저점 추격이 아니라 유도된 앵커다:</p>
+<h2><span lang="ko">2. 기체 아키텍처 — 다섯 계통</span><span lang="en">2. Airframe architecture — five subsystems</span></h2>
+<h3><span lang="ko">2.1 순항 피드백</span><span lang="en">2.1 Cruise feedback</span></h3>
+<p><span lang="ko">창 안의 밀집 신호 개수 T에 따라 w를 조정한다: T=0이면 +2, T=1이면 유지, T≥2이면 −2. 이 규칙 단독(초기 모델)의 실효 평형은 푸아송 계산으로 μ* ≈ 1.14, 실소수 기준 w* ≈ 0.86·ln²x다. 평형이 관측 최대 사막 0.921보다 낮고, 더 치명적으로는 쌍둥이 밀집 지대에서 창이 최솟값까지 붕괴한 직후 평범한 간격에 추락하는 붕괴 사망이 지배적이다. 실소수 10³→1.19×10⁹ 전 구간에서 209,527회 사망했다. 수축 속도(−2/스텝)가 순항 속도와 같아 회복이 지형을 못 따라잡는 구조적 결함이며, 이후의 모든 계통은 이 결함을 다른 각도에서 보완한다.</span><span lang="en">Adjust w by the count T of density signals in the window: T=0 → +2, T=1 → hold, T≥2 → −2. Alone (the initial model), its effective equilibrium is μ* ≈ 1.14 by a Poisson computation, w* ≈ 0.86·ln²x on real primes. The equilibrium sits below the deepest observed desert 0.921; worse, collapse deaths dominate — in twin-dense zones the window shrinks to its minimum and then falls into an ordinary gap. It died 209,527 times across the full real-prime range 10³→1.19×10⁹. Contraction speed (−2/step) equals cruise speed, so recovery can never catch the terrain — a structural flaw that every later subsystem patches from a different angle.</span></p>
+<h3><span lang="ko">2.2 성단 센서</span><span lang="en">2.2 Cluster sensor</span></h3>
+<p><span lang="ko">쌍둥이·삼중·사중 소수 성단을 밀집 신호 1개로 통합한다. 구현은 억제 규칙 하나로 끝난다: 쌍 (p, p+2)는 창 안에 쌍 (p−6, p−4)가 존재하면 세지 않는다. 간격 2·2 연쇄는 3의 배수 제약으로 불가능하므로 p−6만 검사하면 사슬 전체가 첫 쌍 하나로 접힌다. 단독 효과는 사망 −11% (209,527 → 186,948)에 그쳤는데, T≥2의 주범이 희귀한 성단(밀도 ~ln⁻⁴x)이 아니라 서로 떨어진 쌍 2개의 동시 진입(확률 ~(w/ln²x)²)이기 때문이다. 그러나 이 센서는 어드버서리 실험에서 결정적 방어 가치를 보였다: 간격 2 소수 사슬은 쌍둥이 쌍을 대량 생산해 창 붕괴를 유도하는 공격인데, 사슬 억제가 이를 신호 1개로 무력화한다.</span><span lang="en">Twin, triplet and quadruplet clusters merge into a single density signal. The implementation is one suppression rule: a pair (p, p+2) is not counted if the pair (p−6, p−4) lies in the window. A gap-2·2 chain is impossible modulo 3, so checking p−6 alone folds an entire chain into its first pair. On its own it cut deaths only −11% (209,527 → 186,948) — the main source of T≥2 is not rare clusters (density ~ln⁻⁴x) but two separated pairs entering together (probability ~(w/ln²x)²). But the sensor proved decisive in the adversarial experiments: a gap-2 prime chain is an attack that mass-produces twin pairs to force window collapse, and chain suppression neutralizes it into a single signal.</span></p>
+<h3><span lang="ko">2.3 자기유사 눈과 회귀 바닥</span><span lang="en">2.3 The self-similar eye and the regression floor</span></h3>
+<p><span lang="ko">비행체는 거듭제곱 m^k를 만나면 밑 m을 읽는다. ln(m^k) = k·ln m이므로 밑에서의 자기 고도 기억으로 예상고도 E = k²·w(m)을 계산할 수 있다 — 로그 계산 장치 없이 자기유사성만으로 ln²x 스케일을 부트스트랩하는 항법이다. 핵심 교훈 두 가지가 실험에서 나왔다.</span><span lang="en">When the craft meets a power m^k it reads the base m. Since ln(m^k) = k·ln m, its remembered altitude at the base yields an expected altitude E = k²·w(m) — navigation that bootstraps the ln²x scale from self-similarity alone, with no logarithm unit aboard. Two key lessons came out of experiment.</span></p>
+<p><span lang="ko">첫째, 측정을 일회성 넛지(평균으로 당기기)로 쓰면 ±2 피드백이 이완 시간 안에 보정을 지워 효과가 0.1%에 그친다. 측정값은 다음 거듭제곱까지 유지되는 바닥(sample-and-hold)으로 기록해야 하며, 연속 제곱수 사이 ln²x의 변화량이 ~4·ln x/√x로 무시 가능하므로 측정값은 다음 측정까지 낡지 않는다. 이 형태(바닥 = E 고정 상속)만으로 실소수 전 구간과 기록 사막 7곳에서 사망 0을 달성했다.</span><span lang="en">First, used as a one-shot nudge (pulling toward the mean), the ±2 feedback erases the correction within its relaxation time; the effect was 0.1%. The measurement must be recorded as a floor that persists until the next power (sample-and-hold); since ln²x changes by only ~4·ln x/√x between consecutive squares, a measurement never goes stale before the next one. This form alone — floor = E, inherited as-is — achieved zero deaths across the full real-prime range and the seven record deserts.</span></p>
+<p><span lang="ko">둘째, 고정 상속은 기록 시점의 초과분 ε을 100% 물려받아 바닥이 세대마다 ε씩 자가 팽창한다(관측 평균 1.302·ln²). 처방은 회귀 갱신 — 바닥 ← (E + 현재 고도)/2. 밑수 값이 한 세대 전의 낮은 바닥이라 하향 견인이 생기고 표류가 δ = ε/3으로 줄며, ε 자체가 바닥 상승에 따라 e^(−1.32f)로 급감하므로 잔여 표류는 ln ln ln x 스케일 — 사실상 수렴이다. 실소수 실측에서 바닥이 1.298 (10⁵) → 1.061 (10⁸)로 스스로 하강한 뒤 [약 1.03, 1.36] 대역에서 진동함이 확인됐다. 부작용으로 평균 고도는 소폭 상승하는데(바닥이 낮아진 만큼 요동의 여지가 커짐), 안전 마진의 총량이 바닥에서 요동으로 재배치된 것이다. 랜덤 우주 쌍대 비교에서 회귀 바닥은 고정 상속보다 사막 조우 시 최소 마진을 약 3.5배 개선했다(고정 상속은 단일 측정의 잡음을 그대로 바닥에 반영해 한 차례 0.998까지 추락). 평균으로의 회귀는 나쁜 측정의 잡음을 죽이는 저역 필터로 기능한다.</span><span lang="en">Second, fixed inheritance passes on 100% of the excess ε present at recording time, so the floor self-inflates by ε per generation (observed mean 1.302·ln²). The prescription is a regression update — floor ← (E + current altitude)/2. The base's value, being one generation older and lower, provides downward pull; drift shrinks to δ = ε/3, and since ε itself decays like e^(−1.32f) as the floor rises, the residual drift is on the ln ln ln x scale — convergence for all practical purposes. On real primes the floor descended by itself from 1.298 (10⁵) to 1.061 (10⁸), then oscillated in the band [≈1.03, 1.36]. As a side effect mean altitude rises slightly (a lower floor leaves more room to fluctuate): the total safety margin is redistributed from floor to fluctuation. In paired random-universe comparison the regression floor beat fixed inheritance by ≈3.5× on minimum margin at desert encounters (fixed inheritance once crashed the floor to 0.998 by copying a single noisy measurement). Regression to the mean acts as a low-pass filter that kills the noise of bad measurements.</span></p>
+<h3><span lang="ko">2.4 스케일 트리거</span><span lang="en">2.4 The scale trigger</span></h3>
+<p><span lang="ko">비상 감지 조건은 P ≤ 0.4·ln x다 (P는 창 안 소수 개수). 순항 시 P ≈ 1.5·ln x이므로 절대값 트리거(예: P ≤ 2)는 스케일 대비 점점 늦게 울리는 반면, 이 비율 트리거는 유예 시간이 ~0.2·ln²x 스텝으로 스케일과 함께 자란다. 오발률은 푸아송 체르노프 경계로 스텝당 x^(−0.57) — x가 클수록 멱법칙으로 조용해지는 스케일-자유 경보다. 메가사막 실험에서 양력을 +8로 고정한 채 트리거만 절대값에서 비율로 바꿔도 생존 깊이가 3에서 4+로 올라, 트리거가 양력보다 먼저 병목임이 분리 검증됐다.</span><span lang="en">The emergency condition is P ≤ 0.4·ln x (P = primes in the window). Cruise has P ≈ 1.5·ln x, so an absolute trigger (say P ≤ 2) fires ever later relative to scale, while this ratio trigger's grace grows with scale, ~0.2·ln²x steps. Its false-alarm rate, by a Poisson–Chernoff bound, is x^(−0.57) per step — a scale-free alarm that goes quiet polynomially as x grows. In the mega-desert experiments, holding lift fixed at +8 while switching only the trigger from absolute to ratio raised survivable depth from 3 to 4+, isolating the trigger, not the lift, as the first bottleneck.</span></p>
+<h3><span lang="ko">2.5 지수 양력과 기하 경보 (v2: 두 상수 모두 유도값으로 교체)</span><span lang="en">2.5 Exponential lift and the geometric alarm (v2: both constants replaced by derived values)</span></h3>
+<p><span lang="ko">비상 시 양력은 지수형이다. 선형 양력의 커버 용량은 양력률 × 유예시간으로 유한하지만(가산 +0.1·ln²x조차 깊이 ~7이 천장), 지수 양력은 앞전이 지수 가속해 커버 시간이 log(깊이)로 압축된다. 메가사막 매트릭스에서 깊이 10·ln²x를 생존한 유일한 형태다.</span><span lang="en">Emergency lift is exponential. Linear lift's coverage — lift rate × grace time — is finite (even an additive +0.1·ln²x caps out near depth ~7), while the exponential leading edge accelerates so that coverage time compresses to log(depth). It was the only form to survive depth 10·ln²x in the mega-desert matrix.</span></p>
+<p><span lang="ko">비율 트리거의 유예는 통계적 가정 — 사막 직전 소수들이 통상 간격으로 깔려 있음 — 에 의존한다. 최악 배치(쌍둥이 고정 접근로 + 간격 2 초밀집 클러스터)에서는 유예가 7스텝으로 붕괴해 지수 양력조차 깊이 4에서 사망했다. 최종 방어는 기하 경보다: 가장 오른쪽 소수 R이 R ≤ x + θ·w이면 무조건 비상. 사망까지 뒷전이 반드시 θw를 이동해야 하므로 유예 ≥ θw/2 스텝이 소수 배치와 무관하게 보장된다 — 통계가 아니라 기하가 주는 정리급 경보다. 이 경보를 단 기체는 동일 최악 배치에서 전 깊이 생존했다.</span><span lang="en">The ratio trigger's grace rests on a statistical assumption — that primes just before the desert are laid out at typical gaps. Under the worst layout (a pinned twin approach lane + an ultra-dense gap-2 cluster), grace collapsed to 7 steps and even exponential lift died at depth 4. The final defense is geometric: if the rightmost prime R satisfies R ≤ x + θ·w, emergency, unconditionally. Death requires the trailing edge to travel θw, so grace ≥ θw/2 steps is guaranteed regardless of prime placement — a theorem-grade alarm given by geometry, not statistics. The craft carrying it survived every depth under the same worst layout.</span></p>
+<p><span lang="ko">초기 버전은 양력 ×1.1, 문턱 θ=1/4을 손맛으로 골랐다. v2에서 두 상수 모두 목표 수학에서 유도하고 임계까지 실측했다.</span><span lang="en">The first version chose lift ×1.1 and threshold θ=1/4 by feel. v2 derived both constants from the target mathematics and measured their criticals.</span></p>
+<p><span lang="ko">양력률: 유예 θw₀/2 안에 증명된 최대 간격 G = q^0.525를 덮는 조건 w₀·r^(θw₀/2) ≥ G에서 ln r_min = (2/(θw₀))·ln(G/w₀). θ=1/4일 때 이 함수는 q ≈ 10⁹~10¹²에서 정점 1.0746을 찍고 점근적으로 1 + 3.5/ln q → 1로 소멸한다 — 유예(~ln²q)가 커버리지 로그(~0.525·ln q)를 앞지르기 때문이다. BHP 한계급 사막(깊이 q^0.525 ≈ 46.7·ln², x=10⁸, 최악 배치)에 성장률 격자를 통과시킨 결과 사망/생존 경계가 1.070과 1.075 사이에서 실측되어 예측 1.0746을 0.5% 이내로 확인했고, 사망 케이스들이 정확히 유예 스텝 수(51)를 전부 소진하고 추락해 유예 하한이 보수적 추정이 아니라 타이트한 경계이며 어드버서리가 그 경계를 달성하는 최적 공격임이 함께 확인됐다.</span><span lang="en">Lift rate: covering the proven maximal gap G = q^0.525 within grace θw₀/2 requires w₀·r^(θw₀/2) ≥ G, giving ln r_min = (2/(θw₀))·ln(G/w₀). At θ=1/4 this function peaks at 1.0746 near q ≈ 10⁹–10¹², then vanishes asymptotically as 1 + 3.5/ln q → 1 — grace (~ln²q) outruns the coverage logarithm (~0.525·ln q). Running a growth-rate grid through a BHP-limit desert (depth q^0.525 ≈ 46.7·ln², x=10⁸, worst layout) placed the death/survival boundary between 1.070 and 1.075, confirming the prediction 1.0746 within 0.5%; the dying cases crashed after spending exactly the full grace budget (51 steps), confirming at once that the grace bound is tight rather than conservative and that the adversary is the optimal attack achieving it.</span></p>
+<p><span lang="ko">경보 문턱: θ를 올리면 유예가 늘어 필요 양력 상수가 c(θ) = 0.875/θ로 줄지만, 오경보(창 앞쪽 (1−θ)w 공백) 비율이 스텝당 ~x^(−1.2(1−θ))로 늘어난다. 임계율 스캔은 세 문턱(1/4, 1/2, 3/4)에서 모두 예측(1.0746 / 1.0366 / 1.0243)을 사망·생존 사이에 꽂아 0.875/θ 법칙을 확정했고, 순항 비용 측정은 θ=3/4까지 오경보 2×10⁻⁴, 고도 인플레이션 +0.1%로 사실상 무료이며 θ=7/8에서 이론이 예측한 상시점등 상전이의 초입(오경보 25배 급증, 인플레이션 +1.4%)이 관측됨을 보였다. 안정 조건을 풀면 점근 최적은 θ*(q) = 1 − Θ(ln ln q / ln q)로 1에 접근하며, 양력 상수의 증명 가능한 바닥은 c_floor = 2×0.525/1.2 = 0.875다.</span><span lang="en">Alarm threshold: raising θ lengthens grace, so the required lift constant falls as c(θ) = 0.875/θ, while false alarms (an empty front section (1−θ)w) rise as ~x^(−1.2(1−θ)) per step. The critical-rate scan pinned the predictions (1.0746 / 1.0366 / 1.0243) between death and survival at all three thresholds (1/4, 1/2, 3/4), settling the 0.875/θ law; cruise-cost measurement showed θ=3/4 is essentially free (false alarms 2×10⁻⁴, altitude inflation +0.1%), while θ=7/8 exhibits the onset of the theoretically predicted always-on phase transition (false alarms up 25×, inflation +1.4%). Solving the stability condition, the asymptotic optimum approaches 1 as θ*(q) = 1 − Θ(ln ln q / ln q), and the provable floor of the lift constant is c_floor = 2×0.525/1.2 = 0.875.</span></p>
+<p><span lang="ko">최종 채택값: 문턱 θ = 3/4, 양력 r = 1.03 (균일; 임계 정점 1.025 + 여유) 또는 스케줄형 r(q) = 1 + 0.9/ln q. 초기값 대비 양력률 3.3배 타이트, 순항 비용 증가 +0.1%.</span><span lang="en">Adopted: threshold θ = 3/4, lift r = 1.03 (uniform; critical peak 1.025 + margin) or the scheduled form r(q) = 1 + 0.9/ln q. 3.3× tighter than the initial lift rate, cruise cost +0.1%.</span></p>
+<p><span lang="ko">비용은 구조적으로 0이다. 랜덤 우주 10개 쌍대 재비행에서 비상 점화는 우주당 245~461스텝 / 15억 스텝(3×10⁻⁵%)이었고, 평균 고도와 바닥 캐스케이드는 소수점 셋째 자리까지 무변화였다. 비상 채널과 보정 채널의 동시 발생 기대값이 우주당 ~2×10⁻⁴회라, 수렴성 보존이 근사가 아니라 채널 디커플링에 의한 구조적 성질이다.</span><span lang="en">The cost is structurally zero. Across ten paired random-universe reflights, emergency burns totaled 245–461 steps per universe out of 1.5 billion (3×10⁻⁵%); mean altitude and the floor cascade were unchanged to the third decimal. The expected number of coincidences between the emergency and correction channels is ~2×10⁻⁴ per universe, so the preservation of convergence is not an approximation but a structural property of channel decoupling.</span></p>
+<h3><span lang="ko">2.6 바닥계수의 유도와 보존량 (v3)</span><span lang="en">2.6 Deriving the floor coefficient; the conserved quantity (v3)</span></h3>
+<p><span lang="ko">바닥계수 β (w₀ = β·ln²q)는 구형 설계에서 사막 limsup 상수(관측 0.921, 크라메르 1 대 그랜빌 1.123 논쟁)를 덮어야 하는 생존 상수였고, 초기값 1.2는 그 손맛이었다. v2에서 사막 생존이 비상 계통으로 이관되면서 β의 지위가 바뀐다. 커버리지 항등식을 β 일반형으로 쓰면 커버리지 = q^(θβc/2)이고, BHP 목표에서</span><span lang="en">In the old design the floor coefficient β (w₀ = β·ln²q) was a survival constant that had to cover the desert limsup (observed 0.921; Cramér's 1 vs Granville's 1.123, still disputed), and the initial 1.2 was hand flavor. Once v2 moved desert survival to the emergency systems, β's status changes. Writing the coverage identity in general-β form, coverage = q^(θβc/2), and at the BHP target</span></p>
+<p>θ · β · c = 2 × 0.525 = 1.05  (<span lang="ko">보존량</span><span lang="en">conserved quantity</span>)</p>
+<p><span lang="ko">바닥·경보 문턱·양력 상수의 곱이 목표 수학으로 고정된 보존량이 된다. 활주로 θβ·ln²q/2가 세 다이얼이 공유하는 자원이므로, 바닥을 낮추면 유예가 짧아져 버너가 정확히 식만큼 뜨거워져야 한다. 이 결합은 세 바닥(β = 1.2, 0.86, 0.6)에서 예측 임계율(1.0243, 1.0372, 1.0587)이 모두 실측 사망/생존 경계 사이에 위치함으로써 확정됐다. 순항계수 변경이 비상 계통 재조정을 강제하는가라는 질문의 답은 "그렇다, 닫힌 식으로"다. 부차 결합도 둘 있다: 비율 트리거 문턱은 순항 P ≈ β·ln x의 비율(0.33β·ln x)로 따라가야 하고, 경보 정숙성은 β(1−θ)가 충분히 커야 한다.</span><span lang="en">The product of floor, alarm threshold and lift constant becomes a conserved quantity fixed by the target mathematics. The runway θβ·ln²q/2 is a resource the three dials share: lower the floor and grace shortens, so the burner must heat up by exactly what the formula says. The coupling was settled by three floors (β = 1.2, 0.86, 0.6) whose predicted criticals (1.0243, 1.0372, 1.0587) each landed between the measured death and survival boundaries. Does changing a cruise constant force an emergency retune? The answer is "yes, in closed form." Two secondary couplings: the ratio-trigger threshold must track cruise P ≈ β·ln x proportionally (0.33β·ln x), and alarm quietness requires β(1−θ) to stay large enough.</span></p>
+<p><span lang="ko">생존이 β에 최솟값을 강제하지 않게 되면서 β는 순수 경제학 다이얼이 된다. 경제학 스윕(크라메르 모형, β = 1.3 → 0.5)에서 평균 고도는 1.594 → 1.016으로 단조 감소했고 전 구간 사망 0이었다 — 오경보 벽이 조잡한 경계 예측보다 한참 왼쪽에 있어 시험 범위 안에서 U-곡선 바닥이 나타나지 않았다(각주: 저β 구간은 궤도이탈 감쇠 상수의 영향이 섞여 있고, 모형에는 쌍둥이 상수 1.32가 없어 실소수와 평형 위치가 다르다). 채택값은 최저점 추격이 아니라 유도된 앵커다:</span><span lang="en">With survival no longer imposing a minimum, β becomes a pure economics dial. In the economics sweep (Cramér model, β = 1.3 → 0.5) mean altitude fell monotonically 1.594 → 1.016 with zero deaths throughout — the false-alarm wall sits far left of the crude boundary estimate, so no U-curve bottom appeared within the tested range (footnote: the low-β regime is mixed with the deorbit decay constant, and the model lacks the twin constant 1.32, so its equilibrium sits elsewhere than in real primes). The adopted value is a derived anchor, not a chase for the minimum:</span></p>
 <p>β* = μ*/(2C₂) ≈ 1.146/1.320 ≈ 0.87</p>
-<p>μ*는 순항 피드백의 푸아송 평형 e^(−μ)(2+μ) = 1의 해, 2C₂는 하디–리틀우드 쌍둥이 상수다. 이 값에서 바닥이 피드백의 자연 착지점과 일치해 서로 싸우지도 끌지도 않으며, β = 1.2 대비 순항 고도 ~15% 절약과 함께 "순항하는 기체"의 성격이 유지된다. 더 내리면 고도는 절약되지만 r 요구치와 경보 가동률이 함께 올라 버너 의존 글라이더로 변질된다. 유의할 성격 변화 하나: β* = 0.87은 관측 최심 사막 0.921보다 낮으므로, v3 기체는 알려진 기록 사막조차 순항 바닥이 아니라 비상 계통으로 처리한다 — 비상 커버리지가 증명 기반이기에 허용되는 트레이드다. 보존량에 따라 양력은 r = 1.045 (θ = 3/4 유지, 임계 1.037 + 여유)로 재조정된다.</p>
-<p>이로써 핵심 공기역학 상수 세 개(β, θ, r)가 전부 유도값이 됐고, 유도의 뿌리는 정확히 둘이다 — 쌍둥이 통계(β*)와 BHP 지수(보존량 1.05).</p>
-<h3>2.7 회귀 이득의 탈편향 혁신형 (v4)</h3>
-<p>회귀 바닥의 갱신식 (E + w)/2는 "두 위치의 평균"이라는 형태 자체에 결함이 있다. E = k²·alt[m]은 항등식 ln(m^k) = k·ln m에 의한 정확한 스케일 전파로 바닥 스케일의 비편향 추정인 반면, w는 바닥 + 양의 소풍(excursion)이라 E[w] = floor + ε̄ — 앵커의 측정이 아니라 앵커에 체계적 양의 편향이 얹힌 증인이다. 비편향 항과 편향 항을 등가로 평균하면 매 갱신 ε̄/2가 주입되며, 이것이 관측된 표류의 정체다(구식 분석의 δ = ε/3은 이 평균형에 대한 것이었다).</p>
-<p>처방은 두 축이다. 탈편향: 소풍의 온라인 이동평균 ε̂을 공제한 w − ε̂을 사용. 혁신형 재작성: floor ← E + γ·((w − ε̂) − E) — 기억을 척추로 정확히 전파하고, 탈편향된 국소 관측을 이득 γ로 할인해 보정한다. 실소수 전 구간 스윕(버그 수정 후, 3.10절)에서 w 가중을 줄일수록 표류·대역·연료가 전부 단조 개선됨이 확인됐다: 기존 평균형은 표류 +37%, γ=1/8 혁신형은 +1.8%에 대역 절반, 연료 −18%.</p>
-<p>γ = 0(순수 기억)이 최적이 아닌 이유는 시뮬레이터 버그가 우발적으로 시연했다. 낡은 로그 캐시가 기억 체인의 한 대역에 오염값을 기록했을 때, 순수 기억은 독을 영원히 충실하게 전파한 반면 w 혼합 변형들은 자가 치유했다. γ의 진짜 의미는 추적 정밀도의 대가가 아니라 오염 치유율이다 — 나쁜 기록 하나가 ~1/γ 세대 안에 씻겨 나간다. γ = 0은 단 한 번의 나쁜 쓰기에 영구 취약한 유리 기억이며, 이는 랜덤 우주 마진 실험(혼합이 고정 상속을 최소 마진 3.5배로 이김)과 같은 교훈의 재연이다.</p>
-<p>채택값: floor ← E + (1/8)·((w − ε̂) − E). γ = 1/8은 "치유 8세대"라는 해석 가능한 단위를 가진 다이얼로, 평균이라는 인위적 형태가 제거되고 두 위치의 관계 — 신뢰되는 전파 대 할인되는 편향 증언 — 가 명시화됐다.</p>
-<h3>2.8 궤도이탈 감쇠의 유도 (v4.1)</h3>
-<p>궤도이탈은 비상 후 재진입 장치다: 사막을 삼킨 뒤 남는 거대 스파이크(초과분 Δ = w − 바닥)를 순항 피드백의 선형 수축(−2/스텝)보다 빠르게 지수 감쇠시킨다. 구속 조건은 측정 위생 하나뿐이다 — 스파이크가 다음 눈 발화 전에 사라져야 기록과 소풍 추정 ε̂이 오염되지 않는다. 눈의 지배 항인 제곱수 간격이 √x 스텝이므로, 발화 간격당 e-폴딩 3회(η = 1/3)를 요구하면</p>
-<p>τ(x) ≤ √x / 3  ⇔  64스텝당 감쇠 분율 = min(1, 192/√x)</p>
-<p>하한은 없다: 감쇠는 바닥 아래로 내려갈 수 없고 비상 보증이 w = 바닥에서 유도됐으므로 즉시 스냅해도 생존과 무관하며, 소수 지형은 갤러거 푸아송 통계로 상관 길이가 짧아 이력 보존 가치도 미미하다. 흥미롭게도 구식 손맛 쌍 (64스텝, 1/50)은 x = 10⁸에서 유도식이 주는 값(1/52)과 일치한다 — 주 튜닝 스케일에서 우연히 맞는 값을 골랐던 것이고, 식은 그 고정값이 x &lt; 10⁸에서 위생 조건을 위반함을 예측했다.</p>
-<p>검증(3.11절)은 유도가 지목한 정확히 그 자리에서, 예측된 만큼만 개선을 보였다: 저x 창 [10⁵, 10⁷]의 바닥 스파이크 폭 ~30% 절삭, x &gt; 10⁸에선 세 법칙(고정·유도·무감쇠)이 소수점 셋째 자리까지 동일. 정직한 축소 보고도 함께다 — v4의 γ = 1/8이 스파이크 오염을 이미 8배 억제해 이 계통의 위생 역할은 거의 잉여가 됐고(무감쇠조차 평균 무변화), 남은 가치는 저x 트림과 미답 스케일 보험이다.</p>
-<p>이로써 상수 원장이 마감된다: 맨숫자 손맛 0개. 유도값 셋(β, θ, r — 쌍둥이 통계와 BHP 지수), 해석 가능한 다이얼 셋(γ = 1/8 치유율, η = 1/3 위생 여유, 트리거 비율 0.33 = 순항 평균의 1/3 안전 마진). 모든 숫자에 단위와 출처가 있다.</p>
+<p><span lang="ko">μ*는 순항 피드백의 푸아송 평형 e^(−μ)(2+μ) = 1의 해, 2C₂는 하디–리틀우드 쌍둥이 상수다. 이 값에서 바닥이 피드백의 자연 착지점과 일치해 서로 싸우지도 끌지도 않으며, β = 1.2 대비 순항 고도 ~15% 절약과 함께 "순항하는 기체"의 성격이 유지된다. 더 내리면 고도는 절약되지만 r 요구치와 경보 가동률이 함께 올라 버너 의존 글라이더로 변질된다. 유의할 성격 변화 하나: β* = 0.87은 관측 최심 사막 0.921보다 낮으므로, v3 기체는 알려진 기록 사막조차 순항 바닥이 아니라 비상 계통으로 처리한다 — 비상 커버리지가 증명 기반이기에 허용되는 트레이드다. 보존량에 따라 양력은 r = 1.045 (θ = 3/4 유지, 임계 1.037 + 여유)로 재조정된다.</span><span lang="en">μ* solves the cruise feedback's Poisson equilibrium e^(−μ)(2+μ) = 1; 2C₂ is the Hardy–Littlewood twin constant. At this value the floor coincides with the feedback's natural landing point — they neither fight nor drag each other — and versus β = 1.2 the craft saves ~15% cruise altitude while keeping its "cruising" character. Below it, altitude keeps getting cheaper but the required r and alarm duty rise together, degenerating the craft into a burner-dependent glider. One character change to note: β* = 0.87 sits below the deepest observed desert 0.921, so the v3 craft handles even known record deserts with its emergency systems rather than its cruise floor — a trade made permissible because the emergency coverage is proof-based. Per the conserved quantity, lift is retuned to r = 1.045 (θ = 3/4 kept; critical 1.037 + margin).</span></p>
+<p><span lang="ko">이로써 핵심 공기역학 상수 세 개(β, θ, r)가 전부 유도값이 됐고, 유도의 뿌리는 정확히 둘이다 — 쌍둥이 통계(β*)와 BHP 지수(보존량 1.05).</span><span lang="en">With this, all three core aerodynamic constants (β, θ, r) are derived values, from exactly two roots — twin statistics (β*) and the BHP exponent (conserved quantity 1.05).</span></p>
+<h3><span lang="ko">2.7 회귀 이득의 탈편향 혁신형 (v4)</span><span lang="en">2.7 The debiased innovation form of the regression gain (v4)</span></h3>
+<p><span lang="ko">회귀 바닥의 갱신식 (E + w)/2는 "두 위치의 평균"이라는 형태 자체에 결함이 있다. E = k²·alt[m]은 항등식 ln(m^k) = k·ln m에 의한 정확한 스케일 전파로 바닥 스케일의 비편향 추정인 반면, w는 바닥 + 양의 소풍(excursion)이라 E[w] = floor + ε̄ — 앵커의 측정이 아니라 앵커에 체계적 양의 편향이 얹힌 증인이다. 비편향 항과 편향 항을 등가로 평균하면 매 갱신 ε̄/2가 주입되며, 이것이 관측된 표류의 정체다(구식 분석의 δ = ε/3은 이 평균형에 대한 것이었다).</span><span lang="en">The regression update (E + w)/2 is flawed in its very form — "the average of two positions." E = k²·alt[m] is exact scale propagation through the identity ln(m^k) = k·ln m, an unbiased estimate of floor scale; w is floor plus a positive excursion, E[w] = floor + ε̄ — not a measurement of the anchor but a witness carrying systematic positive bias. Averaging an unbiased term with a biased one as equals injects ε̄/2 per update; that is the identity of the observed drift (the old δ = ε/3 analysis described this averaging form).</span></p>
+<p><span lang="ko">처방은 두 축이다. 탈편향: 소풍의 온라인 이동평균 ε̂을 공제한 w − ε̂을 사용. 혁신형 재작성: floor ← E + γ·((w − ε̂) − E) — 기억을 척추로 정확히 전파하고, 탈편향된 국소 관측을 이득 γ로 할인해 보정한다. 실소수 전 구간 스윕(버그 수정 후, 3.10절)에서 w 가중을 줄일수록 표류·대역·연료가 전부 단조 개선됨이 확인됐다: 기존 평균형은 표류 +37%, γ=1/8 혁신형은 +1.8%에 대역 절반, 연료 −18%.</span><span lang="en">The prescription has two axes. Debias: subtract an online moving average ε̂ of the excursion, using w − ε̂. Innovation rewrite: floor ← E + γ·((w − ε̂) − E) — propagate memory exactly along the spine, and let the debiased local observation correct it, discounted by gain γ. The full-range sweep (after the bug fix, §3.10) confirmed that shrinking the w weight improves drift, band and fuel monotonically: the old averaging form drifts +37%; the γ=1/8 innovation form +1.8%, with half the band and −18% fuel.</span></p>
+<p><span lang="ko">γ = 0(순수 기억)이 최적이 아닌 이유는 시뮬레이터 버그가 우발적으로 시연했다. 낡은 로그 캐시가 기억 체인의 한 대역에 오염값을 기록했을 때, 순수 기억은 독을 영원히 충실하게 전파한 반면 w 혼합 변형들은 자가 치유했다. γ의 진짜 의미는 추적 정밀도의 대가가 아니라 오염 치유율이다 — 나쁜 기록 하나가 ~1/γ 세대 안에 씻겨 나간다. γ = 0은 단 한 번의 나쁜 쓰기에 영구 취약한 유리 기억이며, 이는 랜덤 우주 마진 실험(혼합이 고정 상속을 최소 마진 3.5배로 이김)과 같은 교훈의 재연이다.</span><span lang="en">Why γ = 0 (pure memory) is not optimal, a simulator bug demonstrated by accident. When a stale log cache wrote contaminated values into one band of the memory chain, pure memory faithfully propagated the poison forever, while the w-blending variants self-healed. γ's true meaning is not the price of tracking precision but a contamination healing rate — one bad record washes out within ~1/γ generations. γ = 0 is glass memory, permanently vulnerable to a single bad write; the same lesson as the random-universe margin experiment (blending beat fixed inheritance 3.5× on minimum margin), replayed.</span></p>
+<p><span lang="ko">채택값: floor ← E + (1/8)·((w − ε̂) − E). γ = 1/8은 "치유 8세대"라는 해석 가능한 단위를 가진 다이얼로, 평균이라는 인위적 형태가 제거되고 두 위치의 관계 — 신뢰되는 전파 대 할인되는 편향 증언 — 가 명시화됐다.</span><span lang="en">Adopted: floor ← E + (1/8)·((w − ε̂) − E). γ = 1/8 is a dial with an interpretable unit — "healing in 8 generations" — the artificial averaging form is gone, and the relation between the two positions — trusted propagation versus discounted biased testimony — is made explicit.</span></p>
+<h3><span lang="ko">2.8 궤도이탈 감쇠의 유도 (v4.1)</span><span lang="en">2.8 Deriving the deorbit decay (v4.1)</span></h3>
+<p><span lang="ko">궤도이탈은 비상 후 재진입 장치다: 사막을 삼킨 뒤 남는 거대 스파이크(초과분 Δ = w − 바닥)를 순항 피드백의 선형 수축(−2/스텝)보다 빠르게 지수 감쇠시킨다. 구속 조건은 측정 위생 하나뿐이다 — 스파이크가 다음 눈 발화 전에 사라져야 기록과 소풍 추정 ε̂이 오염되지 않는다. 눈의 지배 항인 제곱수 간격이 √x 스텝이므로, 발화 간격당 e-폴딩 3회(η = 1/3)를 요구하면</span><span lang="en">Deorbit is the post-emergency re-entry device: it decays the giant spike left after swallowing a desert (excess Δ = w − floor) exponentially, faster than the cruise feedback's linear −2/step contraction. The only constraint is measurement hygiene — the spike must vanish before the next eye firing so that records and the excursion estimate ε̂ stay clean. The eye's dominant term, the square-number spacing, is √x steps, so demanding 3 e-foldings per firing interval (η = 1/3):</span></p>
+<p>τ(x) ≤ √x / 3  ⇔  <span lang="ko">64스텝당 감쇠 분율 = min(1, 192/√x)</span><span lang="en">decay fraction per 64 steps = min(1, 192/√x)</span></p>
+<p><span lang="ko">하한은 없다: 감쇠는 바닥 아래로 내려갈 수 없고 비상 보증이 w = 바닥에서 유도됐으므로 즉시 스냅해도 생존과 무관하며, 소수 지형은 갤러거 푸아송 통계로 상관 길이가 짧아 이력 보존 가치도 미미하다. 흥미롭게도 구식 손맛 쌍 (64스텝, 1/50)은 x = 10⁸에서 유도식이 주는 값(1/52)과 일치한다 — 주 튜닝 스케일에서 우연히 맞는 값을 골랐던 것이고, 식은 그 고정값이 x &lt; 10⁸에서 위생 조건을 위반함을 예측했다.</span><span lang="en">There is no lower bound: decay cannot go below the floor, the emergency guarantee was derived at w = floor so snapping down instantly cannot affect survival, and prime terrain has a short correlation length by Gallagher's Poisson statistics, so preserving history is barely worth anything. Amusingly, the old hand-tuned pair (64 steps, 1/50) matches the derived value at x = 10⁸ (1/52) — an accidentally correct choice at the main tuning scale; the formula predicted that the fixed value violates the hygiene condition for x &lt; 10⁸.</span></p>
+<p><span lang="ko">검증(3.11절)은 유도가 지목한 정확히 그 자리에서, 예측된 만큼만 개선을 보였다: 저x 창 [10⁵, 10⁷]의 바닥 스파이크 폭 ~30% 절삭, x &gt; 10⁸에선 세 법칙(고정·유도·무감쇠)이 소수점 셋째 자리까지 동일. 정직한 축소 보고도 함께다 — v4의 γ = 1/8이 스파이크 오염을 이미 8배 억제해 이 계통의 위생 역할은 거의 잉여가 됐고(무감쇠조차 평균 무변화), 남은 가치는 저x 트림과 미답 스케일 보험이다.</span><span lang="en">Verification (§3.11) showed improvement at exactly the spot the derivation pointed to, and by exactly the predicted amount: ~30% trimming of floor-spike width in the low-x window [10⁵, 10⁷]; for x &gt; 10⁸, all three laws (fixed, derived, none) identical to the third decimal. An honest deflation comes with it — v4's γ = 1/8 already suppresses spike contamination 8-fold, leaving this subsystem's hygiene role mostly redundant (even no-decay left the averages unchanged); the remaining value is the low-x trim and insurance at unexplored scales.</span></p>
+<p><span lang="ko">이로써 상수 원장이 마감된다: 맨숫자 손맛 0개. 유도값 셋(β, θ, r — 쌍둥이 통계와 BHP 지수), 해석 가능한 다이얼 셋(γ = 1/8 치유율, η = 1/3 위생 여유, 트리거 비율 0.33 = 순항 평균의 1/3 안전 마진). 모든 숫자에 단위와 출처가 있다.</span><span lang="en">This closes the constants ledger: zero hand-tuned bare numbers. Three derived values (β, θ, r — from twin statistics and the BHP exponent), three interpretable dials (γ = 1/8 healing rate, η = 1/3 hygiene margin, trigger ratio 0.33 = 1/3 of the cruise mean as safety margin). Every number has a unit and a pedigree.</span></p>
 <hr />
-<h2>3. 실험 로그</h2>
-<p>모든 실소수 실험은 12×10⁸까지의 에라토스테네스 체와 1.4×10¹⁸급 구간 체를 사용했고, 랜덤 실험은 크라메르 모형(각 n이 확률 1/ln n로 소수인 독립 스트림)을 사용했다.</p>
-<h3>3.1 실소수 전 구간 절제 실험 (10³ → 1.19×10⁹, 사망 횟수)</h3>
+<h2><span lang="ko">3. 실험 로그</span><span lang="en">3. Experiment log</span></h2>
+<p><span lang="ko">모든 실소수 실험은 12×10⁸까지의 에라토스테네스 체와 1.4×10¹⁸급 구간 체를 사용했고, 랜덤 실험은 크라메르 모형(각 n이 확률 1/ln n로 소수인 독립 스트림)을 사용했다.</span><span lang="en">All real-prime experiments used a sieve of Eratosthenes up to 12×10⁸ plus segmented sieves at the 1.4×10¹⁸ scale; random experiments used the Cramér model (independent streams where each n is prime with probability 1/ln n).</span></p>
+<h3><span lang="ko">3.1 실소수 전 구간 절제 실험 (10³ → 1.19×10⁹, 사망 횟수)</span><span lang="en">3.1 Full-range ablation on real primes (10³ → 1.19×10⁹, death counts)</span></h3>
 <table>
 <thead>
 <tr>
-<th>구성</th>
-<th>사망</th>
-<th>비고</th>
+<th><span lang="ko">구성</span><span lang="en">Configuration</span></th>
+<th><span lang="ko">사망</span><span lang="en">Deaths</span></th>
+<th><span lang="ko">비고</span><span lang="en">Notes</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>순항 피드백 단독 (초기 모델)</td>
+<td><span lang="ko">순항 피드백 단독 (초기 모델)</span><span lang="en">cruise feedback alone (initial model)</span></td>
 <td>209,527</td>
-<td>붕괴 사망 지배</td>
+<td><span lang="ko">붕괴 사망 지배</span><span lang="en">collapse deaths dominate</span></td>
 </tr>
 <tr>
-<td>+ 성단 센서</td>
+<td><span lang="ko">+ 성단 센서</span><span lang="en">+ cluster sensor</span></td>
 <td>186,948</td>
 <td>−11%</td>
 </tr>
 <tr>
-<td>+ 눈(평균 넛지)</td>
+<td><span lang="ko">+ 눈(평균 넛지)</span><span lang="en">+ eye (mean nudge)</span></td>
 <td>209,228</td>
-<td>지속성 부재로 무효</td>
+<td><span lang="ko">지속성 부재로 무효</span><span lang="en">void without persistence</span></td>
 </tr>
 <tr>
-<td>성단 + 눈 넛지</td>
+<td><span lang="ko">성단 + 눈 넛지</span><span lang="en">cluster + eye nudge</span></td>
 <td>186,565</td>
 <td></td>
 </tr>
 <tr>
-<td>고정 바닥 1.0·ln²x</td>
+<td><span lang="ko">고정 바닥 1.0·ln²x</span><span lang="en">fixed floor 1.0·ln²x</span></td>
 <td>0</td>
-<td>둔한 규칙의 승리</td>
+<td><span lang="ko">둔한 규칙의 승리</span><span lang="en">victory of the blunt rule</span></td>
 </tr>
 <tr>
-<td>성단 + 눈을 지속 바닥으로</td>
+<td><span lang="ko">성단 + 눈을 지속 바닥으로</span><span lang="en">cluster + eye as persistent floor</span></td>
 <td>0</td>
-<td>자기 측정 35,562회</td>
+<td><span lang="ko">자기 측정 35,562회</span><span lang="en">35,562 self-measurements</span></td>
 </tr>
 <tr>
-<td>성단 + 회귀 바닥</td>
+<td><span lang="ko">성단 + 회귀 바닥</span><span lang="en">cluster + regression floor</span></td>
 <td>0</td>
-<td>바닥 대역 [1.03, 1.36]</td>
+<td><span lang="ko">바닥 대역 [1.03, 1.36]</span><span lang="en">floor band [1.03, 1.36]</span></td>
 </tr>
 </tbody>
 </table>
-<h3>3.2 기록급 사막 7곳 (실소수, 세그먼트 비행)</h3>
-<p>검증된 최대 간격 기록에 대한 통과 시험. 깊이는 gap/ln²p.</p>
+<h3><span lang="ko">3.2 기록급 사막 7곳 (실소수, 세그먼트 비행)</span><span lang="en">3.2 Seven record deserts (real primes, segment flights)</span></h3>
+<p><span lang="ko">검증된 최대 간격 기록에 대한 통과 시험. 깊이는 gap/ln²p.</span><span lang="en">Fly-through tests at verified maximal-gap records. Depth is gap/ln²p.</span></p>
 <table>
 <thead>
 <tr>
-<th>기록</th>
-<th>깊이</th>
-<th>순항 단독</th>
-<th>관대 규칙</th>
-<th>바닥 계열</th>
+<th><span lang="ko">기록</span><span lang="en">Record</span></th>
+<th><span lang="ko">깊이</span><span lang="en">Depth</span></th>
+<th><span lang="ko">순항 단독</span><span lang="en">Cruise alone</span></th>
+<th><span lang="ko">관대 규칙</span><span lang="en">Lenient rule</span></th>
+<th><span lang="ko">바닥 계열</span><span lang="en">Floor family</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>778 @ 4.3×10¹³</td>
 <td>0.790</td>
-<td>사망</td>
-<td>사망</td>
-<td>생존</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>906 @ 2.2×10¹⁴</td>
 <td>0.831</td>
-<td>사망</td>
-<td>생존</td>
-<td>생존</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>916 @ 1.2×10¹⁵</td>
 <td>0.760</td>
-<td>사망</td>
-<td>생존</td>
-<td>생존</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>1132 @ 1.7×10¹⁵</td>
-<td>0.921 (관측 최심)</td>
-<td>생존</td>
-<td>생존</td>
-<td>생존</td>
+<td><span lang="ko">0.921 (관측 최심)</span><span lang="en">0.921 (deepest observed)</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>1184 @ 4.4×10¹⁶</td>
 <td>0.806</td>
-<td>생존</td>
-<td>생존</td>
-<td>생존</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>1370 @ 4.2×10¹⁷</td>
 <td>0.832</td>
-<td>생존</td>
-<td>생존</td>
-<td>생존</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>1476 @ 1.4×10¹⁸</td>
 <td>0.845</td>
-<td>사망</td>
-<td>사망</td>
-<td>생존</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 </tbody>
 </table>
-<p>핵심 발견: 관측 최심 사막(0.921)은 모든 규칙이 통과했고 그보다 얕은 1476(0.845)이 셋을 죽였다. 생사를 결정하는 변수는 사막의 공식 깊이가 아니라 진입 직전 마지막 쌍둥이의 위치(활주로)다 — 마이어형 국소 요동의 실물 관측이다.</p>
-<h3>3.3 랜덤 우주 사냥 (10 시드 × 3×10⁹, 회귀 바닥 기체)</h3>
-<p>사막 조우 66회(깊이 ≥ 0.85), 그중 깊이 ≥ 1.0이 10회. 사망 0. 산점도에서 깊이와 조우 시 고도는 무상관 — 비행체가 사막을 예감하지 못함이 경험적으로 재확인됐다. 최소 마진 사건: 시드 8, 깊이 1.092 사막을 고도 1.158로 조우, 절대 단위로 간격 ≈182 대 창 ≈193 — 11칸 차이 생환. 66표본 기준 조우당 사망 위험은 대략 1% 오더로 추정된다. 이 잔존 위험이 비상 계통 설계의 직접적 동기가 됐다.</p>
-<h3>3.4 메가사막 매트릭스 (인공 주입, x = 10⁸)</h3>
+<p><span lang="ko">핵심 발견: 관측 최심 사막(0.921)은 모든 규칙이 통과했고 그보다 얕은 1476(0.845)이 셋을 죽였다. 생사를 결정하는 변수는 사막의 공식 깊이가 아니라 진입 직전 마지막 쌍둥이의 위치(활주로)다 — 마이어형 국소 요동의 실물 관측이다.</span><span lang="en">Key finding: every rule passed the deepest observed desert (0.921), while the shallower 1476 (0.845) killed three. The life-or-death variable is not a desert's official depth but the position of the last twin pair before entry (the runway) — a live sighting of Maier-type local fluctuation.</span></p>
+<h3><span lang="ko">3.3 랜덤 우주 사냥 (10 시드 × 3×10⁹, 회귀 바닥 기체)</span><span lang="en">3.3 Random-universe hunt (10 seeds × 3×10⁹, regression-floor craft)</span></h3>
+<p><span lang="ko">사막 조우 66회(깊이 ≥ 0.85), 그중 깊이 ≥ 1.0이 10회. 사망 0. 산점도에서 깊이와 조우 시 고도는 무상관 — 비행체가 사막을 예감하지 못함이 경험적으로 재확인됐다. 최소 마진 사건: 시드 8, 깊이 1.092 사막을 고도 1.158로 조우, 절대 단위로 간격 ≈182 대 창 ≈193 — 11칸 차이 생환. 66표본 기준 조우당 사망 위험은 대략 1% 오더로 추정된다. 이 잔존 위험이 비상 계통 설계의 직접적 동기가 됐다.</span><span lang="en">66 desert encounters (depth ≥ 0.85), 10 of them at depth ≥ 1.0. Zero deaths. The scatter plot shows no correlation between depth and altitude at encounter — empirically reconfirming that the craft cannot foresee deserts. Minimum-margin event: seed 8, a depth-1.092 desert met at altitude 1.158 — in absolute units, gap ≈182 versus window ≈193, an 11-slot survival. From 66 samples, the death risk per encounter is estimated on the order of 1%. That residual risk became the direct motivation for the emergency systems.</span></p>
+<h3><span lang="ko">3.4 메가사막 매트릭스 (인공 주입, x = 10⁸)</span><span lang="en">3.4 Mega-desert matrix (artificial injection, x = 10⁸)</span></h3>
 <table>
 <thead>
 <tr>
-<th>설계</th>
-<th>깊이 1.2</th>
+<th><span lang="ko">설계</span><span lang="en">Design</span></th>
+<th><span lang="ko">깊이 1.2</span><span lang="en">depth 1.2</span></th>
 <th>2.0</th>
 <th>4.0</th>
 <th>10.0</th>
@@ -218,122 +225,122 @@ pre{padding:12px 10px;font-size:12px}
 </thead>
 <tbody>
 <tr>
-<td>버너 없음</td>
-<td>생존</td>
-<td>생존</td>
-<td>사망</td>
-<td>사망</td>
+<td><span lang="ko">버너 없음</span><span lang="en">no burner</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
 </tr>
 <tr>
 <td>P≤2 → +8</td>
-<td>생존</td>
-<td>생존</td>
-<td>사망</td>
-<td>사망</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
 </tr>
 <tr>
 <td>P≤0.4lnx → +8</td>
-<td>생존</td>
-<td>생존</td>
-<td>생존</td>
-<td>사망</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
 </tr>
 <tr>
 <td>P≤0.4lnx → +0.1ln²x</td>
-<td>생존</td>
-<td>생존</td>
-<td>생존</td>
-<td>사망</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
 </tr>
 <tr>
 <td>P≤0.4lnx → ×1.1</td>
-<td>생존</td>
-<td>생존</td>
-<td>생존</td>
-<td>생존</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 </tbody>
 </table>
-<h3>3.5 어드버서리 매트릭스 (최악 배치: 쌍둥이 고정 접근로 + 간격 2 클러스터 16개)</h3>
+<h3><span lang="ko">3.5 어드버서리 매트릭스 (최악 배치: 쌍둥이 고정 접근로 + 간격 2 클러스터 16개)</span><span lang="en">3.5 Adversarial matrix (worst layout: pinned twin approach lane + 16 gap-2 clusters)</span></h3>
 <table>
 <thead>
 <tr>
-<th>깊이</th>
-<th>비율 트리거 단독</th>
-<th>+ 기하 경보 (최종 기체)</th>
+<th><span lang="ko">깊이</span><span lang="en">Depth</span></th>
+<th><span lang="ko">비율 트리거 단독</span><span lang="en">Ratio trigger alone</span></th>
+<th><span lang="ko">+ 기하 경보 (최종 기체)</span><span lang="en">+ geometric alarm (final craft)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>4·ln²x</td>
-<td>사망 (유예 7스텝)</td>
-<td>생존</td>
+<td><span lang="ko">사망 (유예 7스텝)</span><span lang="en">died (grace 7 steps)</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>6·ln²x</td>
-<td>사망</td>
-<td>생존</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 <tr>
 <td>10·ln²x</td>
-<td>사망</td>
-<td>생존</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 </tr>
 </tbody>
 </table>
-<p>참고: 간격 2 소수 사슬은 3의 배수 제약으로 실제 소수에서 불가능하다. 어드버서리 공간이 실소수 배치의 진초집합이므로 실소수는 증명된 최악보다 순한 상대다.</p>
-<h3>3.6 양력률 임계 스캔 (BHP 한계급 사막, 깊이 46.7·ln², 최악 배치, θ=1/4)</h3>
+<p><span lang="ko">참고: 간격 2 소수 사슬은 3의 배수 제약으로 실제 소수에서 불가능하다. 어드버서리 공간이 실소수 배치의 진초집합이므로 실소수는 증명된 최악보다 순한 상대다.</span><span lang="en">Note: gap-2 prime chains are impossible in the real primes (multiples of 3). The adversarial space is a proper superset of real placements, so the real primes are a gentler opponent than the proven worst case.</span></p>
+<h3><span lang="ko">3.6 양력률 임계 스캔 (BHP 한계급 사막, 깊이 46.7·ln², 최악 배치, θ=1/4)</span><span lang="en">3.6 Lift-rate critical scan (BHP-limit desert, depth 46.7·ln², worst layout, θ=1/4)</span></h3>
 <table>
 <thead>
 <tr>
-<th>성장률 r</th>
-<th>결과</th>
-<th>최대 도달 고도 (필요 46.7)</th>
+<th><span lang="ko">성장률 r</span><span lang="en">Growth rate r</span></th>
+<th><span lang="ko">결과</span><span lang="en">Result</span></th>
+<th><span lang="ko">최대 도달 고도 (필요 46.7)</span><span lang="en">Max altitude reached (need 46.7)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1.050</td>
-<td>사망 (유예 51스텝 전부 소진)</td>
+<td><span lang="ko">사망 (유예 51스텝 전부 소진)</span><span lang="en">died (all 51 grace steps spent)</span></td>
 <td>13.7</td>
 </tr>
 <tr>
 <td>1.060</td>
-<td>사망</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
 <td>22.2</td>
 </tr>
 <tr>
 <td>1.070</td>
-<td>사망</td>
+<td><span lang="ko">사망</span><span lang="en">died</span></td>
 <td>35.2</td>
 </tr>
 <tr>
 <td>1.075</td>
-<td>생존</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 <td>50.4</td>
 </tr>
 <tr>
 <td>1.080</td>
-<td>생존</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 <td>50.7</td>
 </tr>
 <tr>
 <td>1.100</td>
-<td>생존</td>
+<td><span lang="ko">생존</span><span lang="en">survived</span></td>
 <td>51.7</td>
 </tr>
 </tbody>
 </table>
-<p>닫힌 식 예측 1.0746이 실측 경계(1.070~1.075)를 0.5% 이내로 적중. 사망 케이스들의 비상 스텝 수가 정확히 유예 하한 w₀/8 = 51과 일치해, 경계의 타이트함과 어드버서리의 최적성이 동시에 확인됐다.</p>
-<h3>3.7 경보 문턱 스윕</h3>
-<p>임계율 검증 (동일 사막·배치): θ = 1/4, 1/2, 3/4에서 예측 임계 1.0746, 1.0366, 1.0243이 각각 실측 사망/생존 경계 사이에 위치 — c(θ) = 0.875/θ 법칙 확정.</p>
-<p>순항 오경보 비용 (자연 크라메르 스트림, 10⁸→6×10⁸):</p>
+<p><span lang="ko">닫힌 식 예측 1.0746이 실측 경계(1.070~1.075)를 0.5% 이내로 적중. 사망 케이스들의 비상 스텝 수가 정확히 유예 하한 w₀/8 = 51과 일치해, 경계의 타이트함과 어드버서리의 최적성이 동시에 확인됐다.</span><span lang="en">The closed-form prediction 1.0746 lands within 0.5% of the measured boundary (1.070–1.075). The dying cases' emergency step counts match the grace lower bound w₀/8 = 51 exactly, confirming at once the tightness of the bound and the optimality of the adversary.</span></p>
+<h3><span lang="ko">3.7 경보 문턱 스윕</span><span lang="en">3.7 Alarm-threshold sweep</span></h3>
+<p><span lang="ko">임계율 검증 (동일 사막·배치): θ = 1/4, 1/2, 3/4에서 예측 임계 1.0746, 1.0366, 1.0243이 각각 실측 사망/생존 경계 사이에 위치 — c(θ) = 0.875/θ 법칙 확정.</span><span lang="en">Critical-rate check (same desert and layout): at θ = 1/4, 1/2, 3/4 the predicted criticals 1.0746, 1.0366, 1.0243 each land between the measured death and survival boundaries — the c(θ) = 0.875/θ law confirmed.</span></p>
+<p><span lang="ko">순항 오경보 비용 (자연 크라메르 스트림, 10⁸→6×10⁸):</span><span lang="en">Cruise false-alarm cost (natural Cramér stream, 10⁸→6×10⁸):</span></p>
 <table>
 <thead>
 <tr>
 <th>θ</th>
-<th>오경보 비율/스텝</th>
-<th>평균 w/ln²</th>
+<th><span lang="ko">오경보 비율/스텝</span><span lang="en">False alarms/step</span></th>
+<th><span lang="ko">평균 w/ln²</span><span lang="en">Mean w/ln²</span></th>
 </tr>
 </thead>
 <tbody>
@@ -364,43 +371,43 @@ pre{padding:12px 10px;font-size:12px}
 </tr>
 </tbody>
 </table>
-<p>θ=3/4까지 비용 사실상 0, θ=7/8에서 상시점등 상전이 초입 관측 — 안정 조건이 예측한 위치와 일치.</p>
-<h3>3.8 바닥계수 스터디</h3>
-<p>보존량 검증 (BHP 사막 + 최악 배치, θ = 3/4):</p>
+<p><span lang="ko">θ=3/4까지 비용 사실상 0, θ=7/8에서 상시점등 상전이 초입 관측 — 안정 조건이 예측한 위치와 일치.</span><span lang="en">Cost effectively zero through θ=3/4; at θ=7/8 the onset of the always-on phase transition appears — matching the position the stability condition predicted.</span></p>
+<h3><span lang="ko">3.8 바닥계수 스터디</span><span lang="en">3.8 Floor-coefficient study</span></h3>
+<p><span lang="ko">보존량 검증 (BHP 사막 + 최악 배치, θ = 3/4):</span><span lang="en">Conserved-quantity check (BHP desert + worst layout, θ = 3/4):</span></p>
 <table>
 <thead>
 <tr>
 <th>β</th>
-<th>예측 임계</th>
-<th>실측</th>
+<th><span lang="ko">예측 임계</span><span lang="en">Predicted critical</span></th>
+<th><span lang="ko">실측</span><span lang="en">Measured</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1.20</td>
 <td>1.0243</td>
-<td>1.019 사망 / 1.029 생존</td>
+<td><span lang="ko">1.019 사망 / 1.029 생존</span><span lang="en">1.019 died / 1.029 survived</span></td>
 </tr>
 <tr>
 <td>0.86</td>
 <td>1.0372</td>
-<td>1.032 사망 / 1.042 생존</td>
+<td><span lang="ko">1.032 사망 / 1.042 생존</span><span lang="en">1.032 died / 1.042 survived</span></td>
 </tr>
 <tr>
 <td>0.60</td>
 <td>1.0587</td>
-<td>1.054 사망 / 1.064 생존</td>
+<td><span lang="ko">1.054 사망 / 1.064 생존</span><span lang="en">1.054 died / 1.064 survived</span></td>
 </tr>
 </tbody>
 </table>
-<p>경제학 스윕 (자연 크라메르, 10⁸→6×10⁸, 각 β에 보존량이 요구하는 r 장착):</p>
+<p><span lang="ko">경제학 스윕 (자연 크라메르, 10⁸→6×10⁸, 각 β에 보존량이 요구하는 r 장착):</span><span lang="en">Economics sweep (natural Cramér, 10⁸→6×10⁸, each β fitted with the r the conserved quantity demands):</span></p>
 <table>
 <thead>
 <tr>
 <th>β</th>
-<th>평균 w/ln²</th>
-<th>오경보/스텝</th>
-<th>사망</th>
+<th><span lang="ko">평균 w/ln²</span><span lang="en">Mean w/ln²</span></th>
+<th><span lang="ko">오경보/스텝</span><span lang="en">False alarms/step</span></th>
+<th><span lang="ko">사망</span><span lang="en">Deaths</span></th>
 </tr>
 </thead>
 <tbody>
@@ -442,54 +449,54 @@ pre{padding:12px 10px;font-size:12px}
 </tr>
 </tbody>
 </table>
-<p>시험 범위 내 U-곡선 바닥 미출현 — 생존은 β에 하한을 강제하지 않으며, 채택값 β* = 0.87은 경제 최저점이 아니라 쌍둥이 평형에서 유도된 앵커다.</p>
-<h3>3.9 v3 통합 회귀 테스트 (실소수, 전 계통 동시 가동)</h3>
-<p>성단 센서 + 자기유사 눈/회귀 바닥(β = 0.87 앵커) + 비율 트리거(0.33β·ln x) + 기하 경보(θ = 3/4) + 지수 양력(1.045) + 궤도이탈을 모두 장착한 v3 기체의 실소수 검증.</p>
-<p>전 구간 (10³ → 1.19×10⁹): 사망 0. [v4 교정: 최초 측정치는 시뮬레이터의 로그 캐시 버그(아래 3.10)로 오염되어 있었다. 교정된 수치 —] 기존 평균형 이득 기준 평균 순항 고도 1.346·ln², 자기측정 바닥 평균 1.193 (표류 +37%, 대역 [0.87, 2.98]); v4 탈편향 혁신형(γ=1/8) 기준 평균 고도 1.107·ln² (v1 계열 1.40 대비 −21%), 바닥 평균 0.886 (표류 +1.8%, 대역 [0.77, 1.34]). 캐스케이드가 유도된 앵커 근방에 머무는 것은 이득 법칙의 선택에 달려 있으며, 평균형은 편향 주입으로 위로 표류하고 혁신형은 앵커에 밀착한다. 기하 경보 가동률 ~1.5×10⁻⁴/스텝(교정값). 눈 발화 35,562회.</p>
-<p>기록 사막 7곳: 전승 (기하 경보 9~60스텝씩 점화). 헤드라인은 1132 기록(깊이 0.921)이다 — v3의 순항 바닥 0.87은 이 사막보다 낮아 창이 62칸 부족했고, 사막이 창 앞쪽 1/4을 채우는 순간 기하 경보가 27스텝 점화해 지수 양력으로 적자를 메웠다. "바닥은 경제, 생존은 비상 계통"이라는 v3 아키텍처 재편이 시뮬레이션 어드버서리가 아닌 자연이 만든 실제 최심 사막에서 입증된 첫 비상 구조 실적이다.</p>
-<p>관찰: 바닥이 앵커에 고정되지 않고 대역 안에서 진동하는 것은 회귀 바닥의 본성이며, 진폭 축소가 필요하면 회귀 이득(현재 1/2)이 다음 조정 후보다. [v4에서 실행 — 3.10절.]</p>
-<h3>3.10 회귀 이득 스윕과 오염 치유 (실소수 전 구간, v3 계통 동시 가동)</h3>
+<p><span lang="ko">시험 범위 내 U-곡선 바닥 미출현 — 생존은 β에 하한을 강제하지 않으며, 채택값 β* = 0.87은 경제 최저점이 아니라 쌍둥이 평형에서 유도된 앵커다.</span><span lang="en">No U-curve bottom within the tested range — survival imposes no lower bound on β; the adopted β* = 0.87 is an anchor derived from twin equilibrium, not an economic minimum.</span></p>
+<h3><span lang="ko">3.9 v3 통합 회귀 테스트 (실소수, 전 계통 동시 가동)</span><span lang="en">3.9 v3 integrated regression test (real primes, all subsystems active)</span></h3>
+<p><span lang="ko">성단 센서 + 자기유사 눈/회귀 바닥(β = 0.87 앵커) + 비율 트리거(0.33β·ln x) + 기하 경보(θ = 3/4) + 지수 양력(1.045) + 궤도이탈을 모두 장착한 v3 기체의 실소수 검증.</span><span lang="en">Real-prime verification of the v3 craft carrying everything: cluster sensor + self-similar eye/regression floor (β = 0.87 anchor) + ratio trigger (0.33β·ln x) + geometric alarm (θ = 3/4) + exponential lift (1.045) + deorbit.</span></p>
+<p><span lang="ko">전 구간 (10³ → 1.19×10⁹): 사망 0. [v4 교정: 최초 측정치는 시뮬레이터의 로그 캐시 버그(아래 3.10)로 오염되어 있었다. 교정된 수치 —] 기존 평균형 이득 기준 평균 순항 고도 1.346·ln², 자기측정 바닥 평균 1.193 (표류 +37%, 대역 [0.87, 2.98]); v4 탈편향 혁신형(γ=1/8) 기준 평균 고도 1.107·ln² (v1 계열 1.40 대비 −21%), 바닥 평균 0.886 (표류 +1.8%, 대역 [0.77, 1.34]). 캐스케이드가 유도된 앵커 근방에 머무는 것은 이득 법칙의 선택에 달려 있으며, 평균형은 편향 주입으로 위로 표류하고 혁신형은 앵커에 밀착한다. 기하 경보 가동률 ~1.5×10⁻⁴/스텝(교정값). 눈 발화 35,562회.</span><span lang="en">Full range (10³ → 1.19×10⁹): zero deaths. [v4 correction: the original figures were contaminated by the simulator's log-cache bug (§3.10 below). Corrected —] with the old averaging gain, mean cruise altitude 1.346·ln², self-measured floor mean 1.193 (drift +37%, band [0.87, 2.98]); with the v4 debiased innovation gain (γ=1/8), mean altitude 1.107·ln² (−21% versus the v1 line's 1.40), floor mean 0.886 (drift +1.8%, band [0.77, 1.34]). Whether the cascade stays near the derived anchor depends on the choice of gain law: the averaging form drifts upward by bias injection; the innovation form hugs the anchor. Geometric-alarm duty ~1.5×10⁻⁴/step (corrected). 35,562 eye firings.</span></p>
+<p><span lang="ko">기록 사막 7곳: 전승 (기하 경보 9~60스텝씩 점화). 헤드라인은 1132 기록(깊이 0.921)이다 — v3의 순항 바닥 0.87은 이 사막보다 낮아 창이 62칸 부족했고, 사막이 창 앞쪽 1/4을 채우는 순간 기하 경보가 27스텝 점화해 지수 양력으로 적자를 메웠다. "바닥은 경제, 생존은 비상 계통"이라는 v3 아키텍처 재편이 시뮬레이션 어드버서리가 아닌 자연이 만든 실제 최심 사막에서 입증된 첫 비상 구조 실적이다.</span><span lang="en">Seven record deserts: a clean sweep (the geometric alarm lit for 9–60 steps each). The headline is the 1132 record (depth 0.921) — v3's cruise floor 0.87 sits below this desert, leaving the window 62 slots short; the moment the desert filled the front quarter of the window, the geometric alarm lit for 27 steps and exponential lift covered the deficit. The first emergency rescue that proves the v3 re-architecture — "the floor for economy, survival for the emergency systems" — against a real deepest desert made by nature, not a simulated adversary.</span></p>
+<p><span lang="ko">관찰: 바닥이 앵커에 고정되지 않고 대역 안에서 진동하는 것은 회귀 바닥의 본성이며, 진폭 축소가 필요하면 회귀 이득(현재 1/2)이 다음 조정 후보다. [v4에서 실행 — 3.10절.]</span><span lang="en">Observation: the floor oscillating within a band rather than pinning to the anchor is the nature of a regression floor; if the amplitude must shrink, the regression gain (then 1/2) is the next dial to adjust. [Executed in v4 — §3.10.]</span></p>
+<h3><span lang="ko">3.10 회귀 이득 스윕과 오염 치유 (실소수 전 구간, v3 계통 동시 가동)</span><span lang="en">3.10 Regression-gain sweep and contamination healing (real primes, full range, v3 systems active)</span></h3>
 <table>
 <thead>
 <tr>
-<th>이득 법칙</th>
-<th>평균 바닥</th>
-<th>바닥 대역</th>
-<th>평균 w</th>
-<th>앵커 대비 표류</th>
+<th><span lang="ko">이득 법칙</span><span lang="en">Gain law</span></th>
+<th><span lang="ko">평균 바닥</span><span lang="en">Mean floor</span></th>
+<th><span lang="ko">바닥 대역</span><span lang="en">Floor band</span></th>
+<th><span lang="ko">평균 w</span><span lang="en">Mean w</span></th>
+<th><span lang="ko">앵커 대비 표류</span><span lang="en">Drift vs anchor</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>(E+w)/2 평균형 (기존)</td>
+<td><span lang="ko">(E+w)/2 평균형 (기존)</span><span lang="en">(E+w)/2 averaging (legacy)</span></td>
 <td>1.193</td>
 <td>[0.87, 2.98]</td>
 <td>1.346</td>
 <td>+37%</td>
 </tr>
 <tr>
-<td>탈편향 (E+(w−ε̂))/2</td>
+<td><span lang="ko">탈편향 (E+(w−ε̂))/2</span><span lang="en">debiased (E+(w−ε̂))/2</span></td>
 <td>0.965</td>
 <td>[0.41, 2.78]</td>
 <td>1.179</td>
 <td>+11%</td>
 </tr>
 <tr>
-<td>혁신형 γ=1/4</td>
+<td><span lang="ko">혁신형 γ=1/4</span><span lang="en">innovation γ=1/4</span></td>
 <td>0.903</td>
 <td>[0.66, 1.85]</td>
 <td>1.122</td>
 <td>+3.8%</td>
 </tr>
 <tr>
-<td><strong>혁신형 γ=1/8 (채택)</strong></td>
+<td><strong><span lang="ko">혁신형 γ=1/8 (채택)</span><span lang="en">innovation γ=1/8 (adopted)</span></strong></td>
 <td><strong>0.886</strong></td>
 <td><strong>[0.77, 1.34]</strong></td>
 <td><strong>1.107</strong></td>
 <td><strong>+1.8%</strong></td>
 </tr>
 <tr>
-<td>기억 전용 γ=0</td>
+<td><span lang="ko">기억 전용 γ=0</span><span lang="en">memory-only γ=0</span></td>
 <td>0.868</td>
 <td>[0.83, 0.88]</td>
 <td>1.092</td>
@@ -497,36 +504,36 @@ pre{padding:12px 10px;font-size:12px}
 </tr>
 </tbody>
 </table>
-<p>전 변형 사망 0. w 가중 축소에 따라 표류·대역·연료가 단조 개선 — 평균형이 표류 엔진이었음이 확정됐다.</p>
-<p>부수 발견 (오염 치유의 라이브 시연): 최초 스윕에서 시뮬레이터의 로그 캐시가 초기 구간에서 갱신되지 않아 기억 체인 alt[10³, 6.6×10⁴]에 오염값이 기록됐고, 이 대역의 제곱들이 [10⁶, 4.4×10⁹] 전역에 독을 전파했다. 이 사고에서 γ=0은 독을 영원히 보존한 반면(바닥 0.44 고착) 혼합 변형들은 자가 치유했다. γ의 해석 — 오염 치유율(치유 시간 ~1/γ 세대) — 이 가설이 아니라 사고 재현으로 입증된 셈이다. 버그 수정(로그 캐시의 상대 간격 갱신) 후 위 표가 확정 수치다.</p>
-<h3>3.11 궤도이탈 법칙 스윕 (v4 기체, 실소수 전 구간)</h3>
+<p><span lang="ko">전 변형 사망 0. w 가중 축소에 따라 표류·대역·연료가 단조 개선 — 평균형이 표류 엔진이었음이 확정됐다.</span><span lang="en">Zero deaths in every variant. Drift, band and fuel improve monotonically as the w weight shrinks — the averaging form is confirmed as the drift engine.</span></p>
+<p><span lang="ko">부수 발견 (오염 치유의 라이브 시연): 최초 스윕에서 시뮬레이터의 로그 캐시가 초기 구간에서 갱신되지 않아 기억 체인 alt[10³, 6.6×10⁴]에 오염값이 기록됐고, 이 대역의 제곱들이 [10⁶, 4.4×10⁹] 전역에 독을 전파했다. 이 사고에서 γ=0은 독을 영원히 보존한 반면(바닥 0.44 고착) 혼합 변형들은 자가 치유했다. γ의 해석 — 오염 치유율(치유 시간 ~1/γ 세대) — 이 가설이 아니라 사고 재현으로 입증된 셈이다. 버그 수정(로그 캐시의 상대 간격 갱신) 후 위 표가 확정 수치다.</span><span lang="en">Side discovery (a live demonstration of contamination healing): in the first sweep the simulator's log cache failed to refresh over the early range, writing poisoned values into the memory chain alt[10³, 6.6×10⁴]; squares of this band spread the poison across all of [10⁶, 4.4×10⁹]. In that accident γ=0 preserved the poison forever (floor stuck at 0.44) while the blending variants self-healed. γ's interpretation — contamination healing rate (healing time ~1/γ generations) — was thus proven by accident replay, not by hypothesis. The table above is the settled record after the bug fix (the log cache now refreshes at relative intervals).</span></p>
+<h3><span lang="ko">3.11 궤도이탈 법칙 스윕 (v4 기체, 실소수 전 구간)</span><span lang="en">3.11 Deorbit-law sweep (v4 craft, real primes, full range)</span></h3>
 <table>
 <thead>
 <tr>
-<th>감쇠 법칙</th>
-<th>평균 바닥</th>
-<th>저x 대역 [10⁵,10⁷]</th>
-<th>평균 w</th>
-<th>사망</th>
+<th><span lang="ko">감쇠 법칙</span><span lang="en">Decay law</span></th>
+<th><span lang="ko">평균 바닥</span><span lang="en">Mean floor</span></th>
+<th><span lang="ko">저x 대역 [10⁵,10⁷]</span><span lang="en">Low-x band [10⁵,10⁷]</span></th>
+<th><span lang="ko">평균 w</span><span lang="en">Mean w</span></th>
+<th><span lang="ko">사망</span><span lang="en">Deaths</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>고정 (64, /50)</td>
+<td><span lang="ko">고정 (64, /50)</span><span lang="en">fixed (64, /50)</span></td>
 <td>0.886</td>
 <td>[0.80, 1.244]</td>
 <td>1.107</td>
 <td>0</td>
 </tr>
 <tr>
-<td>유도 √x 스케줄 (채택)</td>
+<td><span lang="ko">유도 √x 스케줄 (채택)</span><span lang="en">derived √x schedule (adopted)</span></td>
 <td>0.886</td>
 <td>[0.81, 1.137]</td>
 <td>1.107</td>
 <td>0</td>
 </tr>
 <tr>
-<td>무감쇠</td>
+<td><span lang="ko">무감쇠</span><span lang="en">no decay</span></td>
 <td>0.886</td>
 <td>[0.80, 1.255]</td>
 <td>1.107</td>
@@ -534,70 +541,70 @@ pre{padding:12px 10px;font-size:12px}
 </tr>
 </tbody>
 </table>
-<p>개선은 유도가 지목한 저x 창에서만(스파이크 폭 ~30% 절삭), x &gt; 10⁸에선 세 법칙 동일 — 고정 상수가 위생 조건을 만족하는 곳에서 차이가 없어야 한다는 예측 그대로. 평균 지표 전반의 무변화는 γ = 1/8이 이 계통의 위생 역할을 이미 대부분 흡수했음을 뜻한다.</p>
+<p><span lang="ko">개선은 유도가 지목한 저x 창에서만(스파이크 폭 ~30% 절삭), x &gt; 10⁸에선 세 법칙 동일 — 고정 상수가 위생 조건을 만족하는 곳에서 차이가 없어야 한다는 예측 그대로. 평균 지표 전반의 무변화는 γ = 1/8이 이 계통의 위생 역할을 이미 대부분 흡수했음을 뜻한다.</span><span lang="en">Improvement only in the low-x window the derivation pointed to (~30% spike-width trim); for x &gt; 10⁸ the three laws are identical — exactly the prediction that where the fixed constant satisfies hygiene, there must be no difference. The flatness of all mean metrics means γ = 1/8 has already absorbed most of this subsystem's hygiene role.</span></p>
 <hr />
-<h2>4. 상수 유도 요약</h2>
-<p>순항 평형은 T의 푸아송 분포에서 P(T=0) = P(T≥2) 조건으로 μ* ≈ 1.14, 실소수 w* = μ*/1.32 ≈ 0.86·ln²x. 회귀 바닥의 갱신은 v4에서 탈편향 혁신형 floor ← E + γ·((w − ε̂) − E)로 확정됐다: E는 항등식에 의한 비편향 전파, w는 +ε̄ 편향 증인이므로 산술평균은 매 갱신 ε̄/2를 주입한다(구식 δ = ε/3 표류 분석은 평균형에 대한 것). 탈편향이 표류를 제거하고, γ는 오염 치유율(치유 ~1/γ 세대)로 해석되는 다이얼이며 채택값 1/8. 비율 트리거 오발률은 P(Poisson(β·ln x) ≤ 0.33β·ln x)로 멱법칙 소멸.</p>
-<p>비상 계통의 상수들은 다음 닫힌 식에서 나온다. 기하 경보(문턱 θ)의 유예는 배치 무관 τ = θw₀/2 스텝이고, 바닥 w₀ = β·ln²q와 커버리지 조건 w₀·r^τ ≥ G에서</p>
-<p>ln r_min(β, θ, q) = (2/(θβln²q)) · ln(q^0.525 / (βln²q)),  커버리지 = q^(θβc/2)</p>
-<p>따라서 BHP 목표에서 보존량 θβc = 1.05가 성립한다. 이 곱이 목표 수학에 따라 결정되는 게이지다 — 크라메르(간격 ~ln²q)면 ~0, 리만 가설(√q·ln q)이면 1.0, 무조건 증명(BHP q^0.525)이면 1.05. BHP의 지수가 개선되면 보존량이 함께 내려가는, 해석적 정수론의 최전선을 추적하는 계기판이다. 바닥의 앵커는 쌍둥이 통계에서 유도된다: β* = μ*/(2C₂) ≈ 0.87 (μ*는 e^(−μ)(2+μ)=1의 해 1.146, 2C₂ = 1.320). 문턱의 점근 최적은 오경보 안정 조건에서 θ*(q) = 1 − Θ(ln ln q / ln q).</p>
-<p>v3 채택값 β = 0.87, θ = 3/4, r = 1.045의 보증 엔벨로프는</p>
-<p>W_보증(q) = 0.87·ln²q × 1.045^(0.326·ln²q) ≈ 0.87·ln²q · e^(0.0143·ln²q)</p>
-<p>로, 무조건 증명된 최대 간격 상한 q^0.525 (Baker–Harman–Pintz)를 여유 계수와 함께 전 구간에서 상회한다.</p>
+<h2><span lang="ko">4. 상수 유도 요약</span><span lang="en">4. Summary of constant derivations</span></h2>
+<p><span lang="ko">순항 평형은 T의 푸아송 분포에서 P(T=0) = P(T≥2) 조건으로 μ* ≈ 1.14, 실소수 w* = μ*/1.32 ≈ 0.86·ln²x. 회귀 바닥의 갱신은 v4에서 탈편향 혁신형 floor ← E + γ·((w − ε̂) − E)로 확정됐다: E는 항등식에 의한 비편향 전파, w는 +ε̄ 편향 증인이므로 산술평균은 매 갱신 ε̄/2를 주입한다(구식 δ = ε/3 표류 분석은 평균형에 대한 것). 탈편향이 표류를 제거하고, γ는 오염 치유율(치유 ~1/γ 세대)로 해석되는 다이얼이며 채택값 1/8. 비율 트리거 오발률은 P(Poisson(β·ln x) ≤ 0.33β·ln x)로 멱법칙 소멸.</span><span lang="en">Cruise equilibrium: from the Poisson distribution of T with the condition P(T=0) = P(T≥2), μ* ≈ 1.14; on real primes w* = μ*/1.32 ≈ 0.86·ln²x. The regression-floor update was settled in v4 as the debiased innovation form floor ← E + γ·((w − ε̂) − E): E propagates unbiased via the identity, w witnesses with +ε̄ bias, so the arithmetic mean injects ε̄/2 per update (the old δ = ε/3 drift analysis described the averaging form). Debiasing removes the drift; γ is the dial read as contamination healing (~1/γ generations), adopted at 1/8. The ratio trigger's false-alarm rate is P(Poisson(β·ln x) ≤ 0.33β·ln x), vanishing polynomially.</span></p>
+<p><span lang="ko">비상 계통의 상수들은 다음 닫힌 식에서 나온다. 기하 경보(문턱 θ)의 유예는 배치 무관 τ = θw₀/2 스텝이고, 바닥 w₀ = β·ln²q와 커버리지 조건 w₀·r^τ ≥ G에서</span><span lang="en">The emergency constants come from the following closed forms. The geometric alarm's grace (threshold θ) is placement-independent, τ = θw₀/2 steps; with floor w₀ = β·ln²q and the coverage condition w₀·r^τ ≥ G:</span></p>
+<p>ln r_min(β, θ, q) = (2/(θβln²q)) · ln(q^0.525 / (βln²q)),  <span lang="ko">커버리지</span><span lang="en">coverage</span> = q^(θβc/2)</p>
+<p><span lang="ko">따라서 BHP 목표에서 보존량 θβc = 1.05가 성립한다. 이 곱이 목표 수학에 따라 결정되는 게이지다 — 크라메르(간격 ~ln²q)면 ~0, 리만 가설(√q·ln q)이면 1.0, 무조건 증명(BHP q^0.525)이면 1.05. BHP의 지수가 개선되면 보존량이 함께 내려가는, 해석적 정수론의 최전선을 추적하는 계기판이다. 바닥의 앵커는 쌍둥이 통계에서 유도된다: β* = μ*/(2C₂) ≈ 0.87 (μ*는 e^(−μ)(2+μ)=1의 해 1.146, 2C₂ = 1.320). 문턱의 점근 최적은 오경보 안정 조건에서 θ*(q) = 1 − Θ(ln ln q / ln q).</span><span lang="en">Hence the conserved quantity θβc = 1.05 holds at the BHP target. The product is a gauge set by the target mathematics — ~0 for Cramér (gaps ~ln²q), 1.0 for the Riemann Hypothesis (√q·ln q), 1.05 for the unconditional proof (BHP q^0.525). When the BHP exponent improves, the conserved quantity ticks down with it: an instrument panel tracking the frontier of analytic number theory. The floor's anchor derives from twin statistics: β* = μ*/(2C₂) ≈ 0.87 (μ* solves e^(−μ)(2+μ)=1, giving 1.146; 2C₂ = 1.320). The threshold's asymptotic optimum, from the false-alarm stability condition, is θ*(q) = 1 − Θ(ln ln q / ln q).</span></p>
+<p><span lang="ko">v3 채택값 β = 0.87, θ = 3/4, r = 1.045의 보증 엔벨로프는</span><span lang="en">The guarantee envelope of the v3 adopted values β = 0.87, θ = 3/4, r = 1.045 is</span></p>
+<p><span lang="ko">W_보증(q)</span><span lang="en">W_guar(q)</span> = 0.87·ln²q × 1.045^(0.326·ln²q) ≈ 0.87·ln²q · e^(0.0143·ln²q)</p>
+<p><span lang="ko">로, 무조건 증명된 최대 간격 상한 q^0.525 (Baker–Harman–Pintz)를 여유 계수와 함께 전 구간에서 상회한다.</span><span lang="en">— which exceeds the unconditionally proven maximal-gap bound q^0.525 (Baker–Harman–Pintz) with a margin factor over the entire range.</span></p>
 <hr />
-<h2>5. 최종 보증 명제</h2>
-<p>측정과 보증을 분리하는 것이 최종 프레임이다. 측정 구간(순항 바닥 대역, v3에서 β* = 0.87)은 다음 소수가 통계적으로 거의 확실히 있는 곳이고(q = 10¹⁸에서 ≈ 1,494), 보증 구간 W_보증(q)는 비행체가 "이 안에 소수가 있으면 반드시 죽지 않고 포착한다"고 인증하는 수색 반경이다(v3 기준 q = 10¹⁸에서 ≈ 7×10¹³). v3에서 순항 바닥은 관측 최심 사막 0.921보다 낮으므로 기록급 사막의 처리는 명시적으로 비상 계통의 몫이며, 그 비상 커버리지가 증명 기반이라는 점이 이 배분을 정당화한다. 보증 구간에는 비상 계통이 반드시 포함되어야 하며, 바로 그 포함이 명제의 지위를 바꾼다:</p>
-<p>간격 ≤ q^0.525 (증명된 수학) + 작은 q의 유한 전산 검증 ⇒ 최종 기체는 어떤 소수 배치에서도 죽지 않는다.</p>
-<p>순항 스케일 ln²x만으로 쓴 영생 명제는 크라메르 추측(미증명)과 동치였다. 지수 비상 엔벨로프가 증명된 간격 상한을 삼키면서, 명제의 의존처가 추측에서 정리로 이동했다. 잔글씨: BHP는 점근 명제라 유효 문턱이 명시적이지 않으며, 문턱 아래 구간은 전산 검증(최대 간격 기록은 4×10¹⁸까지 확정)이 메운다.</p>
-<h3>세 개의 자 비교 (q = 10¹⁸ 기준)</h3>
+<h2><span lang="ko">5. 최종 보증 명제</span><span lang="en">5. The final guarantee proposition</span></h2>
+<p><span lang="ko">측정과 보증을 분리하는 것이 최종 프레임이다. 측정 구간(순항 바닥 대역, v3에서 β* = 0.87)은 다음 소수가 통계적으로 거의 확실히 있는 곳이고(q = 10¹⁸에서 ≈ 1,494), 보증 구간 W_보증(q)는 비행체가 "이 안에 소수가 있으면 반드시 죽지 않고 포착한다"고 인증하는 수색 반경이다(v3 기준 q = 10¹⁸에서 ≈ 7×10¹³). v3에서 순항 바닥은 관측 최심 사막 0.921보다 낮으므로 기록급 사막의 처리는 명시적으로 비상 계통의 몫이며, 그 비상 커버리지가 증명 기반이라는 점이 이 배분을 정당화한다. 보증 구간에는 비상 계통이 반드시 포함되어야 하며, 바로 그 포함이 명제의 지위를 바꾼다:</span><span lang="en">Separating measurement from guarantee is the final frame. The measurement interval (the cruise-floor band; β* = 0.87 in v3) is where the next prime almost surely lies statistically (≈ 1,494 at q = 10¹⁸); the guarantee interval W_guar(q) is the search radius within which the craft certifies "if a prime exists in here, I will capture it without dying" (≈ 7×10¹³ at q = 10¹⁸ for v3). Since the v3 cruise floor sits below the deepest observed desert 0.921, record-class deserts are explicitly the emergency systems' job — a division justified by the fact that the emergency coverage is proof-based. The guarantee interval must include the emergency systems, and precisely that inclusion changes the proposition's status:</span></p>
+<p><span lang="ko">간격 ≤ q^0.525 (증명된 수학) + 작은 q의 유한 전산 검증 ⇒ 최종 기체는 어떤 소수 배치에서도 죽지 않는다.</span><span lang="en">gap ≤ q^0.525 (proven mathematics) + finite computational verification at small q ⇒ the final craft dies under no prime placement whatsoever.</span></p>
+<p><span lang="ko">순항 스케일 ln²x만으로 쓴 영생 명제는 크라메르 추측(미증명)과 동치였다. 지수 비상 엔벨로프가 증명된 간격 상한을 삼키면서, 명제의 의존처가 추측에서 정리로 이동했다. 잔글씨: BHP는 점근 명제라 유효 문턱이 명시적이지 않으며, 문턱 아래 구간은 전산 검증(최대 간격 기록은 4×10¹⁸까지 확정)이 메운다.</span><span lang="en">The immortality claim written at the cruise scale ln²x alone was equivalent to Cramér's conjecture (unproven). Once the exponential emergency envelope swallowed the proven gap bound, the claim's dependency moved from conjecture to theorem. Fine print: BHP is an asymptotic statement with no explicit effective threshold; below the threshold, computation fills the gap (maximal-gap records are settled up to 4×10¹⁸).</span></p>
+<h3><span lang="ko">세 개의 자 비교 (q = 10¹⁸ 기준)</span><span lang="en">Three rulers compared (at q = 10¹⁸)</span></h3>
 <table>
 <thead>
 <tr>
-<th>도구</th>
-<th>다음 소수 범위</th>
-<th>성격</th>
+<th><span lang="ko">도구</span><span lang="en">Instrument</span></th>
+<th><span lang="ko">다음 소수 범위</span><span lang="en">Range to next prime</span></th>
+<th><span lang="ko">성격</span><span lang="en">Nature</span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>초기 모델</td>
+<td><span lang="ko">초기 모델</span><span lang="en">Initial model</span></td>
 <td>1.6·ln²q ≈ 2,749</td>
-<td>추측. 실효 평형 0.86이라 붕괴 취약</td>
+<td><span lang="ko">추측. 실효 평형 0.86이라 붕괴 취약</span><span lang="en">conjecture; effective equilibrium 0.86, collapse-prone</span></td>
 </tr>
 <tr>
-<td>최종 기체 순항 바닥 (v3)</td>
+<td><span lang="ko">최종 기체 순항 바닥 (v3)</span><span lang="en">Final craft cruise floor (v3)</span></td>
 <td>0.87·ln²q ≈ 1,494</td>
-<td>통계 측정; 유도값 β* = μ*/(2C₂)</td>
+<td><span lang="ko">통계 측정; 유도값 β* = μ*/(2C₂)</span><span lang="en">statistical measurement; derived β* = μ*/(2C₂)</span></td>
 </tr>
 <tr>
-<td>실제 관측 최대 간격</td>
+<td><span lang="ko">실제 관측 최대 간격</span><span lang="en">Largest observed gap</span></td>
 <td>1,476</td>
-<td>자연의 답</td>
+<td><span lang="ko">자연의 답</span><span lang="en">nature's answer</span></td>
 </tr>
 <tr>
-<td>최종 기체 보증 엔벨로프 (v3)</td>
+<td><span lang="ko">최종 기체 보증 엔벨로프 (v3)</span><span lang="en">Final craft guarantee envelope (v3)</span></td>
 <td>≈ 7×10¹³</td>
-<td>배치 무관 생존 내성; RH·BHP 천장 상회</td>
+<td><span lang="ko">배치 무관 생존 내성; RH·BHP 천장 상회</span><span lang="en">placement-independent survival; clears the RH &amp; BHP ceilings</span></td>
 </tr>
 <tr>
-<td>리만 가설</td>
+<td><span lang="ko">리만 가설</span><span lang="en">Riemann Hypothesis</span></td>
 <td>√q·ln q ≈ 4.1×10¹⁰</td>
-<td>조건부 증명</td>
+<td><span lang="ko">조건부 증명</span><span lang="en">conditional proof</span></td>
 </tr>
 <tr>
-<td>BHP (무조건 증명)</td>
+<td><span lang="ko">BHP (무조건 증명)</span><span lang="en">BHP (unconditional proof)</span></td>
 <td>q^0.525 ≈ 2.8×10⁹</td>
-<td>현행 수학의 확정 상한</td>
+<td><span lang="ko">현행 수학의 확정 상한</span><span lang="en">current mathematics' firm ceiling</span></td>
 </tr>
 </tbody>
 </table>
-<p>순항 예측은 리만 가설의 구간보다 2천만 배 타이트하다 — 단, 전자는 10¹⁸까지의 통계적 측정이고 후자는 (참이라면) 모든 q에 대한 보증서라는 지위 차이가 있다. 한편 보증 엔벨로프는 리만 가설과 BHP의 천장을 둘 다 넘으므로, 설령 크라메르 스케일이 틀린 우주라도 기체는 증명된 수학이 허용하는 어떤 간격도 삼키고 생존한다.</p>
+<p><span lang="ko">순항 예측은 리만 가설의 구간보다 2천만 배 타이트하다 — 단, 전자는 10¹⁸까지의 통계적 측정이고 후자는 (참이라면) 모든 q에 대한 보증서라는 지위 차이가 있다. 한편 보증 엔벨로프는 리만 가설과 BHP의 천장을 둘 다 넘으므로, 설령 크라메르 스케일이 틀린 우주라도 기체는 증명된 수학이 허용하는 어떤 간격도 삼키고 생존한다.</span><span lang="en">The cruise prediction is twenty million times tighter than the Riemann Hypothesis interval — with the status caveat that the former is statistical measurement up to 10¹⁸ and the latter (if true) a warranty for all q. The guarantee envelope, meanwhile, clears both the RH and BHP ceilings, so even in a universe where the Cramér scale is wrong, the craft swallows and survives any gap that proven mathematics permits.</span></p>
 <hr />
-<h2>6. 열린 문제</h2>
-<p>회귀 바닥의 끌개 대역 하단(~1.05)은 쌍둥이 통계가, 사망선(관측 0.921, 이론 limsup은 크라메르 1 대 그랜빌 1.123으로 논쟁 중)은 최대 간격 통계가 결정한다. 두 상수는 논리적으로 독립이며, 순항 생존은 이들 사이의 수치적 여유에 기대고 있다. limsup 상수의 실험적 추정(바닥 상수를 깎아가며 최소 생존 바닥 탐색)은 미수행 과제다. 랜덤 우주에서 추정된 조우당 ~1% 위험률 곡선의 정밀화(우주 30개 이상), 지수 양력의 실측 한계(깊이 50~100 주입), 그리고 무한대에서의 최종 판정 — 밀도 0의 예외 집합을 공집합으로 바꾸는 일 — 은 통계가 원리적으로 닿지 못하는, 증명만이 넘을 수 있는 벽으로 남는다.</p>
+<h2><span lang="ko">6. 열린 문제</span><span lang="en">6. Open problems</span></h2>
+<p><span lang="ko">회귀 바닥의 끌개 대역 하단(~1.05)은 쌍둥이 통계가, 사망선(관측 0.921, 이론 limsup은 크라메르 1 대 그랜빌 1.123으로 논쟁 중)은 최대 간격 통계가 결정한다. 두 상수는 논리적으로 독립이며, 순항 생존은 이들 사이의 수치적 여유에 기대고 있다. limsup 상수의 실험적 추정(바닥 상수를 깎아가며 최소 생존 바닥 탐색)은 미수행 과제다. 랜덤 우주에서 추정된 조우당 ~1% 위험률 곡선의 정밀화(우주 30개 이상), 지수 양력의 실측 한계(깊이 50~100 주입), 그리고 무한대에서의 최종 판정 — 밀도 0의 예외 집합을 공집합으로 바꾸는 일 — 은 통계가 원리적으로 닿지 못하는, 증명만이 넘을 수 있는 벽으로 남는다.</span><span lang="en">The lower edge of the regression floor's attractor band (~1.05) is set by twin statistics; the death line (observed 0.921; the theoretical limsup disputed between Cramér's 1 and Granville's 1.123) by maximal-gap statistics. The two constants are logically independent, and cruise survival leans on the numerical daylight between them. An experimental estimate of the limsup constant (shaving the floor constant down in search of the minimal surviving floor) remains an unperformed task. Refining the ~1%-per-encounter risk curve from random universes (30+ universes), probing exponential lift's measured limit (injections of depth 50–100), and the final verdict at infinity — turning the density-zero exceptional set into the empty set — remain walls that statistics cannot in principle touch, and only proof can cross.</span></p>
 <hr />
-<h2>부록 — 최종 기체 규칙 의사코드</h2>
-<pre>상태: x (좌표), w (창), floor (바닥), alt[] (밑 고도 기억)
+<h2><span lang="ko">부록 — 최종 기체 규칙 의사코드</span><span lang="en">Appendix — final craft rules, pseudocode</span></h2>
+<pre lang="ko">상태: x (좌표), w (창), floor (바닥), alt[] (밑 고도 기억)
 매 스텝:
   T = 창 안 밀집 신호 수        # 쌍 (p,p+2), 단 창 안에 쌍 (p-6,p-4) 있으면 억제
   P = 창 안 소수 수
@@ -618,7 +625,40 @@ pre{padding:12px 10px;font-size:12px}
       w -= (w - floor) * min(1, 192/sqrt(x))        # tau = sqrt(x)/3 (측정 위생에서 유도)
 
   if P == 0: 사망</pre>
-<p>상수 요약 (v4.1 — 원장 마감): 순항 바닥 β* = 0.87 (쌍둥이 평형 μ*/(2C₂)), 기하 경보 문턱 θ = 3/4, 양력 ×1.045 (보존량 θβc = 1.05), 비율 트리거 0.33β·ln x (순항 평균의 1/3 안전 마진), 회귀 갱신 = 탈편향 혁신형 γ = 1/8 (치유율), 궤도이탈 τ = √x/3 (위생 여유 η = 1/3). 맨숫자 손맛 0개 — 유도값 셋(β, θ, r)과 해석 가능한 다이얼 셋(γ, η, 트리거 비율)뿐이며, 유도의 뿌리는 쌍둥이 통계와 BHP 지수 둘이다.</p>
+<pre lang="en">state: x (position), w (window), floor, alt[] (base-altitude memory)
+each step:
+  T = density signals in window     # pair (p,p+2), suppressed if pair (p-6,p-4) is in the window
+  P = primes in window
+  R = rightmost prime in window
+
+  dw = +2 if T==0 else (0 if T==1 else -2)          # cruise
+  if P &lt;= 0.33*0.87*ln(x) or R &lt;= x + 3*w/4:        # ratio trigger (beta-scaled) or geometric alarm (theta=3/4)
+      dw = max(4, w*0.045)                          # exponential lift x1.045 (per the conserved quantity + margin)
+
+  x += 2; w += dw; w = max(w, floor)
+
+  if window newly captures a power m^k:             # self-similar eye
+      E = k^2 * alt[m]   (beta*ln^2 x if no memory)
+      floor = E + ((w - e_hat) - E)/8               # v4 debiased innovation (e_hat = excursion moving average)
+  if x &lt; recording range: alt[x] = floor            # record the floor (not the altitude)
+
+  if not in emergency and w &gt; 3*floor (every 64 steps):  # deorbit: post-emergency re-entry
+      w -= (w - floor) * min(1, 192/sqrt(x))        # tau = sqrt(x)/3 (from measurement hygiene)
+
+  if P == 0: death</pre>
+<p><span lang="ko">상수 요약 (v4.1 — 원장 마감): 순항 바닥 β* = 0.87 (쌍둥이 평형 μ*/(2C₂)), 기하 경보 문턱 θ = 3/4, 양력 ×1.045 (보존량 θβc = 1.05), 비율 트리거 0.33β·ln x (순항 평균의 1/3 안전 마진), 회귀 갱신 = 탈편향 혁신형 γ = 1/8 (치유율), 궤도이탈 τ = √x/3 (위생 여유 η = 1/3). 맨숫자 손맛 0개 — 유도값 셋(β, θ, r)과 해석 가능한 다이얼 셋(γ, η, 트리거 비율)뿐이며, 유도의 뿌리는 쌍둥이 통계와 BHP 지수 둘이다.</span><span lang="en">Constants summary (v4.1 — ledger closed): cruise floor β* = 0.87 (twin equilibrium μ*/(2C₂)), geometric-alarm threshold θ = 3/4, lift ×1.045 (conserved quantity θβc = 1.05), ratio trigger 0.33β·ln x (1/3 of the cruise mean as safety margin), regression update = debiased innovation γ = 1/8 (healing rate), deorbit τ = √x/3 (hygiene margin η = 1/3). Zero hand-tuned bare numbers — three derived values (β, θ, r) and three interpretable dials (γ, η, trigger ratio), rooted in exactly two places: twin statistics and the BHP exponent.</span></p>
 <hr />
-<p><i>실험 환경: C, 에라토스테네스 체 1.2×10⁹ + 구간 체 ~1.4×10¹⁸, 크라메르 모형 스트림. 총 비행 거리: 실소수 ~1.2×10⁹ × 다수 구성, 랜덤 우주 누적 &gt; 10¹¹. 개정 이력: v1 — 5계통 완성 및 보증 명제. v2 — 비상 계통 두 상수(양력률, 경보 문턱)를 닫힌 식으로 유도하고 BHP 한계급 사막에서 임계 실측으로 확정. v3 — 바닥계수를 쌍둥이 평형에서 유도(β* = 0.87), 보존량 θβc = 1.05 확립 및 세 바닥에서 임계 검증, 경제학 스윕. v3 검증 — 전 계통 통합 회귀 통과: 실소수 전 구간 및 기록 사막 7곳 무사망, 관측 최심 사막(0.921)을 바닥(0.87) 아래에서 비상 계통이 실구조. v4 — 회귀 갱신을 탈편향 혁신형(γ=1/8)으로 교체(표류 +37% → +1.8%, 연료 −18%), 시뮬레이터 로그 캐시 버그 발견·수정 및 3.9절 수치 교정, 오염 치유율로서의 γ 해석을 사고 재현으로 입증. v4.1 — 궤도이탈을 측정 위생에서 유도(τ = √x/3)하고 저x 창에서 예측대로 검증, 상수 원장 마감(맨숫자 손맛 0개).</i></p>
+<p><i><span lang="ko">실험 환경: C, 에라토스테네스 체 1.2×10⁹ + 구간 체 ~1.4×10¹⁸, 크라메르 모형 스트림. 총 비행 거리: 실소수 ~1.2×10⁹ × 다수 구성, 랜덤 우주 누적 &gt; 10¹¹. 개정 이력: v1 — 5계통 완성 및 보증 명제. v2 — 비상 계통 두 상수(양력률, 경보 문턱)를 닫힌 식으로 유도하고 BHP 한계급 사막에서 임계 실측으로 확정. v3 — 바닥계수를 쌍둥이 평형에서 유도(β* = 0.87), 보존량 θβc = 1.05 확립 및 세 바닥에서 임계 검증, 경제학 스윕. v3 검증 — 전 계통 통합 회귀 통과: 실소수 전 구간 및 기록 사막 7곳 무사망, 관측 최심 사막(0.921)을 바닥(0.87) 아래에서 비상 계통이 실구조. v4 — 회귀 갱신을 탈편향 혁신형(γ=1/8)으로 교체(표류 +37% → +1.8%, 연료 −18%), 시뮬레이터 로그 캐시 버그 발견·수정 및 3.9절 수치 교정, 오염 치유율로서의 γ 해석을 사고 재현으로 입증. v4.1 — 궤도이탈을 측정 위생에서 유도(τ = √x/3)하고 저x 창에서 예측대로 검증, 상수 원장 마감(맨숫자 손맛 0개).</span><span lang="en">Environment: C; sieve of Eratosthenes to 1.2×10⁹ + segmented sieves to ~1.4×10¹⁸; Cramér-model streams. Total flight distance: real primes ~1.2×10⁹ × many configurations; random universes &gt; 10¹¹ cumulative. Revision history: v1 — five subsystems completed; the guarantee proposition. v2 — both emergency constants (lift rate, alarm threshold) derived in closed form and pinned by critical measurements at a BHP-limit desert. v3 — floor coefficient derived from twin equilibrium (β* = 0.87); conserved quantity θβc = 1.05 established and verified at three floors; economics sweep. v3 verification — full integrated regression pass: zero deaths across the real-prime range and the seven record deserts; the deepest observed desert (0.921) rescued by the emergency systems below a 0.87 floor. v4 — regression update replaced by the debiased innovation form (γ=1/8; drift +37% → +1.8%, fuel −18%); simulator log-cache bug found and fixed, §3.9 figures corrected; γ's healing-rate interpretation proven by accident replay. v4.1 — deorbit derived from measurement hygiene (τ = √x/3) and verified as predicted in the low-x window; constants ledger closed (zero hand-tuned bare numbers).</span></i></p>
+<script>
+'use strict';
+(function(){
+  var T={ko:'소수 탐사 비행체 — 설계와 실험 보고서 (v4.1)',en:'Prime Flight — Design & Experiment Report (v4.1)'};
+  function cur(){return document.documentElement.getAttribute('data-lang')==='en'?'en':'ko'}
+  function apply(l){document.documentElement.setAttribute('data-lang',l);
+    document.documentElement.setAttribute('lang',l);document.title=T[l];
+    try{localStorage.setItem('pf-lang',l)}catch(e){}}
+  document.title=T[cur()];
+  document.getElementById('btn-lang').onclick=function(){apply(cur()==='ko'?'en':'ko')};
+})();
+</script>
 </main></body></html>
