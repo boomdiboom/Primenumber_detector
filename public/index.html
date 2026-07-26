@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +12,7 @@
 <meta property="og:locale" content="ko_KR">
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%88%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<script>(function(){var l='ko';try{var s=localStorage.getItem('pf-lang');if(s==='en'||s==='ko')l=s}catch(e){}var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l);})();</script>
 <style>
   :root{
     --night:#0B0E1A; --panel:#131829; --panel2:#0F1422; --grid:#232A44;
@@ -25,6 +26,13 @@
   html{scroll-behavior:smooth}
   @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
   body{background:var(--night);color:var(--ink);font-family:var(--sans);line-height:1.7}
+
+  /* ── 언어 전환 ─────────────────────── */
+  html[data-lang="en"] [lang="ko"]{display:none!important}
+  html[data-lang="ko"] [lang="en"]{display:none!important}
+  #btn-lang{margin-left:auto;background:transparent;color:var(--cyan);border:1px solid #2E5A66;
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding:2px 10px;border-radius:3px;cursor:pointer}
+  #btn-lang:hover{background:var(--cyan);color:#062026}
 
   /* ── 조종석 ───────────────────────── */
   #cockpit{max-width:1080px;margin:0 auto;padding:28px 20px 36px}
@@ -114,21 +122,25 @@
 <body>
 
 <!-- ══════════ 조종석 ══════════ -->
-<section id="cockpit" aria-label="비행 시뮬레이터">
+<section id="cockpit" aria-label="비행 시뮬레이터 · flight simulator">
   <div class="brand">
-    <h1>소수 탐사 비행체</h1>
+    <h1><span lang="ko">소수 탐사 비행체</span><span lang="en">Prime Flight</span></h1>
     <span class="ver">SPEC v4.1</span>
-    <p>창 [x, x+w] 안에 소수가 하나도 없으면 추락한다. 이 기체는 쌍둥이 소수를 계기로 읽고,
+    <button id="btn-lang" aria-label="언어 전환 · switch language"><span lang="ko">EN</span><span lang="en">한국어</span></button>
+    <p><span lang="ko">창 [x, x+w] 안에 소수가 하나도 없으면 추락한다. 이 기체는 쌍둥이 소수를 계기로 읽고,
        거듭제곱으로 자기 고도를 측정하며, 사막을 만나면 지수 양력으로 살아남는다.
-       아래 항행일지의 실험 버튼이 이 조종석을 직접 재구성한다.</p>
+       아래 항행일지의 실험 버튼이 이 조종석을 직접 재구성한다.</span><span lang="en">If the window
+       [x, x+w] ever holds no prime, the craft crashes. It reads twin primes as its instruments,
+       measures its own altitude at perfect powers, and survives deserts on exponential lift.
+       The experiment buttons in the flight log below reconfigure this cockpit directly.</span></p>
   </div>
 
   <div class="panel">
     <div class="panel-head"><span>ALTITUDE TAPE — w/ln²x (amber) · floor (cyan)</span>
       <span id="flash" aria-live="polite"></span></div>
-    <canvas id="chart" height="240" aria-label="고도 기록 차트"></canvas>
-    <div class="panel-head" style="border-top:1px solid var(--grid)"><span>TERRAIN — 소수 활주로등과 탐사창</span></div>
-    <canvas id="strip" height="96" aria-label="지형 스트립"></canvas>
+    <canvas id="chart" height="240" aria-label="고도 기록 차트 · altitude tape chart"></canvas>
+    <div class="panel-head" style="border-top:1px solid var(--grid)"><span><span lang="ko">TERRAIN — 소수 활주로등과 탐사창</span><span lang="en">TERRAIN — prime runway lights and the survey window</span></span></div>
+    <canvas id="strip" height="96" aria-label="지형 스트립 · terrain strip"></canvas>
 
     <div class="readouts">
       <div class="ro"><b>POSITION x</b><i id="r-x">—</i></div>
@@ -143,14 +155,14 @@
 
     <div class="controls">
       <button id="btn-run" class="primary">시작</button>
-      <button id="btn-reset">리셋</button>
-      <label>기체
+      <button id="btn-reset"><span lang="ko">리셋</span><span lang="en">Reset</span></button>
+      <label><span lang="ko">기체</span><span lang="en">Craft</span>
         <select id="sel-model">
           <option value="v41">v4.1 완전체</option>
           <option value="origin">초기 모델 (±2)</option>
         </select>
       </label>
-      <label>속도 <input id="sl-speed" type="range" min="0" max="100" value="55"><output id="o-speed">240</output></label>
+      <label><span lang="ko">속도</span><span lang="en">Speed</span> <input id="sl-speed" type="range" min="0" max="100" value="55"><output id="o-speed">240</output></label>
       <label>β <input id="sl-beta" type="range" min="50" max="130" value="87"><output id="o-beta">0.87</output></label>
       <label>θ <input id="sl-theta" type="range" min="25" max="90" value="75"><output id="o-theta">0.75</output></label>
       <label>r <input id="sl-rate" type="range" min="10" max="100" value="45"><output id="o-rate">1.045</output></label>
@@ -162,38 +174,49 @@
       </label>
     </div>
     <div class="controls">
-      <label>사막 깊이 ×ln²x <input id="sl-depth" type="range" min="10" max="120" value="40"><output id="o-depth">4.0</output></label>
-      <label><input id="chk-adv" type="checkbox"> 최악 배치(입구 뭉침)</label>
-      <button id="btn-desert" class="danger">전방에 사막 주입</button>
+      <label><span lang="ko">사막 깊이 ×ln²x</span><span lang="en">Desert depth ×ln²x</span> <input id="sl-depth" type="range" min="10" max="120" value="40"><output id="o-depth">4.0</output></label>
+      <label><input id="chk-adv" type="checkbox"> <span lang="ko">최악 배치(입구 뭉침)</span><span lang="en">worst-case layout (crowded approach)</span></label>
+      <button id="btn-desert" class="danger"><span lang="ko">전방에 사막 주입</span><span lang="en">Inject desert ahead</span></button>
     </div>
-    <div class="note" id="status">소수 체 준비 중…</div>
+    <div class="note" id="status"><span lang="ko">소수 체 준비 중…</span><span lang="en">Sieving primes…</span></div>
   </div>
 </section>
 
 <!-- ══════════ 항행일지 ══════════ -->
-<section id="logbook" aria-label="항행일지">
+<section id="logbook" aria-label="항행일지 · flight log">
   <div class="log-inner">
 
-    <div class="stamp">항행일지 · 출발점</div>
-    <h2>다음 소수는 어디까지 가면 반드시 있는가</h2>
-    <p>소수 q 다음 소수까지의 거리에는 아직 증명된 좁은 한계가 없다. 확률적으로는 간격이
+    <div class="stamp"><span lang="ko">항행일지 · 출발점</span><span lang="en">FLIGHT LOG · DEPARTURE</span></div>
+    <h2><span lang="ko">다음 소수는 어디까지 가면 반드시 있는가</span><span lang="en">How far away can the next prime possibly be?</span></h2>
+    <p><span lang="ko">소수 q 다음 소수까지의 거리에는 아직 증명된 좁은 한계가 없다. 확률적으로는 간격이
       ln²q 규모를 넘지 못한다는 크라메르의 예측이 90년째 유력하지만, 리만 가설을 가정해도
       증명은 √q 규모에서 멈춘다. 우리는 이 문제를 비행기로 번역했다:
       <em>창 안에 항상 소수가 있도록 고도 w를 조종하는 기체가 영원히 살 수 있는가.</em>
-      기체의 생존은 간격 상계와 동치가 된다.</p>
+      기체의 생존은 간격 상계와 동치가 된다.</span><span lang="en">No proven tight bound exists for
+      the distance from a prime q to the next. Probabilistically, Cramér's 90-year-old prediction
+      says gaps never exceed the ln²q scale — yet even assuming the Riemann Hypothesis, proofs stop
+      at the √q scale. We translated the problem into an aircraft:
+      <em>can a craft that steers its altitude w so the window always contains a prime live forever?</em>
+      The craft's survival becomes equivalent to a gap upper bound.</span></p>
 
-    <div class="stamp">일지 v1 · 초기 모델과 붕괴</div>
-    <h2>±2 피드백은 스스로 무너진다</h2>
-    <p>첫 기체는 단순했다. 창 안의 쌍둥이 소수가 없으면 +2, 하나면 유지, 둘 이상이면 −2.
+    <div class="stamp"><span lang="ko">일지 v1 · 초기 모델과 붕괴</span><span lang="en">LOG v1 · THE INITIAL MODEL AND ITS COLLAPSE</span></div>
+    <h2><span lang="ko">±2 피드백은 스스로 무너진다</span><span lang="en">±2 feedback collapses on its own</span></h2>
+    <p><span lang="ko">첫 기체는 단순했다. 창 안의 쌍둥이 소수가 없으면 +2, 하나면 유지, 둘 이상이면 −2.
       쌍둥이를 온도계로 쓰는 순간 고도는 저절로 ln²x 스케일에 맞춰진다 — 크라메르의 유도를
       기체가 재발견한 셈이다. 그러나 실소수 10⁹까지 날려보면 <em>209,527번 추락한다.</em>
       범인은 기록급 사막이 아니라 쌍둥이 밀집 지대: 창이 최솟값까지 붕괴한 직후 평범한 간격에
-      떨어진다. 수축 속도가 순항 속도와 같아 회복이 지형을 못 따라잡는 구조적 결함이다.</p>
-    <button class="try" data-preset="origin">실험 1 — 초기 모델로 날아보기 (추락을 지켜보라)</button>
+      떨어진다. 수축 속도가 순항 속도와 같아 회복이 지형을 못 따라잡는 구조적 결함이다.</span><span lang="en">The
+      first craft was simple: no twin primes in the window → +2, one → hold, two or more → −2.
+      The moment twins become the thermometer, altitude locks onto the ln²x scale by itself —
+      the craft rediscovering Cramér's heuristic. But fly it through the real primes up to 10⁹
+      and it <em>crashes 209,527 times.</em> The culprit is not record deserts but twin-dense zones:
+      the window collapses to its minimum, then falls into a perfectly ordinary gap. Contraction
+      speed equals cruise speed — a structural flaw where recovery can never catch the terrain.</span></p>
+    <button class="try" data-preset="origin"><span lang="ko">실험 1 — 초기 모델로 날아보기 (추락을 지켜보라)</span><span lang="en">Experiment 1 — fly the initial model (watch it crash)</span></button>
 
-    <div class="stamp">일지 v1–v2 · 다섯 계통</div>
-    <h2>기체가 배운 다섯 가지</h2>
-    <p><em>성단 센서</em> — 삼중·사중 소수 성단은 밀집 신호 하나로 접는다.
+    <div class="stamp"><span lang="ko">일지 v1–v2 · 다섯 계통</span><span lang="en">LOG v1–v2 · FIVE SUBSYSTEMS</span></div>
+    <h2><span lang="ko">기체가 배운 다섯 가지</span><span lang="en">Five things the craft learned</span></h2>
+    <p><span lang="ko"><em>성단 센서</em> — 삼중·사중 소수 성단은 밀집 신호 하나로 접는다.
       <em>자기유사 눈</em> — 거듭제곱 m^k를 만나면 밑을 읽어 w(m^k) = k²·w(m)으로 자기 고도를
       측정한다. 로그 계산 없이 스케일을 부트스트랩하는 항법이다.
       <em>회귀 바닥</em> — 측정을 다음 거듭제곱까지 유지되는 바닥으로 기록하되, 현재 고도의
@@ -201,53 +224,119 @@
       <em>기하 경보</em> — 창 앞쪽 1/4이 비면 무조건 비상. 소수 배치와 무관하게 유예 3w/8스텝이
       보장되는, 통계가 아니라 기하가 주는 경보다.
       <em>지수 양력</em> — 비상 시 w를 1.045배씩 키운다. 선형 양력의 커버 용량은 유한하지만
-      지수 양력은 어떤 깊이든 log 시간에 삼킨다.</p>
-    <button class="try" data-preset="cruise">실험 2 — v4.1 순항 (바닥선이 0.87에 착지하는 과정)</button>
-    <button class="try" data-preset="desert4">실험 3 — 깊이 4 사막 주입 (비상 계통의 구조 작업)</button>
+      지수 양력은 어떤 깊이든 log 시간에 삼킨다.</span><span lang="en"><em>Cluster sensor</em> —
+      prime triplets and quadruplets fold into a single density signal.
+      <em>Self-similar eye</em> — meeting a power m^k, the craft reads the base and measures its own
+      altitude via w(m^k) = k²·w(m): navigation that bootstraps the scale without computing a logarithm.
+      <em>Regression floor</em> — measurements are recorded as a floor that persists until the next
+      power, with the current altitude's bias subtracted and only 1/8 blended in (an eight-generation
+      healing time).
+      <em>Geometric alarm</em> — if the front quarter of the window is empty, emergency, unconditionally.
+      A grace of 3w/8 steps is guaranteed regardless of prime placement — an alarm given by geometry,
+      not statistics.
+      <em>Exponential lift</em> — in an emergency, w grows ×1.045 per step. Linear lift has finite
+      coverage; exponential lift swallows any depth in log time.</span></p>
+    <button class="try" data-preset="cruise"><span lang="ko">실험 2 — v4.1 순항 (바닥선이 0.87에 착지하는 과정)</span><span lang="en">Experiment 2 — v4.1 cruise (watch the floor settle at 0.87)</span></button>
+    <button class="try" data-preset="desert4"><span lang="ko">실험 3 — 깊이 4 사막 주입 (비상 계통의 구조 작업)</span><span lang="en">Experiment 3 — inject a depth-4 desert (the emergency systems at work)</span></button>
 
-    <div class="stamp">일지 v2–v3 · 보존량</div>
-    <h2>세 개의 다이얼, 하나의 보존량</h2>
-    <p>바닥 β, 경보 문턱 θ, 양력 상수 c는 독립이 아니다. 활주로 θβ·ln²x/2가 셋이 공유하는
+    <div class="stamp"><span lang="ko">일지 v2–v3 · 보존량</span><span lang="en">LOG v2–v3 · THE CONSERVED QUANTITY</span></div>
+    <h2><span lang="ko">세 개의 다이얼, 하나의 보존량</span><span lang="en">Three dials, one conserved quantity</span></h2>
+    <p><span lang="ko">바닥 β, 경보 문턱 θ, 양력 상수 c는 독립이 아니다. 활주로 θβ·ln²x/2가 셋이 공유하는
       자원이고, 증명된 최대 간격 q<sup>0.525</sup>를 덮는 조건에서
       <em>θ·β·c = 1.05</em>라는 보존량이 성립한다. 위 다이얼로 β를 낮춰보라 —
       살아남으려면 r이 정확히 식만큼 뜨거워져야 한다. 이 곱은 목표 수학의 게이지이기도 하다:
-      크라메르가 증명되면 ~0, 리만 가설이면 1.0, 현행 무조건 증명이면 1.05.</p>
-    <button class="try" data-preset="mega10">실험 4 — 깊이 10 + 최악 배치 (기하 경보의 진가)</button>
-    <button class="try" data-preset="mega10-origin">실험 5 — 같은 공격을 초기 모델에게</button>
+      크라메르가 증명되면 ~0, 리만 가설이면 1.0, 현행 무조건 증명이면 1.05.</span><span lang="en">Floor β,
+      alarm threshold θ and lift constant c are not independent. The runway θβ·ln²x/2 is a resource
+      all three share, and covering the proven maximal gap q<sup>0.525</sup> forces the conserved
+      quantity <em>θ·β·c = 1.05</em>. Try lowering β with the dial above — to survive, r must heat
+      up by exactly what the formula demands. The product is also a gauge of the target mathematics:
+      ~0 if Cramér were proven, 1.0 under the Riemann Hypothesis, 1.05 under today's unconditional proof.</span></p>
+    <button class="try" data-preset="mega10"><span lang="ko">실험 4 — 깊이 10 + 최악 배치 (기하 경보의 진가)</span><span lang="en">Experiment 4 — depth 10 + worst layout (the geometric alarm earns its keep)</span></button>
+    <button class="try" data-preset="mega10-origin"><span lang="ko">실험 5 — 같은 공격을 초기 모델에게</span><span lang="en">Experiment 5 — the same attack on the initial model</span></button>
 
-    <div class="stamp">일지 · 세 개의 자</div>
-    <h2>이 기체는 무엇을 측정했나 (q = 10¹⁸ 기준)</h2>
+    <div class="stamp"><span lang="ko">일지 · 세 개의 자</span><span lang="en">LOG · THREE RULERS</span></div>
+    <h2><span lang="ko">이 기체는 무엇을 측정했나 (q = 10¹⁸ 기준)</span><span lang="en">What did this craft measure? (at q = 10¹⁸)</span></h2>
     <div class="fig"><table>
-      <tr><th>측정 도구</th><th>다음 소수 범위</th><th>성격</th></tr>
-      <tr><td>기체 순항 바닥</td><td class="hl">0.87·ln²q ≈ 1,494</td><td>통계 측정 (유도값)</td></tr>
-      <tr><td>실제 관측 최대 간격</td><td>1,476</td><td>자연의 답</td></tr>
-      <tr><td>기체 보증 엔벨로프</td><td class="hl">≈ 7×10¹³</td><td>배치 무관 생존 내성</td></tr>
-      <tr><td>리만 가설</td><td>√q·ln q ≈ 4.1×10¹⁰</td><td>조건부 증명</td></tr>
-      <tr><td>무조건 증명 (BHP)</td><td>q<sup>0.525</sup> ≈ 2.8×10⁹</td><td>현행 수학의 확정 상한</td></tr>
+      <tr><th><span lang="ko">측정 도구</span><span lang="en">Instrument</span></th><th><span lang="ko">다음 소수 범위</span><span lang="en">Range to next prime</span></th><th><span lang="ko">성격</span><span lang="en">Nature</span></th></tr>
+      <tr><td><span lang="ko">기체 순항 바닥</span><span lang="en">Craft cruise floor</span></td><td class="hl">0.87·ln²q ≈ 1,494</td><td><span lang="ko">통계 측정 (유도값)</span><span lang="en">statistical measurement (derived)</span></td></tr>
+      <tr><td><span lang="ko">실제 관측 최대 간격</span><span lang="en">Largest observed gap</span></td><td>1,476</td><td><span lang="ko">자연의 답</span><span lang="en">nature's answer</span></td></tr>
+      <tr><td><span lang="ko">기체 보증 엔벨로프</span><span lang="en">Craft guarantee envelope</span></td><td class="hl">≈ 7×10¹³</td><td><span lang="ko">배치 무관 생존 내성</span><span lang="en">placement-independent survival</span></td></tr>
+      <tr><td><span lang="ko">리만 가설</span><span lang="en">Riemann Hypothesis</span></td><td>√q·ln q ≈ 4.1×10¹⁰</td><td><span lang="ko">조건부 증명</span><span lang="en">conditional proof</span></td></tr>
+      <tr><td><span lang="ko">무조건 증명 (BHP)</span><span lang="en">Unconditional proof (BHP)</span></td><td>q<sup>0.525</sup> ≈ 2.8×10⁹</td><td><span lang="ko">현행 수학의 확정 상한</span><span lang="en">current mathematics' firm ceiling</span></td></tr>
     </table></div>
-    <p>순항 측정은 리만 가설의 구간보다 2천만 배 타이트하다 — 단 전자는 10¹⁸까지의 통계이고
+    <p><span lang="ko">순항 측정은 리만 가설의 구간보다 2천만 배 타이트하다 — 단 전자는 10¹⁸까지의 통계이고
       후자는 모든 q에 대한 보증서다. 반면 보증 엔벨로프는 두 천장을 모두 넘으므로, 기체의
       영생은 미증명 추측이 아니라 <em>이미 증명된 수학에만 의존한다.</em> 그것이 이 설계의
-      최종 성적표다.</p>
+      최종 성적표다.</span><span lang="en">The cruise measurement is twenty million times tighter than
+      the Riemann Hypothesis interval — though the former is statistics up to 10¹⁸ and the latter a
+      warranty for every q. The guarantee envelope, meanwhile, clears both ceilings, so the craft's
+      immortality rests <em>only on mathematics already proven.</em> That is this design's final
+      report card.</span></p>
 
-    <div class="stamp">일지 v4.1 · 원장 마감</div>
-    <h2>맨숫자 손맛 0개</h2>
-    <p>여정의 끝에서 모든 상수는 출처를 갖게 됐다. 유도값 셋 — β는 쌍둥이 평형 μ*/(2C₂)에서,
+    <div class="stamp"><span lang="ko">일지 v4.1 · 원장 마감</span><span lang="en">LOG v4.1 · LEDGER CLOSED</span></div>
+    <h2><span lang="ko">맨숫자 손맛 0개</span><span lang="en">Zero hand-tuned numbers</span></h2>
+    <p><span lang="ko">여정의 끝에서 모든 상수는 출처를 갖게 됐다. 유도값 셋 — β는 쌍둥이 평형 μ*/(2C₂)에서,
       θ와 r은 보존량에서. 해석 가능한 다이얼 셋 — γ = 1/8(오염 치유율), η = 1/3(측정 위생 여유),
       트리거 비율 1/3(안전 마진). 뿌리는 정확히 둘이다: 쌍둥이 소수의 통계와, 해석적 정수론의
       최전선인 BHP 지수. 후자가 언젠가 개선되면 이 기체의 비상 다이얼도 함께 내려간다 —
-      부품 하나가 미해결 문제의 진척도 게이지인 셈이다.</p>
-    <p class="fine">이 페이지의 시뮬레이터는 보고서의 v4.1 사양을 그대로 구현했으며, 브라우저에서
+      부품 하나가 미해결 문제의 진척도 게이지인 셈이다.</span><span lang="en">At journey's end every
+      constant has a pedigree. Three derived values — β from the twin equilibrium μ*/(2C₂), θ and r
+      from the conserved quantity. Three interpretable dials — γ = 1/8 (contamination healing rate),
+      η = 1/3 (measurement hygiene margin), trigger ratio 1/3 (safety margin). Exactly two roots:
+      the statistics of twin primes, and the BHP exponent at the frontier of analytic number theory.
+      If the latter ever improves, this craft's emergency dials turn down with it — one of its parts
+      is a progress gauge for an open problem.</span></p>
+    <p class="fine"><span lang="ko">이 페이지의 시뮬레이터는 보고서의 v4.1 사양을 그대로 구현했으며, 브라우저에서
       3×10⁷까지의 실제 소수를 체로 걸러 사용한다. 여기 결과는 통계적 관측이지 증명이 아니다 —
       밀도 0의 예외를 공집합으로 바꾸는 일은 여전히 증명만이 할 수 있고, 그 벽이 이 이야기의
-      마지막 문장이다. 전체 설계·유도·실험 기록: <a href="report.html">설계와 실험 보고서 (v4.1)</a>.</p>
+      마지막 문장이다. 전체 설계·유도·실험 기록: <a href="report.html">설계와 실험 보고서 (v4.1)</a>.</span><span lang="en">The
+      simulator on this page implements the report's v4.1 specification as written, sieving real
+      primes up to 3×10⁷ in your browser. What you see here is statistical observation, not proof —
+      turning a density-zero set of exceptions into the empty set is something only proof can do,
+      and that wall is the last sentence of this story. Full design, derivations and experiments:
+      <a href="report.html">Design &amp; Experiment Report (v4.1)</a>.</span></p>
 
-    <footer>소수 탐사 비행체 프로젝트 · 시뮬레이션은 사용자 기기에서만 실행됩니다.</footer>
+    <footer><span lang="ko">소수 탐사 비행체 프로젝트 · 시뮬레이션은 사용자 기기에서만 실행됩니다.</span><span lang="en">Prime Flight project · the simulation runs entirely on your device.</span></footer>
   </div>
 </section>
 
 <script>
 'use strict';
+/* ════════ 언어 / language ════════ */
+const STR={
+  ko:{
+    title:'소수 탐사 비행체 — 인터랙티브 항행일지',
+    run:'시작',stop:'정지',
+    modelV41:'v4.1 완전체',modelOrigin:'초기 모델 (±2)',
+    gammaMem:'0 (기억 전용)',
+    sieving:'소수 체 준비 중… (3×10⁷)',
+    ready:ms=>`체 완료 (${ms}ms). 시작을 누르거나 항행일지의 실험 버튼을 사용하세요.`,
+    relaunch:'재이륙 준비 완료.',
+    sieveEnd:'체 범위(3×10⁷) 끝 — 리셋으로 재이륙하세요.',
+    crash:'✕ 추락 — 재이륙',
+    noRoom:'체 범위가 부족합니다 — 리셋 후 다시.',
+    injected:(x,d,adv)=>`전방 x=${x}에 깊이 ${d}×ln² 사막 주입${adv?' + 최악 배치':''}.`,
+    refAnchor:'β* 0.87',refDesert:'관측 최심 사막 0.921'
+  },
+  en:{
+    title:'Prime Flight — an interactive flight log',
+    run:'Start',stop:'Pause',
+    modelV41:'v4.1 full craft',modelOrigin:'initial model (±2)',
+    gammaMem:'0 (memory only)',
+    sieving:'Sieving primes… (3×10⁷)',
+    ready:ms=>`Sieve ready (${ms} ms). Press Start, or use the experiment buttons in the log below.`,
+    relaunch:'Ready for relaunch.',
+    sieveEnd:'End of sieve range (3×10⁷) — reset to fly again.',
+    crash:'✕ crashed — relaunching',
+    noRoom:'Not enough sieve range — reset and try again.',
+    injected:(x,d,adv)=>`Injected a depth-${d}×ln² desert ahead at x=${x}${adv?' + worst-case layout':''}.`,
+    refAnchor:'β* 0.87',refDesert:'deepest observed desert 0.921'
+  }
+};
+const L=()=>document.documentElement.getAttribute('data-lang')==='en'?'en':'ko';
+let statusFn=null;
+function setStatus(fn){statusFn=fn;document.getElementById('status').textContent=fn();}
+
 /* ════════ 소수 체 (3e7, 홀수 비트셋) ════════ */
 const NMAX = 30_000_000;
 const BITS = new Uint32Array(((NMAX>>1)>>5)+2);
@@ -402,11 +491,12 @@ function drawChart(){
   for(let g=1;g<ymax;g+= ymax>8?5:1){cx.moveTo(0,Y(g));cx.lineTo(W,Y(g));}
   cx.stroke();
   // 기준선: 앵커 0.87, 관측 최심 사막 0.921
+  const s=STR[L()];
   const ref=(v,col,lab)=>{cx.setLineDash([5,5]);cx.strokeStyle=col;cx.beginPath();
     cx.moveTo(0,Y(v));cx.lineTo(W,Y(v));cx.stroke();cx.setLineDash([]);
     cx.fillStyle=col;cx.font='10px ui-monospace,monospace';cx.fillText(lab,6,Y(v)-4);};
-  ref(0.87,'#4E7C88','β* 0.87');
-  ref(0.921,'#8A4038','관측 최심 사막 0.921');
+  ref(0.87,'#4E7C88',s.refAnchor);
+  ref(0.921,'#8A4038',s.refDesert);
   if(hist.length<2)return;
   const X=i=>(i/(HMAX-1))*W;
   const off=Math.max(0,hist.length-HMAX);
@@ -457,16 +547,16 @@ function drawStrip(){
 }
 function readout(){
   const l2=S.lc*S.lc;
-  document.getElementById('r-x').textContent=S.x.toLocaleString('ko-KR');
+  document.getElementById('r-x').textContent=S.x.toLocaleString('en-US');
   document.getElementById('r-w').textContent=(S.w/l2).toFixed(3);
   document.getElementById('r-f').textContent=CFG.model==='v41'?(S.floor/l2).toFixed(3):'—';
   document.getElementById('r-p').textContent=S.P;
   document.getElementById('r-t').textContent=S.T;
   document.getElementById('r-d').textContent=S.deaths;
-  document.getElementById('r-a').textContent=S.geo.toLocaleString('ko-KR');
+  document.getElementById('r-a').textContent=S.geo.toLocaleString('en-US');
   document.getElementById('r-e').textContent=S.eye;
   document.getElementById('flash').textContent=
-    performance.now()<S.flashUntil?'✕ 추락 — 재이륙':'';
+    performance.now()<S.flashUntil?STR[L()].crash:'';
 }
 
 /* ════════ 루프 & 컨트롤 ════════ */
@@ -479,8 +569,8 @@ function frame(){
       if(S.deaths>d0)dd=1;
       if(S.alarm)al=true;
       if(S.x+S.w>=NMAX-4096){running=false;
-        document.getElementById('status').textContent='체 범위(3×10⁷) 끝 — 리셋으로 재이륙하세요.';
-        document.getElementById('btn-run').textContent='시작';break;}
+        setStatus(()=>STR[L()].sieveEnd);
+        document.getElementById('btn-run').textContent=STR[L()].run;break;}
     }
     const l2=S.lc*S.lc;
     hist.push({wr:S.w/l2,fr:CFG.model==='v41'?S.floor/l2:0,dd,al});
@@ -490,8 +580,23 @@ function frame(){
   requestAnimationFrame(frame);
 }
 const $=id=>document.getElementById(id);
-$('btn-run').onclick=()=>{running=!running;$('btn-run').textContent=running?'정지':'시작';};
-$('btn-reset').onclick=()=>{resetSim();$('status').textContent='재이륙 준비 완료.';};
+function refreshStrings(){
+  const s=STR[L()];
+  document.title=s.title;
+  $('btn-run').textContent=running?s.stop:s.run;
+  const mo=$('sel-model').options;mo[0].text=s.modelV41;mo[1].text=s.modelOrigin;
+  $('sel-gamma').options[3].text=s.gammaMem;
+  if(statusFn)$('status').textContent=statusFn();
+}
+$('btn-lang').onclick=()=>{
+  const l=L()==='ko'?'en':'ko';
+  document.documentElement.setAttribute('data-lang',l);
+  document.documentElement.setAttribute('lang',l);
+  try{localStorage.setItem('pf-lang',l)}catch(e){}
+  refreshStrings();
+};
+$('btn-run').onclick=()=>{running=!running;$('btn-run').textContent=running?STR[L()].stop:STR[L()].run;};
+$('btn-reset').onclick=()=>{resetSim();setStatus(()=>STR[L()].relaunch);};
 $('sel-model').onchange=e=>{CFG.model=e.target.value;resetSim();};
 $('sl-speed').oninput=e=>{stepsPerFrame=Math.round(2**(e.target.value/12.5));
   $('o-speed').textContent=stepsPerFrame;};
@@ -504,16 +609,17 @@ $('btn-desert').onclick=()=>{
   const depth=$('sl-depth').value/10,l=lnn(S.x);
   const len=Math.round(depth*l*l);
   const D=S.x+Math.max(3000,S.w*2);
-  if(D+len>=NMAX-8192){$('status').textContent='체 범위가 부족합니다 — 리셋 후 다시.';return;}
+  if(D+len>=NMAX-8192){setStatus(()=>STR[L()].noRoom);return;}
   desert={lo:D,hi:D+len};forced=[];
-  if($('chk-adv').checked){
+  const adv=$('chk-adv').checked;
+  if(adv){
     forced.push({lo:D-4000,hi:D-64,step:24});      // 쌍둥이 고정 접근로
     forced.push({lo:D-4000+2,hi:D-64,step:24});
     forced.push({lo:D-64,hi:D,step:4});            // 입구 초밀집 클러스터
   }
   recount();
-  $('status').textContent=`전방 x=${D.toLocaleString('ko-KR')}에 깊이 ${depth.toFixed(1)}×ln² 사막 주입`
-    +($('chk-adv').checked?' + 최악 배치':'')+'.';
+  const xs=D.toLocaleString('en-US'),ds=depth.toFixed(1);
+  setStatus(()=>STR[L()].injected(xs,ds,adv));
 };
 document.querySelectorAll('.try').forEach(b=>b.onclick=()=>{
   const p=b.dataset.preset;
@@ -521,7 +627,7 @@ document.querySelectorAll('.try').forEach(b=>b.onclick=()=>{
     $('sel-model').value=model;CFG.model=model;resetSim();
     if(depth){$('sl-depth').value=depth*10;$('o-depth').textContent=depth.toFixed(1);
       $('chk-adv').checked=adv;$('btn-desert').click();}
-    running=true;$('btn-run').textContent='정지';
+    running=true;$('btn-run').textContent=STR[L()].stop;
     document.getElementById('cockpit').scrollIntoView({behavior:'smooth'});
   };
   if(p==='origin')set('origin');
@@ -532,15 +638,16 @@ document.querySelectorAll('.try').forEach(b=>b.onclick=()=>{
 });
 
 /* ════════ 부팅 ════════ */
-document.getElementById('status').textContent='소수 체 준비 중… (3×10⁷)';
+refreshStrings();
+setStatus(()=>STR[L()].sieving);
 setTimeout(()=>{
   const t0=performance.now();
   buildSieve();
   resetSim();
-  document.getElementById('status').textContent=
-    `체 완료 (${Math.round(performance.now()-t0)}ms). 시작을 누르거나 항행일지의 실험 버튼을 사용하세요.`;
+  const ms=Math.round(performance.now()-t0);
+  setStatus(()=>STR[L()].ready(ms));
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!reduce){running=true;$('btn-run').textContent='정지';}
+  if(!reduce){running=true;$('btn-run').textContent=STR[L()].stop;}
   requestAnimationFrame(frame);
 },30);
 </script>
