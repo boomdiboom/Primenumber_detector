@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>소수 탐사 비행체 — 인터랙티브 항행일지</title>
+<meta name="description" content="창 안에 소수가 없으면 추락하는 비행체로 소수 간격 문제를 탐사하는 인터랙티브 에세이. 실제 소수 3×10⁷ 구간을 브라우저에서 직접 비행한다.">
+<meta name="theme-color" content="#0B0E1A">
+<meta property="og:type" content="website">
+<meta property="og:title" content="소수 탐사 비행체 — 인터랙티브 항행일지">
+<meta property="og:description" content="창 안에 소수가 없으면 추락하는 비행체로 소수 간격 문제를 탐사하는 인터랙티브 에세이.">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%88%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <style>
   :root{
     --night:#0B0E1A; --panel:#131829; --panel2:#0F1422; --grid:#232A44;
@@ -86,6 +94,21 @@
   .log-inner a{color:#B0651A}
   footer{max-width:74ch;margin:48px auto 0;padding-top:18px;border-top:1px solid var(--paper-line);
     font-size:13px;color:var(--paper-dim)}
+
+  /* ── 터치 & 모바일 ─────────────────── */
+  button,select,input,.try{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  @media (max-width:640px){
+    #cockpit{padding:18px 12px 28px}
+    .controls{padding:10px 12px;gap:8px 12px}
+    .controls label{flex:1 1 44%;justify-content:space-between}
+    .controls input[type=range]{flex:1;width:auto;min-width:60px}
+    .controls button{min-height:44px;padding:8px 16px}
+    select{min-height:36px}
+    .readouts{grid-template-columns:repeat(auto-fit,minmax(92px,1fr))}
+    .ro i{font-size:15px}
+    #logbook{padding:44px 16px 64px}
+    .try{width:100%;justify-content:flex-start;text-align:left;min-height:44px}
+  }
 </style>
 </head>
 <body>
