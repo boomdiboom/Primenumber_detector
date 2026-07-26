@@ -28,11 +28,13 @@ npx wrangler dev
 
 ## 배포 (Cloudflare Workers · GitHub 연동)
 
+사이트: **<https://prime.jeongjuhaeng.net>** (커스텀 도메인, wrangler.jsonc의 `routes`로 선언)
+
 저장소: `github.com/boomdiboom/Primenumber_detector` —
 Cloudflare 대시보드의 Git 연동(Workers Builds, 서비스명 `primenumberdetector`)이
 `main`에 push할 때마다 `wrangler deploy`를 실행해 `public/`을 정적 에셋으로 자동 배포한다.
-배포 URL은 대시보드 → Workers & Pages → `primenumberdetector`에서 확인
-(`https://primenumberdetector.<계정 서브도메인>.workers.dev`).
+기본 URL(`https://primenumberdetector.<계정 서브도메인>.workers.dev`)은
+대시보드 → Workers & Pages → `primenumberdetector`에서 확인.
 
 수동 배포가 필요하면 (Git 연동 없이):
 
