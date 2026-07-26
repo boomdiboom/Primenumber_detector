@@ -1,0 +1,6 @@
+{
+  // Cloudflare Pages 설정 — Git 연동 빌드와 로컬 미리보기(wrangler pages dev)가 공유
+  "name": "prime-flight",
+  "pages_build_output_dir": "./public",
+  "compatibility_date": "2026-07-26"
+}
