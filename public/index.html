@@ -41,6 +41,13 @@
   .brand .ver{font-family:var(--mono);font-size:12px;color:var(--amber);border:1px solid var(--amber-dim);
     padding:2px 8px;border-radius:3px;letter-spacing:.08em}
   .brand p{width:100%;color:var(--ink-dim);font-size:14px;max-width:70ch}
+  .quicklinks{display:flex;gap:10px;width:100%;margin-top:10px;flex-wrap:wrap}
+  .quicklinks a{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
+    letter-spacing:.06em;color:var(--amber);border:1px solid var(--amber-dim);border-radius:4px;
+    padding:7px 14px;text-decoration:none;transition:background .15s,color .15s}
+  .quicklinks a:hover{background:var(--amber);color:#14100a}
+  .quicklinks a.cy{color:var(--cyan);border-color:#2E5A66}
+  .quicklinks a.cy:hover{background:var(--cyan);color:#062026}
 
   .panel{background:var(--panel);border:1px solid var(--grid);border-radius:10px;margin-top:16px;overflow:hidden}
   .panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;
@@ -114,6 +121,7 @@
     select{min-height:36px}
     .readouts{grid-template-columns:repeat(auto-fit,minmax(92px,1fr))}
     .ro i{font-size:15px}
+    .quicklinks a{flex:1 1 auto;justify-content:center;min-height:44px}
     #logbook{padding:44px 16px 64px}
     .try{width:100%;justify-content:flex-start;text-align:left;min-height:44px}
   }
@@ -133,6 +141,14 @@
        [x, x+w] ever holds no prime, the craft crashes. It reads twin primes as its instruments,
        measures its own altitude at perfect powers, and survives deserts on exponential lift.
        The experiment buttons in the flight log below reconfigure this cockpit directly.</span></p>
+    <nav class="quicklinks" aria-label="바로가기 · quick links">
+      <a href="https://www.youtube.com/watch?v=LnAxYLqRjis" target="_blank" rel="noopener">
+        <span lang="ko">▶ 모델 소개 영상 (YouTube)</span><span lang="en">▶ Model explainer (YouTube)</span>
+      </a>
+      <a class="cy" href="report.html">
+        <span lang="ko">📄 설계와 실험 보고서</span><span lang="en">📄 Design &amp; Experiment Report</span>
+      </a>
+    </nav>
   </div>
 
   <div class="panel">
