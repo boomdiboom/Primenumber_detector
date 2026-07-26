@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>소수 탐사 비행체 — 인터랙티브 항행일지</title>
+<style>
+  :root{
+    --night:#0B0E1A; --panel:#131829; --panel2:#0F1422; --grid:#232A44;
+    --amber:#FFB454; --amber-dim:#8A6430; --cyan:#6FD3E7; --danger:#FF5C49;
+    --ink:#C9CDD8; --ink-dim:#7C8299;
+    --paper:#EDEFF4; --paper-ink:#1C2333; --paper-dim:#5A6178; --paper-line:#D4D8E3;
+    --mono:ui-monospace,'Cascadia Mono','SF Mono',Consolas,'Nanum Gothic Coding',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR','Malgun Gothic',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+  body{background:var(--night);color:var(--ink);font-family:var(--sans);line-height:1.7}
+
+  /* ── 조종석 ───────────────────────── */
+  #cockpit{max-width:1080px;margin:0 auto;padding:28px 20px 36px}
+  .brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .brand h1{font-size:clamp(22px,3.4vw,32px);font-weight:800;letter-spacing:-.02em;color:#fff}
+  .brand .ver{font-family:var(--mono);font-size:12px;color:var(--amber);border:1px solid var(--amber-dim);
+    padding:2px 8px;border-radius:3px;letter-spacing:.08em}
+  .brand p{width:100%;color:var(--ink-dim);font-size:14px;max-width:70ch}
+
+  .panel{background:var(--panel);border:1px solid var(--grid);border-radius:10px;margin-top:16px;overflow:hidden}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:8px 14px;border-bottom:1px solid var(--grid);background:var(--panel2)}
+  .panel-head span{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--ink-dim)}
+  canvas{display:block;width:100%}
+
+  .readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));
+    gap:1px;background:var(--grid);border-top:1px solid var(--grid)}
+  .ro{background:var(--panel);padding:8px 12px}
+  .ro b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+    color:var(--ink-dim);font-weight:500;margin-bottom:2px}
+  .ro i{font-style:normal;font-family:var(--mono);font-size:17px;color:var(--amber)}
+  .ro.cy i{color:var(--cyan)} .ro.dg i{color:var(--danger)}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;
+    padding:12px 14px;background:var(--panel2);border-top:1px solid var(--grid)}
+  .controls label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-dim);
+    display:flex;align-items:center;gap:8px}
+  .controls output{color:var(--amber);min-width:4.5ch;text-align:right}
+  input[type=range]{accent-color:var(--amber);width:110px}
+  select{background:var(--panel);color:var(--ink);border:1px solid var(--grid);
+    font-family:var(--mono);font-size:12px;padding:4px 6px;border-radius:4px}
+  button{background:transparent;color:var(--amber);border:1px solid var(--amber-dim);
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:6px 14px;
+    border-radius:4px;cursor:pointer;transition:background .15s,color .15s}
+  button:hover{background:var(--amber);color:#14100a}
+  button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  button.primary{background:var(--amber);color:#14100a;font-weight:700}
+  button.primary:hover{background:#ffc87e}
+  button.danger{color:var(--danger);border-color:#7a2c24}
+  button.danger:hover{background:var(--danger);color:#180a08}
+  .note{font-family:var(--mono);font-size:11px;color:var(--ink-dim);padding:8px 14px;
+    border-top:1px solid var(--grid);background:var(--panel2)}
+  #flash{color:var(--danger);font-weight:700}
+
+  /* ── 항행일지 ─────────────────────── */
+  #logbook{background:var(--paper);color:var(--paper-ink);margin-top:44px;
+    border-top:3px solid var(--amber);padding:56px 20px 80px}
+  .log-inner{max-width:74ch;margin:0 auto}
+  .log-inner h2{font-size:clamp(20px,2.6vw,26px);font-weight:800;letter-spacing:-.01em;margin:52px 0 14px}
+  .log-inner h2:first-child{margin-top:0}
+  .stamp{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--paper-dim);
+    border-bottom:1px solid var(--paper-line);padding-bottom:4px;margin-bottom:8px}
+  .log-inner p{margin:0 0 16px;color:#2A3147}
+  .log-inner em{font-style:normal;background:linear-gradient(transparent 62%,rgba(255,180,84,.45) 0)}
+  .fig{font-family:var(--mono);font-size:13px;background:#fff;border:1px solid var(--paper-line);
+    border-radius:8px;padding:14px 16px;margin:18px 0;overflow-x:auto}
+  .fig table{border-collapse:collapse;width:100%;min-width:420px}
+  .fig th,.fig td{text-align:left;padding:5px 10px;border-bottom:1px solid var(--paper-line);white-space:nowrap}
+  .fig th{color:var(--paper-dim);font-weight:600;font-size:11px;letter-spacing:.08em}
+  .fig .hl{color:#B0651A;font-weight:700}
+  .try{display:inline-flex;align-items:center;gap:8px;background:var(--paper-ink);color:var(--amber);
+    border:none;font-family:var(--mono);font-size:12.5px;padding:9px 16px;border-radius:6px;
+    cursor:pointer;margin:2px 0 20px;transition:transform .12s}
+  .try::before{content:'▶';font-size:9px}
+  .try:hover{transform:translateY(-1px);background:#0B0E1A}
+  .fine{font-size:13px;color:var(--paper-dim)}
+  .log-inner a{color:#B0651A}
+  footer{max-width:74ch;margin:48px auto 0;padding-top:18px;border-top:1px solid var(--paper-line);
+    font-size:13px;color:var(--paper-dim)}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 조종석 ══════════ -->
+<section id="cockpit" aria-label="비행 시뮬레이터">
+  <div class="brand">
+    <h1>소수 탐사 비행체</h1>
+    <span class="ver">SPEC v4.1</span>
+    <p>창 [x, x+w] 안에 소수가 하나도 없으면 추락한다. 이 기체는 쌍둥이 소수를 계기로 읽고,
+       거듭제곱으로 자기 고도를 측정하며, 사막을 만나면 지수 양력으로 살아남는다.
+       아래 항행일지의 실험 버튼이 이 조종석을 직접 재구성한다.</p>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><span>ALTITUDE TAPE — w/ln²x (amber) · floor (cyan)</span>
+      <span id="flash" aria-live="polite"></span></div>
+    <canvas id="chart" height="240" aria-label="고도 기록 차트"></canvas>
+    <div class="panel-head" style="border-top:1px solid var(--grid)"><span>TERRAIN — 소수 활주로등과 탐사창</span></div>
+    <canvas id="strip" height="96" aria-label="지형 스트립"></canvas>
+
+    <div class="readouts">
+      <div class="ro"><b>POSITION x</b><i id="r-x">—</i></div>
+      <div class="ro"><b>w / ln²x</b><i id="r-w">—</i></div>
+      <div class="ro cy"><b>FLOOR / ln²x</b><i id="r-f">—</i></div>
+      <div class="ro"><b>PRIMES P</b><i id="r-p">—</i></div>
+      <div class="ro"><b>SIGNAL T</b><i id="r-t">—</i></div>
+      <div class="ro dg"><b>DEATHS</b><i id="r-d">0</i></div>
+      <div class="ro"><b>GEO ALARM</b><i id="r-a">0</i></div>
+      <div class="ro"><b>EYE FIRES</b><i id="r-e">0</i></div>
+    </div>
+
+    <div class="controls">
+      <button id="btn-run" class="primary">시작</button>
+      <button id="btn-reset">리셋</button>
+      <label>기체
+        <select id="sel-model">
+          <option value="v41">v4.1 완전체</option>
+          <option value="origin">초기 모델 (±2)</option>
+        </select>
+      </label>
+      <label>속도 <input id="sl-speed" type="range" min="0" max="100" value="55"><output id="o-speed">240</output></label>
+      <label>β <input id="sl-beta" type="range" min="50" max="130" value="87"><output id="o-beta">0.87</output></label>
+      <label>θ <input id="sl-theta" type="range" min="25" max="90" value="75"><output id="o-theta">0.75</output></label>
+      <label>r <input id="sl-rate" type="range" min="10" max="100" value="45"><output id="o-rate">1.045</output></label>
+      <label>γ
+        <select id="sel-gamma">
+          <option value="0.5">1/2</option><option value="0.25">1/4</option>
+          <option value="0.125" selected>1/8</option><option value="0">0 (기억 전용)</option>
+        </select>
+      </label>
+    </div>
+    <div class="controls">
+      <label>사막 깊이 ×ln²x <input id="sl-depth" type="range" min="10" max="120" value="40"><output id="o-depth">4.0</output></label>
+      <label><input id="chk-adv" type="checkbox"> 최악 배치(입구 뭉침)</label>
+      <button id="btn-desert" class="danger">전방에 사막 주입</button>
+    </div>
+    <div class="note" id="status">소수 체 준비 중…</div>
+  </div>
+</section>
+
+<!-- ══════════ 항행일지 ══════════ -->
+<section id="logbook" aria-label="항행일지">
+  <div class="log-inner">
+
+    <div class="stamp">항행일지 · 출발점</div>
+    <h2>다음 소수는 어디까지 가면 반드시 있는가</h2>
+    <p>소수 q 다음 소수까지의 거리에는 아직 증명된 좁은 한계가 없다. 확률적으로는 간격이
+      ln²q 규모를 넘지 못한다는 크라메르의 예측이 90년째 유력하지만, 리만 가설을 가정해도
+      증명은 √q 규모에서 멈춘다. 우리는 이 문제를 비행기로 번역했다:
+      <em>창 안에 항상 소수가 있도록 고도 w를 조종하는 기체가 영원히 살 수 있는가.</em>
+      기체의 생존은 간격 상계와 동치가 된다.</p>
+
+    <div class="stamp">일지 v1 · 초기 모델과 붕괴</div>
+    <h2>±2 피드백은 스스로 무너진다</h2>
+    <p>첫 기체는 단순했다. 창 안의 쌍둥이 소수가 없으면 +2, 하나면 유지, 둘 이상이면 −2.
+      쌍둥이를 온도계로 쓰는 순간 고도는 저절로 ln²x 스케일에 맞춰진다 — 크라메르의 유도를
+      기체가 재발견한 셈이다. 그러나 실소수 10⁹까지 날려보면 <em>209,527번 추락한다.</em>
+      범인은 기록급 사막이 아니라 쌍둥이 밀집 지대: 창이 최솟값까지 붕괴한 직후 평범한 간격에
+      떨어진다. 수축 속도가 순항 속도와 같아 회복이 지형을 못 따라잡는 구조적 결함이다.</p>
+    <button class="try" data-preset="origin">실험 1 — 초기 모델로 날아보기 (추락을 지켜보라)</button>
+
+    <div class="stamp">일지 v1–v2 · 다섯 계통</div>
+    <h2>기체가 배운 다섯 가지</h2>
+    <p><em>성단 센서</em> — 삼중·사중 소수 성단은 밀집 신호 하나로 접는다.
+      <em>자기유사 눈</em> — 거듭제곱 m^k를 만나면 밑을 읽어 w(m^k) = k²·w(m)으로 자기 고도를
+      측정한다. 로그 계산 없이 스케일을 부트스트랩하는 항법이다.
+      <em>회귀 바닥</em> — 측정을 다음 거듭제곱까지 유지되는 바닥으로 기록하되, 현재 고도의
+      편향을 공제하고 1/8만 반영한다(치유 8세대).
+      <em>기하 경보</em> — 창 앞쪽 3/4이 비면 무조건 비상. 소수 배치와 무관하게 유예 w/8스텝이
+      보장되는, 통계가 아니라 기하가 주는 경보다.
+      <em>지수 양력</em> — 비상 시 w를 1.045배씩 키운다. 선형 양력의 커버 용량은 유한하지만
+      지수 양력은 어떤 깊이든 log 시간에 삼킨다.</p>
+    <button class="try" data-preset="cruise">실험 2 — v4.1 순항 (바닥선이 0.87에 착지하는 과정)</button>
+    <button class="try" data-preset="desert4">실험 3 — 깊이 4 사막 주입 (비상 계통의 구조 작업)</button>
+
+    <div class="stamp">일지 v2–v3 · 보존량</div>
+    <h2>세 개의 다이얼, 하나의 보존량</h2>
+    <p>바닥 β, 경보 문턱 θ, 양력 상수 c는 독립이 아니다. 활주로 θβ·ln²x/2가 셋이 공유하는
+      자원이고, 증명된 최대 간격 q<sup>0.525</sup>를 덮는 조건에서
+      <em>θ·β·c = 1.05</em>라는 보존량이 성립한다. 위 다이얼로 β를 낮춰보라 —
+      살아남으려면 r이 정확히 식만큼 뜨거워져야 한다. 이 곱은 목표 수학의 게이지이기도 하다:
+      크라메르가 증명되면 ~0, 리만 가설이면 1.0, 현행 무조건 증명이면 1.05.</p>
+    <button class="try" data-preset="mega10">실험 4 — 깊이 10 + 최악 배치 (기하 경보의 진가)</button>
+    <button class="try" data-preset="mega10-origin">실험 5 — 같은 공격을 초기 모델에게</button>
+
+    <div class="stamp">일지 · 세 개의 자</div>
+    <h2>이 기체는 무엇을 측정했나 (q = 10¹⁸ 기준)</h2>
+    <div class="fig"><table>
+      <tr><th>측정 도구</th><th>다음 소수 범위</th><th>성격</th></tr>
+      <tr><td>기체 순항 바닥</td><td class="hl">0.87·ln²q ≈ 1,494</td><td>통계 측정 (유도값)</td></tr>
+      <tr><td>실제 관측 최대 간격</td><td>1,476</td><td>자연의 답</td></tr>
+      <tr><td>기체 보증 엔벨로프</td><td class="hl">≈ 7×10¹³</td><td>배치 무관 생존 내성</td></tr>
+      <tr><td>리만 가설</td><td>√q·ln q ≈ 4.1×10¹⁰</td><td>조건부 증명</td></tr>
+      <tr><td>무조건 증명 (BHP)</td><td>q<sup>0.525</sup> ≈ 2.8×10⁹</td><td>현행 수학의 확정 상한</td></tr>
+    </table></div>
+    <p>순항 측정은 리만 가설의 구간보다 2천만 배 타이트하다 — 단 전자는 10¹⁸까지의 통계이고
+      후자는 모든 q에 대한 보증서다. 반면 보증 엔벨로프는 두 천장을 모두 넘으므로, 기체의
+      영생은 미증명 추측이 아니라 <em>이미 증명된 수학에만 의존한다.</em> 그것이 이 설계의
+      최종 성적표다.</p>
+
+    <div class="stamp">일지 v4.1 · 원장 마감</div>
+    <h2>맨숫자 손맛 0개</h2>
+    <p>여정의 끝에서 모든 상수는 출처를 갖게 됐다. 유도값 셋 — β는 쌍둥이 평형 μ*/(2C₂)에서,
+      θ와 r은 보존량에서. 해석 가능한 다이얼 셋 — γ = 1/8(오염 치유율), η = 1/3(측정 위생 여유),
+      트리거 비율 1/3(안전 마진). 뿌리는 정확히 둘이다: 쌍둥이 소수의 통계와, 해석적 정수론의
+      최전선인 BHP 지수. 후자가 언젠가 개선되면 이 기체의 비상 다이얼도 함께 내려간다 —
+      부품 하나가 미해결 문제의 진척도 게이지인 셈이다.</p>
+    <p class="fine">이 페이지의 시뮬레이터는 보고서의 v4.1 사양을 그대로 구현했으며, 브라우저에서
+      3×10⁷까지의 실제 소수를 체로 걸러 사용한다. 여기 결과는 통계적 관측이지 증명이 아니다 —
+      밀도 0의 예외를 공집합으로 바꾸는 일은 여전히 증명만이 할 수 있고, 그 벽이 이 이야기의
+      마지막 문장이다. 전체 설계·유도·실험 기록: <a href="report.html">설계와 실험 보고서 (v4.1)</a>.</p>
+
+    <footer>소수 탐사 비행체 프로젝트 · 시뮬레이션은 사용자 기기에서만 실행됩니다.</footer>
+  </div>
+</section>
+
+<script>
+'use strict';
+/* ════════ 소수 체 (3e7, 홀수 비트셋) ════════ */
+const NMAX = 30_000_000;
+const BITS = new Uint32Array(((NMAX>>1)>>5)+2);
+function buildSieve(){
+  for(let i=3;i*i<=NMAX;i+=2){
+    if(!((BITS[(i>>1)>>5]>>>((i>>1)&31))&1)){
+      for(let j=i*i;j<=NMAX;j+=2*i) BITS[(j>>1)>>5]|=1<<((j>>1)&31);
+    }
+  }
+}
+/* 인공 지형 */
+let desert=null;              // {lo,hi}
+let forced=[];                // [{lo,hi,step}] 강제 소수 패턴
+function isP(q){
+  if(q<2||q>=NMAX) return 0;
+  if(desert&&q>=desert.lo&&q<desert.hi) return 0;
+  for(const f of forced) if(q>=f.lo&&q<f.hi&&((q-f.lo)%f.step===0)) return 1;
+  if(q===2) return 1;
+  if(!(q&1)) return 0;
+  return ((BITS[(q>>1)>>5]>>>((q>>1)&31))&1)?0:1;
+}
+const pairq=q=>isP(q)&&isP(q+2);
+
+/* ════════ 거듭제곱 눈 ════════ */
+function nextPower(v){
+  let best=Infinity,bb=2,bk=2;
+  for(let k=2;k<=25;k++){
+    if(2**k>v){ if(2**k<best){best=2**k;bb=2;bk=k;} break; }
+    let m=Math.floor(v**(1/k));
+    while((m+1)**k<=v)m++;
+    while(m>=2&&m**k>v)m--;
+    const c=(m+1)**k;
+    if(c>v&&(c<best||(c===best&&k>bk))){best=c;bb=m+1;bk=k;}
+  }
+  return [best,bb,bk];
+}
+
+/* ════════ 기체 ════════ */
+const S={};
+const CFG={model:'v41',beta:.87,theta:.75,rate:1.045,gamma:.125};
+function lnn(x){return Math.log(x);}
+
+function recount(){
+  let p=0,t=0,r=0;const fr=S.x+S.w;
+  for(let q=S.x;q<=fr;q++){
+    if(isP(q)){p++;r=q;
+      if(q+2<=fr&&isP(q+2)){
+        if(CFG.model==='origin') t++;
+        else if(!(q>=S.x+6&&pairq(q-6))) t++;
+      }
+    }
+  }
+  S.P=p;S.T=t;S.R=r;
+}
+function resetSim(x0){
+  desert=null;forced=[];
+  S.x=(x0||100001)|1;
+  const l=lnn(S.x);
+  S.lc=l;S.lupd=S.x;
+  S.w=Math.max(16,Math.round(CFG.beta*l*l)&~1);
+  S.floor=S.w;S.ehat=0;
+  S.alt=new Float64Array(6000);
+  S.deaths=0;S.geo=0;S.eye=0;S.steps=0;
+  S.alarm=false;S.flashUntil=0;
+  recount();
+  const [np,nb,nk]=nextPower(S.x+S.w);S.np=np;S.nb=nb;S.nk=nk;
+  hist.length=0;
+}
+function step(){
+  if(S.x>=S.lupd){S.lc=lnn(S.x);
+    let st=Math.floor(S.x/256);st=Math.min(65536,Math.max(64,st));S.lupd=S.x+st;}
+  let dw=S.T===0?2:S.T===1?0:-2;
+  let emerg=false;
+  if(CFG.model==='v41'){
+    if(S.P<=0.33*CFG.beta*S.lc) emerg=true;
+    if(S.R<=S.x+CFG.theta*S.w){emerg=true;S.geo++;}
+    if(emerg){let k=Math.max(4,Math.floor(S.w*(CFG.rate-1)));dw=(k+1)&~1;}
+  }
+  S.alarm=emerg;
+  const of=S.x+S.w;
+  for(let k2=0;k2<2;k2++){
+    const q=S.x+k2;
+    if(isP(q)&&isP(q+2)&&q+2<=of){
+      if(CFG.model==='origin') S.T--;
+      else{
+        if(!(q>=S.x+6&&pairq(q-6))) S.T--;
+        if(pairq(q+6)&&q+8<=of) S.T++;
+      }
+    }
+    if(isP(q)) S.P--;
+  }
+  S.x+=2;S.w+=dw;
+  if(S.w<16)S.w=16;
+  if(CFG.model==='v41'&&S.w<S.floor)S.w=S.floor;
+  let nf=S.x+S.w;
+  for(let q=of+1;q<=nf;q++){
+    if(isP(q)){S.P++;S.R=q;}
+    if(q>=S.x+2&&pairq(q-2)){
+      if(CFG.model==='origin') S.T++;
+      else if(!(q>=S.x+8&&pairq(q-8))) S.T++;
+    }
+  }
+  if(CFG.model==='v41'){
+    while(nf>=S.np){
+      const E=(S.nb<6000&&S.alt[S.nb]>0)?S.nk*S.nk*S.alt[S.nb]:CFG.beta*S.lc*S.lc;
+      const wd=Math.max(16,S.w-S.ehat);
+      let tgt=CFG.gamma===0?E:E+CFG.gamma*(wd-E);
+      tgt=Math.max(16,Math.round(tgt)&~1);
+      S.floor=tgt;
+      if(S.w<S.floor)S.w=S.floor;
+      recount();nf=S.x+S.w;S.eye++;
+      const [np,nb,nk]=nextPower(nf);S.np=np;S.nb=nb;S.nk=nk;
+    }
+    if(S.x+1<6000){S.alt[S.x]=S.floor;S.alt[S.x+1]=S.floor;}
+  }
+  if(S.P===0){
+    S.deaths++;S.flashUntil=performance.now()+900;
+    while(S.P===0&&S.x+S.w<NMAX-64){
+      const o2=S.x+S.w;S.w+=2;
+      for(let q=o2+1;q<=S.x+S.w;q++) if(isP(q))S.P++;
+    }
+    recount();
+  }
+  if(CFG.model==='v41'&&!emerg&&S.w>3*S.floor&&(S.steps&63)===0){
+    const fr2=Math.min(1,192/Math.sqrt(S.x));
+    const cut=Math.floor((S.w-S.floor)*fr2);
+    if(cut>0){S.w-=cut;if(S.w&1)S.w++;if(S.w<S.floor)S.w=S.floor;recount();}
+  }
+  S.ehat+=((S.w-S.floor)-S.ehat)/4096;
+  S.steps++;
+  if(desert&&S.x>desert.hi+2000){desert=null;forced=[];}
+}
+
+/* ════════ 렌더 ════════ */
+const chart=document.getElementById('chart'),strip=document.getElementById('strip');
+const cx=chart.getContext('2d'),sx=strip.getContext('2d');
+const hist=[];const HMAX=900;
+function fitCanvas(c){
+  const d=Math.min(2,devicePixelRatio||1);
+  const w=c.clientWidth;
+  if(c.width!==w*d){c.width=w*d;c.height=parseInt(c.getAttribute('height'))*d;
+    c.getContext('2d').setTransform(d,0,0,d,0,0);}
+}
+function drawChart(){
+  fitCanvas(chart);
+  const W=chart.clientWidth,H=parseInt(chart.getAttribute('height'));
+  cx.clearRect(0,0,W,H);
+  let ymax=2.2;for(const h of hist) ymax=Math.max(ymax,h.wr+.3);
+  ymax=Math.min(ymax,60);
+  const Y=v=>H-14-(v/ymax)*(H-30);
+  cx.strokeStyle='#232A44';cx.lineWidth=1;cx.beginPath();
+  for(let g=1;g<ymax;g+= ymax>8?5:1){cx.moveTo(0,Y(g));cx.lineTo(W,Y(g));}
+  cx.stroke();
+  // 기준선: 앵커 0.87, 관측 최심 사막 0.921
+  const ref=(v,col,lab)=>{cx.setLineDash([5,5]);cx.strokeStyle=col;cx.beginPath();
+    cx.moveTo(0,Y(v));cx.lineTo(W,Y(v));cx.stroke();cx.setLineDash([]);
+    cx.fillStyle=col;cx.font='10px ui-monospace,monospace';cx.fillText(lab,6,Y(v)-4);};
+  ref(0.87,'#4E7C88','β* 0.87');
+  ref(0.921,'#8A4038','관측 최심 사막 0.921');
+  if(hist.length<2)return;
+  const X=i=>(i/(HMAX-1))*W;
+  const off=Math.max(0,hist.length-HMAX);
+  // 경보 음영
+  cx.fillStyle='rgba(255,92,73,.10)';
+  for(let i=1;i<hist.length-off;i++) if(hist[off+i].al)
+    cx.fillRect(X(i-1),16,X(i)-X(i-1)+1,H-30);
+  const line=(key,col,lw)=>{cx.strokeStyle=col;cx.lineWidth=lw;cx.beginPath();
+    for(let i=0;i<hist.length-off;i++){const v=Y(hist[off+i][key]);
+      i?cx.lineTo(X(i),v):cx.moveTo(X(i),v);}cx.stroke();};
+  line('fr','#6FD3E7',1.4);
+  line('wr','#FFB454',1.8);
+  cx.fillStyle='#FF5C49';
+  for(let i=0;i<hist.length-off;i++) if(hist[off+i].dd){
+    cx.font='bold 13px ui-monospace,monospace';cx.fillText('✕',X(i)-4,Y(hist[off+i].wr)-6);}
+}
+function drawStrip(){
+  fitCanvas(strip);
+  const W=strip.clientWidth,H=parseInt(strip.getAttribute('height'));
+  sx.clearRect(0,0,W,H);
+  const span=Math.max(S.w*1.7,360);
+  const lo=S.x-span*0.14,hi=lo+span;
+  const PX=q=>((q-lo)/span)*W;
+  if(desert&&desert.hi>lo&&desert.lo<hi){
+    sx.fillStyle='rgba(255,92,73,.16)';
+    sx.fillRect(PX(Math.max(desert.lo,lo)),0,PX(Math.min(desert.hi,hi))-PX(Math.max(desert.lo,lo)),H);
+  }
+  // 탐사창 빔
+  sx.fillStyle=S.alarm?'rgba(255,92,73,.22)':'rgba(255,180,84,.16)';
+  sx.fillRect(PX(S.x),12,PX(S.x+S.w)-PX(S.x),H-24);
+  sx.strokeStyle=S.alarm?'#FF5C49':'#FFB454';sx.lineWidth=1;
+  sx.strokeRect(PX(S.x),12,PX(S.x+S.w)-PX(S.x),H-24);
+  // 소수 활주로등 (span이 크면 샘플 폭 조정)
+  const stepQ=span>6000?2*Math.ceil(span/6000):1;
+  sx.strokeStyle='#E8D9B0';
+  for(let q=Math.max(3,Math.floor(lo))|1;q<=hi;q+=2*stepQ){
+    if(isP(q)){
+      const tw=isP(q+2)||isP(q-2);
+      sx.globalAlpha=tw?1:.5;sx.lineWidth=tw?2:1;
+      sx.beginPath();sx.moveTo(PX(q),H-22);sx.lineTo(PX(q),H-6);sx.stroke();
+    }
+  }
+  sx.globalAlpha=1;
+  // 기체
+  sx.fillStyle='#fff';
+  sx.beginPath();sx.moveTo(PX(S.x)+1,7);sx.lineTo(PX(S.x)-5,1);sx.lineTo(PX(S.x)-5,13);
+  sx.closePath();sx.fill();
+}
+function readout(){
+  const l2=S.lc*S.lc;
+  document.getElementById('r-x').textContent=S.x.toLocaleString('ko-KR');
+  document.getElementById('r-w').textContent=(S.w/l2).toFixed(3);
+  document.getElementById('r-f').textContent=CFG.model==='v41'?(S.floor/l2).toFixed(3):'—';
+  document.getElementById('r-p').textContent=S.P;
+  document.getElementById('r-t').textContent=S.T;
+  document.getElementById('r-d').textContent=S.deaths;
+  document.getElementById('r-a').textContent=S.geo.toLocaleString('ko-KR');
+  document.getElementById('r-e').textContent=S.eye;
+  document.getElementById('flash').textContent=
+    performance.now()<S.flashUntil?'✕ 추락 — 재이륙':'';
+}
+
+/* ════════ 루프 & 컨트롤 ════════ */
+let running=false,stepsPerFrame=240;
+function frame(){
+  if(running){
+    let dd=0,al=false;
+    for(let i=0;i<stepsPerFrame;i++){
+      const d0=S.deaths;step();
+      if(S.deaths>d0)dd=1;
+      if(S.alarm)al=true;
+      if(S.x+S.w>=NMAX-4096){running=false;
+        document.getElementById('status').textContent='체 범위(3×10⁷) 끝 — 리셋으로 재이륙하세요.';
+        document.getElementById('btn-run').textContent='시작';break;}
+    }
+    const l2=S.lc*S.lc;
+    hist.push({wr:S.w/l2,fr:CFG.model==='v41'?S.floor/l2:0,dd,al});
+    if(hist.length>HMAX)hist.shift();
+  }
+  drawChart();drawStrip();readout();
+  requestAnimationFrame(frame);
+}
+const $=id=>document.getElementById(id);
+$('btn-run').onclick=()=>{running=!running;$('btn-run').textContent=running?'정지':'시작';};
+$('btn-reset').onclick=()=>{resetSim();$('status').textContent='재이륙 준비 완료.';};
+$('sel-model').onchange=e=>{CFG.model=e.target.value;resetSim();};
+$('sl-speed').oninput=e=>{stepsPerFrame=Math.round(2**(e.target.value/12.5));
+  $('o-speed').textContent=stepsPerFrame;};
+$('sl-beta').oninput=e=>{CFG.beta=e.target.value/100;$('o-beta').textContent=CFG.beta.toFixed(2);};
+$('sl-theta').oninput=e=>{CFG.theta=e.target.value/100;$('o-theta').textContent=CFG.theta.toFixed(2);};
+$('sl-rate').oninput=e=>{CFG.rate=1+e.target.value/1000;$('o-rate').textContent=CFG.rate.toFixed(3);};
+$('sel-gamma').onchange=e=>{CFG.gamma=+e.target.value;};
+$('sl-depth').oninput=e=>{$('o-depth').textContent=(e.target.value/10).toFixed(1);};
+$('btn-desert').onclick=()=>{
+  const depth=$('sl-depth').value/10,l=lnn(S.x);
+  const len=Math.round(depth*l*l);
+  const D=S.x+Math.max(3000,S.w*2);
+  if(D+len>=NMAX-8192){$('status').textContent='체 범위가 부족합니다 — 리셋 후 다시.';return;}
+  desert={lo:D,hi:D+len};forced=[];
+  if($('chk-adv').checked){
+    forced.push({lo:D-4000,hi:D-64,step:24});      // 쌍둥이 고정 접근로
+    forced.push({lo:D-4000+2,hi:D-64,step:24});
+    forced.push({lo:D-64,hi:D,step:4});            // 입구 초밀집 클러스터
+  }
+  recount();
+  $('status').textContent=`전방 x=${D.toLocaleString('ko-KR')}에 깊이 ${depth.toFixed(1)}×ln² 사막 주입`
+    +($('chk-adv').checked?' + 최악 배치':'')+'.';
+};
+document.querySelectorAll('.try').forEach(b=>b.onclick=()=>{
+  const p=b.dataset.preset;
+  const set=(model,depth,adv)=>{
+    $('sel-model').value=model;CFG.model=model;resetSim();
+    if(depth){$('sl-depth').value=depth*10;$('o-depth').textContent=depth.toFixed(1);
+      $('chk-adv').checked=adv;$('btn-desert').click();}
+    running=true;$('btn-run').textContent='정지';
+    document.getElementById('cockpit').scrollIntoView({behavior:'smooth'});
+  };
+  if(p==='origin')set('origin');
+  else if(p==='cruise')set('v41');
+  else if(p==='desert4')set('v41',4,false);
+  else if(p==='mega10')set('v41',10,true);
+  else if(p==='mega10-origin')set('origin',10,true);
+});
+
+/* ════════ 부팅 ════════ */
+document.getElementById('status').textContent='소수 체 준비 중… (3×10⁷)';
+setTimeout(()=>{
+  const t0=performance.now();
+  buildSieve();
+  resetSim();
+  document.getElementById('status').textContent=
+    `체 완료 (${Math.round(performance.now()-t0)}ms). 시작을 누르거나 항행일지의 실험 버튼을 사용하세요.`;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){running=true;$('btn-run').textContent='정지';}
+  requestAnimationFrame(frame);
+},30);
+</script>
+</body>
+</html>
