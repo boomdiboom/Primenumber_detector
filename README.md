@@ -14,7 +14,7 @@ The page sieves real primes up to 3×10⁷ in the browser and flies the v4.1 cra
 | `public/index.html` | 인터랙티브 항행일지 (시뮬레이터 + 에세이, 한/영 전환) |
 | `public/report.html` | 설계와 실험 보고서 v4.1 전문 (한/영 전환) |
 | `소수탐사비행체_설계와_실험_보고서_5.md` | 보고서 마크다운 원본 (배포 제외) |
-| `wrangler.jsonc` | Cloudflare Pages 설정 (`pages_build_output_dir: ./public`) |
+| `wrangler.jsonc` | Cloudflare Workers 정적 에셋 설정 (`assets.directory: ./public`) |
 
 빌드 단계 없음 — 정적 HTML 두 장이 전부이며 외부 의존성이 없다.
 언어 전환 버튼은 우측 상단에 있고, 선택은 `localStorage(pf-lang)`에 저장되어 두 페이지가 공유한다.
@@ -22,24 +22,20 @@ The page sieves real primes up to 3×10⁷ in the browser and flies the v4.1 cra
 ## 로컬 미리보기
 
 ```bash
-npx wrangler pages dev ./public
+npx wrangler dev
 # 또는 아무 정적 서버: python -m http.server -d public 8000
 ```
 
-## 배포 (Cloudflare Pages · GitHub 연동)
+## 배포 (Cloudflare Workers · GitHub 연동)
 
-저장소: `github.com/boomdiboom/Primenumber_detector` — `main`에 push하면 자동 배포된다.
-
-최초 1회 대시보드 연결 (이미 완료했다면 불필요):
-
-1. Cloudflare 대시보드 → **Workers & Pages → Create → Pages → Connect to Git**
-2. `Primenumber_detector` 저장소 선택
-3. 빌드 설정: Framework preset **None**, Build command **(비움)**,
-   Build output directory **`public`**, Production branch **`main`**
-4. Save and Deploy → `https://<프로젝트명>.pages.dev` 발급
+저장소: `github.com/boomdiboom/Primenumber_detector` —
+Cloudflare 대시보드의 Git 연동(Workers Builds, 서비스명 `primenumberdetector`)이
+`main`에 push할 때마다 `wrangler deploy`를 실행해 `public/`을 정적 에셋으로 자동 배포한다.
+배포 URL은 대시보드 → Workers & Pages → `primenumberdetector`에서 확인
+(`https://primenumberdetector.<계정 서브도메인>.workers.dev`).
 
 수동 배포가 필요하면 (Git 연동 없이):
 
 ```bash
-npx wrangler pages deploy ./public --project-name=prime-flight
+npx wrangler deploy
 ```
