@@ -281,7 +281,7 @@ function recount(){
 }
 function resetSim(x0){
   desert=null;forced=[];
-  S.x=(x0||100001)|1;
+  S.x=(x0||1001)|1;
   const l=lnn(S.x);
   S.lc=l;S.lupd=S.x;
   S.w=Math.max(16,Math.round(CFG.beta*l*l)&~1);
