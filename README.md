@@ -15,6 +15,7 @@ The page sieves real primes up to 3×10⁷ in the browser and flies the v4.1 cra
 | `public/report.html` | 설계와 실험 보고서 v4.1 전문 (한/영 전환) |
 | `소수탐사비행체_설계와_실험_보고서_5.md` | 보고서 마크다운 원본 (배포 제외) |
 | `wrangler.jsonc` | Cloudflare Workers 정적 에셋 설정 (`assets.directory: ./public`) |
+| `tools/desert-flight.mjs` | 신규 기록 사막(1676·1854) 세그먼트 비행 재현 스크립트 (`node tools/desert-flight.mjs`) |
 
 빌드 단계 없음 — 정적 HTML 두 장이 전부이며 외부 의존성이 없다.
 언어 전환 버튼은 우측 상단에 있고, 선택은 `localStorage(pf-lang)`에 저장되어 두 페이지가 공유한다.
