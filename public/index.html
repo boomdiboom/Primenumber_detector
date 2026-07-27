@@ -185,7 +185,7 @@
 <section id="cockpit" aria-label="비행 시뮬레이터 · flight simulator">
   <div class="brand">
     <h1><span lang="ko">소수 탐사 비행체</span><span lang="en">Prime Flight</span></h1>
-    <span class="ver">SPEC v4.5</span>
+    <span class="ver">SPEC v4.6</span>
     <button id="btn-lang" aria-label="언어 전환 · switch language"><span lang="ko">English</span><span lang="en">한국어</span></button>
     <p><span lang="ko">창 [x, x+w] 안에 소수가 하나도 없으면 추락한다. 이 기체는 쌍둥이 소수를 계기로 읽고,
        거듭제곱으로 자기 고도를 측정하며, 사막을 만나면 지수 양력으로 살아남는다.
@@ -226,7 +226,7 @@
       <button id="btn-reset"><span lang="ko">리셋</span><span lang="en">Reset</span></button>
       <label><span lang="ko">기체</span><span lang="en">Craft</span>
         <select id="sel-model">
-          <option value="v41">v4.5 완전체</option>
+          <option value="v41">v4.6 완전체</option>
           <option value="origin">초기 모델 (±2)</option>
         </select>
       </label>
@@ -305,7 +305,7 @@
       <em>Exponential lift</em> — in an emergency, w grows ×1.045 per step (with a minimum of +4 at low
       altitude). Linear lift has finite
       coverage; exponential lift swallows any depth in log time.</span></p>
-    <button class="try" data-preset="cruise"><span lang="ko">실험 2 — v4.5 순항 (바닥선이 0.87에 착지하는 과정)</span><span lang="en">Experiment 2 — v4.5 cruise (watch the floor settle at 0.87)</span></button>
+    <button class="try" data-preset="cruise"><span lang="ko">실험 2 — v4.6 순항 (바닥선이 0.87에 착지하는 과정)</span><span lang="en">Experiment 2 — v4.6 cruise (watch the floor settle at 0.87)</span></button>
     <button class="try" data-preset="desert4"><span lang="ko">실험 3 — 깊이 4 사막 주입 (비상 계통의 구조 작업)</span><span lang="en">Experiment 3 — inject a depth-4 desert (the emergency systems at work)</span></button>
 
     <div class="stamp"><span lang="ko">일지 v2–v3 · 점근 임계곱</span><span lang="en">LOG v2–v3 · THE ASYMPTOTIC CRITICAL PRODUCT</span></div>
@@ -363,17 +363,17 @@
       the statistics of twin primes, and the BHP exponent at the frontier of analytic number theory.
       If the latter ever improves, this craft's emergency dials turn down with it — one of its parts
       is a progress gauge for an open problem.</span></p>
-    <p class="fine"><span lang="ko">이 페이지의 시뮬레이터는 보고서의 v4.5 사양을 그대로 구현했으며(기본값은
+    <p class="fine"><span lang="ko">이 페이지의 시뮬레이터는 보고서의 v4.6 사양을 그대로 구현했으며(기본값은
       경제 모드 r=1.045), 브라우저에서
       3×10⁷까지의 실제 소수를 체로 걸러 사용한다. 여기 결과는 통계적 관측이지 증명이 아니다 —
       밀도 0의 예외를 공집합으로 바꾸는 일은 여전히 증명만이 할 수 있고, 그 벽이 이 이야기의
-      마지막 문장이다. 전체 설계·유도·실험 기록: <a href="report.html">설계와 실험 보고서 (v4.5)</a>.</span><span lang="en">The
-      simulator on this page implements the report's v4.5 specification as written (defaulting to
+      마지막 문장이다. 전체 설계·유도·실험 기록: <a href="report.html">설계와 실험 보고서 (v4.6)</a>.</span><span lang="en">The
+      simulator on this page implements the report's v4.6 specification as written (defaulting to
       economy mode, r = 1.045), sieving real
       primes up to 3×10⁷ in your browser. What you see here is statistical observation, not proof —
       turning a density-zero set of exceptions into the empty set is something only proof can do,
       and that wall is the last sentence of this story. Full design, derivations and experiments:
-      <a href="report.html">Design &amp; Experiment Report (v4.5)</a>.</span></p>
+      <a href="report.html">Design &amp; Experiment Report (v4.6)</a>.</span></p>
 
     <footer><span lang="ko">소수 탐사 비행체 프로젝트 · 시뮬레이션은 사용자 기기에서만 실행됩니다.</span><span lang="en">Prime Flight project · the simulation runs entirely on your device.</span></footer>
   </div>
@@ -386,7 +386,7 @@ const STR={
   ko:{
     title:'소수 탐사 비행체 — 인터랙티브 항행일지',
     run:'시작',stop:'정지',
-    modelV41:'v4.5 완전체',modelOrigin:'초기 모델 (±2)',
+    modelV41:'v4.6 완전체',modelOrigin:'초기 모델 (±2)',
     gammaMem:'0 (기억 전용)',
     waiting:'대기 중 — "시뮬레이션 시작"을 누르면 브라우저 안에서 소수 체(3×10⁷)를 계산합니다. 네트워크 전송은 없습니다.',
     sieving:'소수 체 준비 중… (3×10⁷)',
@@ -401,7 +401,7 @@ const STR={
   en:{
     title:'Prime Flight — an interactive flight log',
     run:'Start',stop:'Pause',
-    modelV41:'v4.5 full craft',modelOrigin:'initial model (±2)',
+    modelV41:'v4.6 full craft',modelOrigin:'initial model (±2)',
     gammaMem:'0 (memory only)',
     waiting:'Standing by — press "Start" to sieve the primes (3×10⁷) inside your browser. No network transfer.',
     sieving:'Sieving primes… (3×10⁷)',

@@ -26,7 +26,7 @@
 
 ## 배포 구조 요약
 
-- `public/` = 배포 루트 (index.html 에세이+시뮬레이터, report.html 보고서 v4.5, 한/영 이중언어)
+- `public/` = 배포 루트 (index.html 에세이+시뮬레이터, report.html 보고서 v4.6, 한/영 이중언어)
 - 저장소: github.com/boomdiboom/Primenumber_detector → Workers 서비스 `primenumberdetector`
 - `_headers`에 CSP(`default-src 'none'`) — 외부 리소스(스크립트·폰트·fetch) 추가 시 CSP부터 갱신
 
