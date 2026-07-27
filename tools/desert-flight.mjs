@@ -1,5 +1,8 @@
 // 신규 기록 사막 2곳 세그먼트 비행 — v4.5 인증 기체 (증명 바닥 + 최초교차 경보)
-// 소수판정: 결정적 Miller–Rabin (밑 2..37, n < 3.317×10²⁴에서 결정적) — 원 실험의 C 구간 체와 독립된 구현
+// 소수판정: 결정적 Miller–Rabin (밑 2..41 — 13개 밑, n < 3.317×10²⁴에서 결정적) — 원 실험의 C 구간 체와 독립된 구현
+//   정정(2026-07-28): 구판은 밑 12개(2..37)로 같은 한계를 표기했으나 12개 밑의 결정성 한계는
+//   ψ₁₂ ≈ 3.187×10²³ 이다(3.317×10²⁴는 13개 밑 ψ₁₃). 본 기록(2.07×10¹⁹·1.01×10²⁰)은 둘 다
+//   ψ₁₂보다 3자릿수 이상 아래라 원 결과는 무영향 — 한계 표기 정정 + 밑 41 추가.
 // 실행: node tools/desert-flight.mjs
 
 const RECORDS = [
@@ -10,7 +13,7 @@ const APPROACH = 120000; // 접근 활주로 (~57·ln²p)
 const TAIL = 20000;
 
 // ── 결정적 Miller–Rabin ──────────────────────────────
-const MR_BASES = [2n, 3n, 5n, 7n, 11n, 13n, 17n, 19n, 23n, 29n, 31n, 37n];
+const MR_BASES = [2n, 3n, 5n, 7n, 11n, 13n, 17n, 19n, 23n, 29n, 31n, 37n, 41n];
 function modpow(b, e, m) { let r = 1n; b %= m; while (e > 0n) { if (e & 1n) r = r * b % m; b = b * b % m; e >>= 1n; } return r; }
 function isPrimeBig(n) {
   if (n < 2n) return false;
