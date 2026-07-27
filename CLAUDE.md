@@ -5,9 +5,12 @@
 - **`lab/` 이하와 `소수의규칙을찾을수있는가.md`는 어떤 경우에도 커밋·push하지 않는다.**
   소수 규칙 탐사 여정의 산출물(스크립트·데이터·노트)은 전부 `lab/` 디렉터리에 만든다.
   `.gitignore`가 막고 있지만, 새 탐사 파일을 루트에 만들지 말 것.
+- **예외(2026-07-27 개정): `predictions/`는 커밋 대상이다** — 블라인드 추정치 JSON·
+  SHA-256·암호화 아카이브(lab-vault.enc)만 담는다(커밋 시각 = 타임스탬프 증거).
+  복호 키(lab/VAULT-KEY.txt)는 lab/에 있으므로 자동으로 커밋 제외 — 절대 옮기지 말 것.
 - push는 곧 라이브 배포다: `main`에 push하면 Cloudflare Workers Builds가
   `public/`을 https://prime.jeongjuhaeng.net 에 자동 배포한다.
-  **사이트·보고서 관련 변경만 커밋한다.**
+  **사이트·보고서 관련 변경과 predictions/만 커밋한다.**
 
 ## 배포 구조 요약
 

@@ -1,0 +1,20 @@
+{
+  "experiment": "exp13 — 영점 파동 성장 지수 β 측정 (γ 탐지 후 조건부 β 추정의 2단계 좌표계)",
+  "date": "2026-07-27",
+  "method": "구간 포락선 회귀(γ-적응 구간 4~6, 국소 Hann 진폭 → ln A vs t 가중 회귀), 합성 주입 보정(45회)으로 오차 바닥 C/SNR·편향 자체 추정",
+  "estimator_history": "v1(정규화 상관) 주입 검정에서 기각(외측 편향 ±0.10), v2 회귀 SE 요행 문제, v3 확정 — 주입 보정이 결함을 두 번 검출",
+  "calibration": {
+    "noise_constant_C": 4.17,
+    "injection_bias": "+0.0204 (방향성 — 상향)",
+    "injection_scatter": "0.069~0.081"
+  },
+  "results": {
+    "beta_raw_weighted_mean": 0.4757,
+    "sigma_internal_independence_assumed": 0.0262,
+    "beta_bias_corrected_simple": 0.456,
+    "strongest_line_zeta_gamma1": "0.501 ± 0.044",
+    "claim": "두 값(0.476/0.456) 모두 현재 오차에서 β=1/2와 유의하게 충돌하지 않음 — 지지되는 주장은 '0.5 배제 불가'이지 '0.5 정밀 재측정'이 아님",
+    "caveat": "저고도 영점의 β=1/2은 전산 검증된 기지 영역 — 본 실험은 계측 능력 실증"
+  },
+  "notes": "상세: lab/exp13-results.md; 후속 검증(대칭쌍 주입·포함률·파이프라인 σ): lab/exp13b-verify.mjs"
+}
