@@ -1,0 +1,1079 @@
+{
+ "date": "2026-07-28",
+ "challenge": "3자은닉평가v2",
+ "answerKeySha256": "fefdb41c871aa6ea809a40a0cc701880ea5913a5ee086acaca68617fba88c2b9",
+ "rules": {
+  "thresh": 3,
+  "scan": [
+   1,
+   45
+  ],
+  "pipeline": "hunt → cluster(간격≤1.5) → cleanFit(τ=급수별 bgNull 95%, 가드=창±2.5 이웃 후보) → 균일 프룬 → 수술(분할·붕괴)",
+  "scoringCutoff": 25
+ },
+ "series": [
+  {
+   "id": "V1",
+   "q": 17,
+   "ord": 4,
+   "complex": true,
+   "floor": 0.05383,
+   "tau": 0.5623,
+   "nNullWin": 40,
+   "raw": [
+    {
+     "g": -11.671,
+     "sharp": 3.2
+    },
+    {
+     "g": -9.196,
+     "sharp": 4
+    },
+    {
+     "g": -7.971,
+     "sharp": 4.7
+    },
+    {
+     "g": -6.025,
+     "sharp": 6.1
+    },
+    {
+     "g": -1.893,
+     "sharp": 19
+    },
+    {
+     "g": 3.387,
+     "sharp": 10.9
+    },
+    {
+     "g": 6.466,
+     "sharp": 5.7
+    },
+    {
+     "g": 8.508,
+     "sharp": 4.3
+    },
+    {
+     "g": 10.417,
+     "sharp": 3.2
+    }
+   ],
+   "refit": [
+    {
+     "g": -12.862,
+     "sharp": 2.9,
+     "K": 2,
+     "cluster": 1
+    },
+    {
+     "g": -11.657,
+     "sharp": 3.2,
+     "K": 2,
+     "cluster": 1
+    },
+    {
+     "g": -9.194,
+     "sharp": 4,
+     "K": 2,
+     "cluster": 2
+    },
+    {
+     "g": -7.975,
+     "sharp": 4.7,
+     "K": 2,
+     "cluster": 2
+    },
+    {
+     "g": -6.021,
+     "sharp": 6.2,
+     "K": 1,
+     "cluster": 3
+    },
+    {
+     "g": -1.895,
+     "sharp": 19,
+     "K": 1,
+     "cluster": 4
+    },
+    {
+     "g": 3.387,
+     "sharp": 10.8,
+     "K": 1,
+     "cluster": 5
+    },
+    {
+     "g": 6.466,
+     "sharp": 5.7,
+     "K": 1,
+     "cluster": 6
+    },
+    {
+     "g": 8.512,
+     "sharp": 4.4,
+     "K": 1,
+     "cluster": 7
+    },
+    {
+     "g": 10.66,
+     "sharp": 3.2,
+     "K": 1,
+     "cluster": 8
+    }
+   ],
+   "decisions": [
+    {
+     "cluster": 1,
+     "range": [
+      -11.671,
+      -11.671
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 1건"
+     ]
+    },
+    {
+     "cluster": 2,
+     "range": [
+      -9.196,
+      -7.971
+     ],
+     "seeds": 2,
+     "guards": 2,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 3,
+     "range": [
+      -6.025,
+      -6.025
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 4,
+     "range": [
+      -1.893,
+      -1.893
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 5,
+     "range": [
+      3.387,
+      3.387
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 6,
+     "range": [
+      6.466,
+      6.466
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 7,
+     "range": [
+      8.508,
+      8.508
+     ],
+     "seeds": 1,
+     "guards": 2,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 8,
+     "range": [
+      10.417,
+      10.417
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건",
+      "분해능 강제 붕괴 [10.710, 10.713] → 10.660"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "V2",
+   "q": 19,
+   "ord": 9,
+   "complex": true,
+   "floor": 0.05615,
+   "tau": 0.4659,
+   "nNullWin": 40,
+   "raw": [
+    {
+     "g": -11.41,
+     "sharp": 3.2
+    },
+    {
+     "g": -10.06,
+     "sharp": 3.6
+    },
+    {
+     "g": -6.706,
+     "sharp": 5.5
+    },
+    {
+     "g": -5.35,
+     "sharp": 6.7
+    },
+    {
+     "g": -2.734,
+     "sharp": 12.8
+    },
+    {
+     "g": 4.257,
+     "sharp": 8.4
+    },
+    {
+     "g": 5.603,
+     "sharp": 6.6
+    },
+    {
+     "g": 7.442,
+     "sharp": 4.8
+    },
+    {
+     "g": 9.944,
+     "sharp": 3.6
+    },
+    {
+     "g": 12.195,
+     "sharp": 3
+    },
+    {
+     "g": 17.02,
+     "sharp": 3.2
+    }
+   ],
+   "refit": [
+    {
+     "g": -12.671,
+     "sharp": 2.8,
+     "K": 3,
+     "cluster": 1
+    },
+    {
+     "g": -11.416,
+     "sharp": 3.1,
+     "K": 3,
+     "cluster": 1
+    },
+    {
+     "g": -10.066,
+     "sharp": 3.5,
+     "K": 3,
+     "cluster": 1
+    },
+    {
+     "g": -6.688,
+     "sharp": 5.3,
+     "K": 2,
+     "cluster": 2
+    },
+    {
+     "g": -5.364,
+     "sharp": 6.6,
+     "K": 2,
+     "cluster": 2
+    },
+    {
+     "g": -2.734,
+     "sharp": 12.8,
+     "K": 1,
+     "cluster": 3
+    },
+    {
+     "g": 4.269,
+     "sharp": 8.3,
+     "K": 2,
+     "cluster": 4
+    },
+    {
+     "g": 5.591,
+     "sharp": 6.3,
+     "K": 2,
+     "cluster": 4
+    },
+    {
+     "g": 7.428,
+     "sharp": 4.8,
+     "K": 1,
+     "cluster": 5
+    },
+    {
+     "g": 9.938,
+     "sharp": 3.6,
+     "K": 1,
+     "cluster": 6
+    },
+    {
+     "g": 12.139,
+     "sharp": 2.9,
+     "K": 2,
+     "cluster": 7
+    },
+    {
+     "g": 13.185,
+     "sharp": 2.7,
+     "K": 2,
+     "cluster": 7
+    },
+    {
+     "g": 17.06,
+     "sharp": 3.5,
+     "K": 1,
+     "cluster": 8
+    }
+   ],
+   "decisions": [
+    {
+     "cluster": 1,
+     "range": [
+      -11.41,
+      -10.06
+     ],
+     "seeds": 2,
+     "guards": 0,
+     "K": 3,
+     "log": [
+      "CLEAN 추가 1건"
+     ]
+    },
+    {
+     "cluster": 2,
+     "range": [
+      -6.706,
+      -5.35
+     ],
+     "seeds": 2,
+     "guards": 0,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 3,
+     "range": [
+      -2.734,
+      -2.734
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 4,
+     "range": [
+      4.257,
+      5.603
+     ],
+     "seeds": 2,
+     "guards": 1,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 5,
+     "range": [
+      7.442,
+      7.442
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 6,
+     "range": [
+      9.944,
+      9.944
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 7,
+     "range": [
+      12.195,
+      12.195
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 0건",
+      "무해 위반@K=3 — 되돌림",
+      "분할 12.455 → [12.11, 13.01] (ΔRSS 5.8e-1 > τ)"
+     ]
+    },
+    {
+     "cluster": 8,
+     "range": [
+      17.02,
+      17.02
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "V3",
+   "q": 19,
+   "ord": 2,
+   "complex": false,
+   "floor": 0.05158,
+   "tau": 0.6439,
+   "nNullWin": 40,
+   "raw": [
+    {
+     "g": 1.516,
+     "sharp": 24.3
+    },
+    {
+     "g": 5.492,
+     "sharp": 7.1
+    },
+    {
+     "g": 7.134,
+     "sharp": 5.5
+    },
+    {
+     "g": 9.375,
+     "sharp": 4.2
+    },
+    {
+     "g": 10.787,
+     "sharp": 3.6
+    },
+    {
+     "g": 12.173,
+     "sharp": 3.2
+    }
+   ],
+   "refit": [
+    {
+     "g": 1.514,
+     "sharp": 24.3,
+     "K": 1,
+     "cluster": 1
+    },
+    {
+     "g": 5.478,
+     "sharp": 7.1,
+     "K": 1,
+     "cluster": 2
+    },
+    {
+     "g": 7.16,
+     "sharp": 5.4,
+     "K": 1,
+     "cluster": 3
+    },
+    {
+     "g": 9.385,
+     "sharp": 4.1,
+     "K": 3,
+     "cluster": 4
+    },
+    {
+     "g": 10.785,
+     "sharp": 3.6,
+     "K": 3,
+     "cluster": 4
+    },
+    {
+     "g": 12.177,
+     "sharp": 3.2,
+     "K": 3,
+     "cluster": 4
+    }
+   ],
+   "decisions": [
+    {
+     "cluster": 1,
+     "range": [
+      1.516,
+      1.516
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 2,
+     "range": [
+      5.492,
+      5.492
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 3,
+     "range": [
+      7.134,
+      7.134
+     ],
+     "seeds": 1,
+     "guards": 2,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 4,
+     "range": [
+      9.375,
+      12.173
+     ],
+     "seeds": 3,
+     "guards": 1,
+     "K": 3,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "V4",
+   "q": 23,
+   "ord": 11,
+   "complex": true,
+   "floor": 0.05656,
+   "tau": 0.5209,
+   "nNullWin": 40,
+   "raw": [
+    {
+     "g": -12.658,
+     "sharp": 3.7
+    },
+    {
+     "g": -10.72,
+     "sharp": 3.3
+    },
+    {
+     "g": -9.183,
+     "sharp": 3.8
+    },
+    {
+     "g": -6.098,
+     "sharp": 5.8
+    },
+    {
+     "g": -4.882,
+     "sharp": 7.2
+    },
+    {
+     "g": -1.969,
+     "sharp": 17.4
+    },
+    {
+     "g": 4.1,
+     "sharp": 8.6
+    },
+    {
+     "g": 6.036,
+     "sharp": 6.2
+    },
+    {
+     "g": 9.536,
+     "sharp": 3.7
+    },
+    {
+     "g": 11.216,
+     "sharp": 3.1
+    },
+    {
+     "g": 16.742,
+     "sharp": 3.3
+    }
+   ],
+   "refit": [
+    {
+     "g": -12.688,
+     "sharp": 4,
+     "K": 1,
+     "cluster": 1
+    },
+    {
+     "g": -10.67,
+     "sharp": 3.3,
+     "K": 1,
+     "cluster": 2
+    },
+    {
+     "g": -9.199,
+     "sharp": 3.8,
+     "K": 1,
+     "cluster": 3
+    },
+    {
+     "g": -6.094,
+     "sharp": 5.8,
+     "K": 2,
+     "cluster": 4
+    },
+    {
+     "g": -4.88,
+     "sharp": 7.2,
+     "K": 2,
+     "cluster": 4
+    },
+    {
+     "g": -1.971,
+     "sharp": 17.4,
+     "K": 1,
+     "cluster": 5
+    },
+    {
+     "g": 4.108,
+     "sharp": 8.6,
+     "K": 1,
+     "cluster": 6
+    },
+    {
+     "g": 5.932,
+     "sharp": 5.9,
+     "K": 2,
+     "cluster": 7
+    },
+    {
+     "g": 6.992,
+     "sharp": 5.1,
+     "K": 2,
+     "cluster": 7
+    },
+    {
+     "g": 9.518,
+     "sharp": 3.7,
+     "K": 1,
+     "cluster": 8
+    },
+    {
+     "g": 11.236,
+     "sharp": 3.2,
+     "K": 1,
+     "cluster": 9
+    },
+    {
+     "g": 16.726,
+     "sharp": 3.6,
+     "K": 1,
+     "cluster": 10
+    }
+   ],
+   "decisions": [
+    {
+     "cluster": 1,
+     "range": [
+      -12.658,
+      -12.658
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건",
+      "프룬 -10.408 (한계이득 9.2e-2 ≤ τ)"
+     ]
+    },
+    {
+     "cluster": 2,
+     "range": [
+      -10.72,
+      -10.72
+     ],
+     "seeds": 1,
+     "guards": 2,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 3,
+     "range": [
+      -9.183,
+      -9.183
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 4,
+     "range": [
+      -6.098,
+      -4.882
+     ],
+     "seeds": 2,
+     "guards": 0,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 5,
+     "range": [
+      -1.969,
+      -1.969
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 6,
+     "range": [
+      4.1,
+      4.1
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 7,
+     "range": [
+      6.036,
+      6.036
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 1건"
+     ]
+    },
+    {
+     "cluster": 8,
+     "range": [
+      9.536,
+      9.536
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 9,
+     "range": [
+      11.216,
+      11.216
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 10,
+     "range": [
+      16.742,
+      16.742
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "V5",
+   "q": 25,
+   "ord": 10,
+   "complex": true,
+   "floor": 0.05847,
+   "tau": 0.5206,
+   "nNullWin": 40,
+   "raw": [
+    {
+     "g": -9.634,
+     "sharp": 3.7
+    },
+    {
+     "g": -6.319,
+     "sharp": 5.4
+    },
+    {
+     "g": -4.722,
+     "sharp": 7.2
+    },
+    {
+     "g": -3.125,
+     "sharp": 10.8
+    },
+    {
+     "g": 3.065,
+     "sharp": 11
+    },
+    {
+     "g": 5.598,
+     "sharp": 6.1
+    },
+    {
+     "g": 6.738,
+     "sharp": 5
+    },
+    {
+     "g": 8.352,
+     "sharp": 4.1
+    },
+    {
+     "g": 11.163,
+     "sharp": 3.1
+    }
+   ],
+   "refit": [
+    {
+     "g": -10.674,
+     "sharp": 3.2,
+     "K": 2,
+     "cluster": 1
+    },
+    {
+     "g": -9.496,
+     "sharp": 3.7,
+     "K": 2,
+     "cluster": 1
+    },
+    {
+     "g": -6.329,
+     "sharp": 5.4,
+     "K": 1,
+     "cluster": 2
+    },
+    {
+     "g": -4.72,
+     "sharp": 7.2,
+     "K": 1,
+     "cluster": 3
+    },
+    {
+     "g": -3.123,
+     "sharp": 10.8,
+     "K": 1,
+     "cluster": 4
+    },
+    {
+     "g": 3.065,
+     "sharp": 11,
+     "K": 1,
+     "cluster": 5
+    },
+    {
+     "g": 5.58,
+     "sharp": 6.1,
+     "K": 2,
+     "cluster": 6
+    },
+    {
+     "g": 6.782,
+     "sharp": 5,
+     "K": 2,
+     "cluster": 6
+    },
+    {
+     "g": 8.338,
+     "sharp": 4.1,
+     "K": 1,
+     "cluster": 7
+    },
+    {
+     "g": 11.133,
+     "sharp": 3.1,
+     "K": 1,
+     "cluster": 8
+    }
+   ],
+   "decisions": [
+    {
+     "cluster": 1,
+     "range": [
+      -9.634,
+      -9.634
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 1건"
+     ]
+    },
+    {
+     "cluster": 2,
+     "range": [
+      -6.319,
+      -6.319
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 3,
+     "range": [
+      -4.722,
+      -4.722
+     ],
+     "seeds": 1,
+     "guards": 2,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 4,
+     "range": [
+      -3.125,
+      -3.125
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 5,
+     "range": [
+      3.065,
+      3.065
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 6,
+     "range": [
+      5.598,
+      6.738
+     ],
+     "seeds": 2,
+     "guards": 1,
+     "K": 2,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 7,
+     "range": [
+      8.352,
+      8.352
+     ],
+     "seeds": 1,
+     "guards": 1,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    },
+    {
+     "cluster": 8,
+     "range": [
+      11.163,
+      11.163
+     ],
+     "seeds": 1,
+     "guards": 0,
+     "K": 1,
+     "log": [
+      "CLEAN 추가 0건"
+     ]
+    }
+   ]
+  }
+ ]
+}
