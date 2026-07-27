@@ -12,7 +12,7 @@
 <meta property="og:locale" content="ko_KR">
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%88%EF%B8%8F%3C/text%3E%3C/svg%3E">
-<script>(function(){var l='ko';try{var s=localStorage.getItem('pf-lang');if(s==='en'||s==='ko')l=s}catch(e){}var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l);})();</script>
+<script>(function(){var l='ko',r='0';try{var s=localStorage.getItem('pf-lang');if(s==='en'||s==='ko')l=s;r=localStorage.getItem('pf-run')||'0'}catch(e){}var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l);d.setAttribute('data-boot',r==='1'?'auto':'gate');})();</script>
 <style>
   :root{
     --night:#0B0E1A; --panel:#131829; --panel2:#0F1422; --grid:#232A44;
@@ -33,6 +33,28 @@
   #btn-lang{margin-left:auto;background:transparent;color:var(--cyan);border:1px solid #2E5A66;
     font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding:2px 10px;border-radius:3px;cursor:pointer}
   #btn-lang:hover{background:var(--cyan);color:#062026}
+
+  /* ── 소개 게이트 ───────────────────── */
+  #gate{position:fixed;inset:0;z-index:100;background:var(--night);overflow:auto;
+    display:flex;align-items:center;justify-content:center;padding:24px 20px}
+  html[data-boot="auto"] #gate{display:none}
+  html[data-boot="gate"] body{overflow:hidden}
+  .gate-inner{max-width:580px;width:100%}
+  .gate-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .gate-top h2{font-size:clamp(22px,4.5vw,30px);font-weight:800;letter-spacing:-.02em;color:#fff}
+  #gate-lang{background:transparent;color:var(--cyan);border:1px solid #2E5A66;
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding:2px 10px;border-radius:3px;cursor:pointer}
+  #gate-lang:hover{background:var(--cyan);color:#062026}
+  .gate-sub{color:var(--ink-dim);font-size:14px;line-height:1.7;margin-bottom:16px}
+  .gate-note{background:var(--panel);border:1px solid var(--grid);border-radius:10px;
+    padding:14px 16px;margin-bottom:18px;font-size:13px;line-height:1.65;color:var(--ink)}
+  .gate-note ul{list-style:none;display:grid;gap:9px;margin:0;padding:0}
+  .gate-note li{padding-left:20px;position:relative}
+  .gate-note li::before{content:'✓';position:absolute;left:0;color:var(--cyan);font-weight:700}
+  .gate-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .gate-btns button{min-height:44px;font-size:13px;padding:10px 20px}
+  .gate-links{font-family:var(--mono);font-size:12px;display:flex;gap:18px;flex-wrap:wrap}
+  .gate-links a{color:var(--amber)}
 
   /* ── 조종석 ───────────────────────── */
   #cockpit{max-width:1080px;margin:0 auto;padding:28px 20px 36px}
@@ -129,6 +151,36 @@
 </head>
 <body>
 
+<!-- ══════════ 소개 게이트 ══════════ -->
+<section id="gate" aria-label="소개 · introduction">
+  <div class="gate-inner">
+    <div class="gate-top">
+      <h2><span lang="ko">소수 탐사 비행체</span><span lang="en">Prime Flight</span></h2>
+      <button id="gate-lang" aria-label="언어 전환 · switch language"><span lang="ko">EN</span><span lang="en">한국어</span></button>
+    </div>
+    <p class="gate-sub"><span lang="ko">"다음 소수는 어디까지 가면 반드시 있는가"를 비행 시뮬레이션으로
+      탐사하는 인터랙티브 에세이입니다. 창 안에 소수가 없으면 추락하는 비행체를 실제 소수 위에
+      띄워 놓고, 조종하면서 읽습니다.</span><span lang="en">An interactive essay exploring "how far away
+      can the next prime be?" as a flight simulation — a craft that crashes when its window holds no
+      prime, flying over the real primes while you read.</span></p>
+    <div class="gate-note">
+      <ul>
+        <li><span lang="ko">이 페이지는 <b>아무 파일도 다운로드하지 않습니다.</b></span><span lang="en">This page <b>downloads no files whatsoever.</b></span></li>
+        <li><span lang="ko">아래 버튼을 누를 때만 소수 계산(3×10⁷ 범위, 메모리 약 2MB)이 <b>브라우저 안에서만</b> 실행됩니다. 누르기 전에는 아무것도 실행되지 않습니다.</span><span lang="en">Only when you press the button does the prime computation (up to 3×10⁷, ~2 MB of memory) run — <b>entirely inside your browser</b>. Nothing runs before you press it.</span></li>
+        <li><span lang="ko">어떤 데이터도 전송·수집·설치되지 않습니다. 서버의 보안 정책(CSP)이 이 페이지의 외부 요청 자체를 차단하며, 개발자 도구(F12) → 네트워크 탭에서 로드 후 요청이 0건임을 직접 확인할 수 있습니다.</span><span lang="en">No data is sent, collected, or installed. The server's security policy (CSP) blocks this page from making any outbound request — verify it yourself in DevTools (F12) → Network: zero requests after load.</span></li>
+      </ul>
+    </div>
+    <div class="gate-btns">
+      <button id="gate-start" class="primary"><span lang="ko">시뮬레이션 시작</span><span lang="en">Start the simulation</span></button>
+      <button id="gate-read"><span lang="ko">계산 없이 읽기</span><span lang="en">Read without computing</span></button>
+    </div>
+    <p class="gate-links">
+      <a href="https://www.youtube.com/watch?v=LnAxYLqRjis" target="_blank" rel="noopener"><span lang="ko">▶ 소개 영상 (YouTube)</span><span lang="en">▶ Intro video (YouTube)</span></a>
+      <a href="report.html"><span lang="ko">📄 설계와 실험 보고서</span><span lang="en">📄 Design &amp; Experiment Report</span></a>
+    </p>
+  </div>
+</section>
+
 <!-- ══════════ 조종석 ══════════ -->
 <section id="cockpit" aria-label="비행 시뮬레이터 · flight simulator">
   <div class="brand">
@@ -194,7 +246,7 @@
       <label><input id="chk-adv" type="checkbox"> <span lang="ko">최악 배치(입구 뭉침)</span><span lang="en">worst-case layout (crowded approach)</span></label>
       <button id="btn-desert" class="danger"><span lang="ko">전방에 사막 주입</span><span lang="en">Inject desert ahead</span></button>
     </div>
-    <div class="note" id="status"><span lang="ko">소수 체 준비 중…</span><span lang="en">Sieving primes…</span></div>
+    <div class="note" id="status"><span lang="ko">대기 중 — 시작 전에는 아무 계산도 실행되지 않습니다.</span><span lang="en">Standing by — nothing runs before you start.</span></div>
   </div>
 </section>
 
@@ -336,6 +388,7 @@ const STR={
     run:'시작',stop:'정지',
     modelV41:'v4.3 완전체',modelOrigin:'초기 모델 (±2)',
     gammaMem:'0 (기억 전용)',
+    waiting:'대기 중 — "시뮬레이션 시작"을 누르면 브라우저 안에서 소수 체(3×10⁷)를 계산합니다. 네트워크 전송은 없습니다.',
     sieving:'소수 체 준비 중… (3×10⁷)',
     ready:ms=>`체 완료 (${ms}ms). 시작을 누르거나 항행일지의 실험 버튼을 사용하세요.`,
     relaunch:'재이륙 준비 완료.',
@@ -350,6 +403,7 @@ const STR={
     run:'Start',stop:'Pause',
     modelV41:'v4.3 full craft',modelOrigin:'initial model (±2)',
     gammaMem:'0 (memory only)',
+    waiting:'Standing by — press "Start" to sieve the primes (3×10⁷) inside your browser. No network transfer.',
     sieving:'Sieving primes… (3×10⁷)',
     ready:ms=>`Sieve ready (${ms} ms). Press Start, or use the experiment buttons in the log below.`,
     relaunch:'Ready for relaunch.',
@@ -622,9 +676,13 @@ $('btn-lang').onclick=()=>{
   try{localStorage.setItem('pf-lang',l)}catch(e){}
   refreshStrings();
 };
-$('btn-run').onclick=()=>{running=!running;$('btn-run').textContent=running?STR[L()].stop:STR[L()].run;};
-$('btn-reset').onclick=()=>{resetSim();setStatus(()=>STR[L()].relaunch);};
-$('sel-model').onchange=e=>{CFG.model=e.target.value;resetSim();};
+$('btn-run').onclick=()=>{
+  if(!sieveReady){ensureBoot(startRun);return;}
+  running=!running;$('btn-run').textContent=running?STR[L()].stop:STR[L()].run;};
+$('btn-reset').onclick=()=>{
+  if(!sieveReady){ensureBoot();return;}
+  resetSim();setStatus(()=>STR[L()].relaunch);};
+$('sel-model').onchange=e=>{CFG.model=e.target.value;if(sieveReady)resetSim();};
 $('sl-speed').oninput=e=>{stepsPerFrame=Math.round(2**(e.target.value/12.5));
   $('o-speed').textContent=stepsPerFrame;};
 $('sl-beta').oninput=e=>{CFG.beta=e.target.value/100;$('o-beta').textContent=CFG.beta.toFixed(2);};
@@ -632,7 +690,7 @@ $('sl-theta').oninput=e=>{CFG.theta=e.target.value/100;$('o-theta').textContent=
 $('sl-rate').oninput=e=>{CFG.rate=1+e.target.value/1000;$('o-rate').textContent=CFG.rate.toFixed(3);};
 $('sel-gamma').onchange=e=>{CFG.gamma=+e.target.value;};
 $('sl-depth').oninput=e=>{$('o-depth').textContent=(e.target.value/10).toFixed(1);};
-$('btn-desert').onclick=()=>{
+$('btn-desert').onclick=()=>{ensureBoot(()=>{
   const depth=$('sl-depth').value/10,l=lnn(S.x);
   const len=Math.round(depth*l*l);
   const D=S.x+Math.max(3000,S.w*2);
@@ -647,36 +705,56 @@ $('btn-desert').onclick=()=>{
   recount();
   const xs=D.toLocaleString('en-US'),ds=depth.toFixed(1);
   setStatus(()=>STR[L()].injected(xs,ds,adv));
-};
+});};
 document.querySelectorAll('.try').forEach(b=>b.onclick=()=>{
   const p=b.dataset.preset;
-  const set=(model,depth,adv)=>{
-    $('sel-model').value=model;CFG.model=model;resetSim();
-    if(depth){$('sl-depth').value=depth*10;$('o-depth').textContent=depth.toFixed(1);
-      $('chk-adv').checked=adv;$('btn-desert').click();}
-    running=true;$('btn-run').textContent=STR[L()].stop;
-    document.getElementById('cockpit').scrollIntoView({behavior:'smooth'});
-  };
-  if(p==='origin')set('origin');
-  else if(p==='cruise')set('v41');
-  else if(p==='desert4')set('v41',4,false);
-  else if(p==='mega10')set('v41',10,true);
-  else if(p==='mega10-origin')set('origin',10,true);
+  document.getElementById('cockpit').scrollIntoView({behavior:'smooth'});
+  ensureBoot(()=>{
+    const set=(model,depth,adv)=>{
+      $('sel-model').value=model;CFG.model=model;resetSim();
+      if(depth){$('sl-depth').value=depth*10;$('o-depth').textContent=depth.toFixed(1);
+        $('chk-adv').checked=adv;$('btn-desert').click();}
+      running=true;$('btn-run').textContent=STR[L()].stop;
+    };
+    if(p==='origin')set('origin');
+    else if(p==='cruise')set('v41');
+    else if(p==='desert4')set('v41',4,false);
+    else if(p==='mega10')set('v41',10,true);
+    else if(p==='mega10-origin')set('origin',10,true);
+  });
 });
 
-/* ════════ 부팅 ════════ */
+/* ════════ 부팅 — 게이트 동의 후에만 계산 (지연 실행) ════════ */
+let sieveReady=false,booting=false;const afterBoot=[];
+function ensureBoot(cb){
+  if(sieveReady){cb&&cb();return;}
+  if(cb)afterBoot.push(cb);
+  if(booting)return;
+  booting=true;
+  setStatus(()=>STR[L()].sieving);
+  setTimeout(()=>{
+    const t0=performance.now();
+    buildSieve();
+    resetSim();
+    sieveReady=true;
+    const ms=Math.round(performance.now()-t0);
+    setStatus(()=>STR[L()].ready(ms));
+    requestAnimationFrame(frame);
+    afterBoot.splice(0).forEach(f=>f());
+  },30);
+}
+function startRun(){running=true;$('btn-run').textContent=STR[L()].stop;}
+function dismissGate(){document.documentElement.setAttribute('data-boot','auto');}
+$('gate-lang').onclick=()=>$('btn-lang').click();
+$('gate-start').onclick=()=>{try{localStorage.setItem('pf-run','1')}catch(e){}dismissGate();ensureBoot(startRun);};
+$('gate-read').onclick=()=>dismissGate();
 refreshStrings();
-setStatus(()=>STR[L()].sieving);
-setTimeout(()=>{
-  const t0=performance.now();
-  buildSieve();
-  resetSim();
-  const ms=Math.round(performance.now()-t0);
-  setStatus(()=>STR[L()].ready(ms));
+if(document.documentElement.getAttribute('data-boot')==='auto'){
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!reduce){running=true;$('btn-run').textContent=STR[L()].stop;}
-  requestAnimationFrame(frame);
-},30);
+  ensureBoot(reduce?null:startRun);
+}else{
+  setStatus(()=>STR[L()].waiting);
+}
 </script>
 </body>
 </html>

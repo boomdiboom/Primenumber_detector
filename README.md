@@ -19,6 +19,11 @@ The page sieves real primes up to 3×10⁷ in the browser and flies the v4.1 cra
 빌드 단계 없음 — 정적 HTML 두 장이 전부이며 외부 의존성이 없다.
 언어 전환 버튼은 우측 상단에 있고, 선택은 `localStorage(pf-lang)`에 저장되어 두 페이지가 공유한다.
 
+**안전 설계**: 이 사이트는 아무 파일도 다운로드하지 않고 어떤 데이터도 전송하지 않는다.
+첫 방문 시 소개 게이트가 표시되며, [시뮬레이션 시작]을 눌러야만 소수 계산이 브라우저 안에서
+실행된다(동의는 `localStorage(pf-run)`에 저장되어 재방문 시 게이트 생략). 서버는
+CSP(`default-src 'none'` + connect 차단)로 페이지의 외부 요청 자체를 차단한다.
+
 ## 로컬 미리보기
 
 ```bash
