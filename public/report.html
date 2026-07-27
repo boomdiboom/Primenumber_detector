@@ -24,7 +24,7 @@ display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap
 .top a{color:var(--amber);text-decoration:none}
 .topright{display:flex;gap:12px;align-items:center}
 #btn-lang{background:transparent;color:var(--amber);border:1px solid #D8B98F;
-font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:2px 10px;border-radius:3px;cursor:pointer}
+font-family:var(--mono);font-size:13px;letter-spacing:.08em;padding:7px 20px;border-radius:5px;cursor:pointer;min-height:36px}
 #btn-lang:hover{background:var(--amber);color:#fff}
 html[data-lang="en"] [lang="ko"]{display:none!important}
 html[data-lang="ko"] [lang="en"]{display:none!important}
@@ -48,7 +48,7 @@ h2{margin-top:44px}
 pre{padding:12px 10px;font-size:12px}
 }
 </style></head><body><main>
-<div class="top"><span>PRIME FLIGHT · REPORT v4.3</span><span class="topright"><a href="./"><span lang="ko">← 인터랙티브 항행일지</span><span lang="en">← interactive flight log</span></a><button id="btn-lang" aria-label="언어 전환 · switch language"><span lang="ko">EN</span><span lang="en">한국어</span></button></span></div>
+<div class="top"><span>PRIME FLIGHT · REPORT v4.3</span><span class="topright"><a href="./"><span lang="ko">← 인터랙티브 항행일지</span><span lang="en">← interactive flight log</span></a><button id="btn-lang" aria-label="언어 전환 · switch language"><span lang="ko">English</span><span lang="en">한국어</span></button></span></div>
 <h1><span lang="ko">소수 탐사 비행체 — 설계 사양과 실험 보고서</span><span lang="en">Prime Flight — Design Specification and Experiment Report</span></h1>
 <p><span lang="ko">이 문서는 "소수 q의 다음 소수는 어디까지 가면 반드시 있는가"라는 질문을 동역학계로 번역한 탐사 프로젝트의 최종 기록이다. 출발점은 확률 모형에서 유도한 크라메르급 추측(간격 &lt; 1.6·ln²q)이었고, 종착점은 다섯 개의 계통을 갖춘 적응형 비행체와 두 단계의 보증 명제다: 경제 모드(점근 임계곱 1.05)는 BHP 정리의 미계산 문턱 x₀ 위에서 성립하고, 무조건 모드(1.978, 양력 ×1.07)는 문턱 없는 명시적 정리에 의해 4×10¹⁸ 위 전 구간에서 미계산 상수 의존 없이 성립한다(5절). 모든 주장 옆에는 그것을 뒷받침한 실험이 붙어 있다.</span><span lang="en">This document is the final record of a project that translated the question "how far, at most, can the next prime after q be?" into a dynamical system. It began with a Cramér-class conjecture derived from a probabilistic model (gap &lt; 1.6·ln²q); it ends with an adaptive craft of five subsystems and a two-tier guarantee: the economy mode (asymptotic critical product 1.05) holds above BHP's uncomputed threshold x₀, while the unconditional mode (1.978, lift ×1.07) holds over the entire range above 4×10¹⁸, by a threshold-free explicit theorem, with no dependence on any uncomputed constant (§5). Beside every claim sits the experiment that backs it.</span></p>
 <hr />
