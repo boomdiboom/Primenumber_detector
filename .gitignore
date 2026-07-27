@@ -2,3 +2,7 @@ node_modules/
 .wrangler/
 .DS_Store
 Thumbs.db
+
+# 소수 규칙 탐사 — 커밋·push 금지 (push는 라이브 배포로 이어짐)
+lab/
+소수의규칙을찾을수있는가.md
