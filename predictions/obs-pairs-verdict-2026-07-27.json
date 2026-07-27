@@ -1,6 +1,6 @@
 {
  "date": "2026-07-27",
- "criteria": "|모델피크−γ̂|≤0.05 ∧ |모델피크−실측피크|≤0.05; 기여영점≥2→병합, 1→변위",
+ "criteria": "v2 값 기준(exp14b-feedback): M(γ̂)/max ≥ 0.90 ∧ 선명도비 ×/÷1.5; argmax는 고원폭95<0.1일 때만 보조 — 간섭 영역 argmax 비정의성 반영",
  "verdicts": [
   {
    "q": 11,
@@ -10,12 +10,13 @@
    "sharp": 6.2,
    "nearestRef": 6.6307304504849425,
    "refDist": 0.0207,
-   "neighborGap": 1.2557,
-   "screen": false,
-   "modelPeak": 6.6099999999999834,
-   "measPeak": 6.609999999999991,
+   "valueRatio": 1,
+   "plateauWidth95": 0.3,
+   "sharpPred": 8.13,
+   "sharpRatio": 1.311,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -25,12 +26,13 @@
    "sharp": 5.3,
    "nearestRef": 7.886434659201507,
    "refDist": 0.0276,
-   "neighborGap": 1.2557,
-   "screen": false,
-   "modelPeak": 7.913999999999983,
-   "measPeak": 7.913999999999991,
+   "valueRatio": 1,
+   "plateauWidth95": 0.295,
+   "sharpPred": 6.87,
+   "sharpRatio": 1.296,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -40,12 +42,13 @@
    "sharp": 7.8,
    "nearestRef": -5.27308657584209,
    "refDist": 0.0179,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": -5.271000000000018,
-   "measPeak": -5.291000000000009,
+   "valueRatio": 0.9994,
+   "plateauWidth95": 0.325,
+   "sharpPred": 10.11,
+   "sharpRatio": 1.296,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -55,12 +58,13 @@
    "sharp": 6.2,
    "nearestRef": 6.706219791836629,
    "refDist": 0.0118,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": 6.707999999999983,
-   "measPeak": 6.717999999999991,
+   "valueRatio": 0.9998,
+   "plateauWidth95": 0.33,
+   "sharpPred": 5.03,
+   "sharpRatio": 0.811,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -70,12 +74,13 @@
    "sharp": 3.5,
    "nearestRef": -10.919366913981312,
    "refDist": 0.1426,
-   "neighborGap": 0.9504,
-   "screen": false,
-   "modelPeak": -11.056999999999874,
-   "measPeak": -11.062000000000008,
+   "valueRatio": 0.9999,
+   "plateauWidth95": 0.255,
+   "sharpPred": 2.87,
+   "sharpRatio": 0.82,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -85,12 +90,13 @@
    "sharp": 3.9,
    "nearestRef": -9.968986597464013,
    "refDist": 0.122,
-   "neighborGap": 0.9504,
-   "screen": false,
-   "modelPeak": -9.846999999999875,
-   "measPeak": -9.847000000000008,
+   "valueRatio": 1,
+   "plateauWidth95": 0.265,
+   "sharpPred": 3.17,
+   "sharpRatio": 0.812,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -100,12 +106,13 @@
    "sharp": 6.9,
    "nearestRef": -6.031809302694154,
    "refDist": 0.0102,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": -6.032000000000017,
-   "measPeak": -6.042000000000009,
+   "valueRatio": 0.9998,
+   "plateauWidth95": 0.33,
+   "sharpPred": 5.59,
+   "sharpRatio": 0.81,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -115,12 +122,13 @@
    "sharp": 3.4,
    "nearestRef": -12.115069806903321,
    "refDist": 0.0371,
-   "neighborGap": 1.3226,
-   "screen": false,
-   "modelPeak": -12.097999999999878,
-   "measPeak": -12.078000000000008,
+   "valueRatio": 0.9989,
+   "plateauWidth95": 0.295,
+   "sharpPred": 3.34,
+   "sharpRatio": 0.982,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -130,12 +138,13 @@
    "sharp": 5.4,
    "nearestRef": 7.661857628686862,
    "refDist": 0.0241,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": 7.660999999999984,
-   "measPeak": 7.685999999999991,
+   "valueRatio": 0.9989,
+   "plateauWidth95": 0.33,
+   "sharpPred": 5.23,
+   "sharpRatio": 0.968,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -145,12 +154,13 @@
    "sharp": 5.6,
    "nearestRef": -7.206926471299104,
    "refDist": 0.0169,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": -7.205000000000017,
-   "measPeak": -7.190000000000009,
+   "valueRatio": 0.9995,
+   "plateauWidth95": 0.325,
+   "sharpPred": 5.56,
+   "sharpRatio": 0.992,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 11,
@@ -160,12 +170,13 @@
    "sharp": 4.4,
    "nearestRef": 8.971284368499385,
    "refDist": 0.1727,
-   "neighborGap": 1.1371,
-   "screen": false,
-   "modelPeak": 9.159000000000127,
-   "measPeak": 9.143999999999991,
+   "valueRatio": 0.9999,
+   "plateauWidth95": 0.66,
+   "sharpPred": 4.58,
+   "sharpRatio": 1.04,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -175,12 +186,13 @@
    "sharp": 9,
    "nearestRef": 4.24460934264585,
    "refDist": 0.0106,
-   "neighborGap": 1.3325,
-   "screen": false,
-   "modelPeak": 4.233999999999983,
-   "measPeak": 4.233999999999992,
+   "valueRatio": 1,
+   "plateauWidth95": 0.3,
+   "sharpPred": 9.5,
+   "sharpRatio": 1.055,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -190,12 +202,13 @@
    "sharp": 6.9,
    "nearestRef": 5.577131969512615,
    "refDist": 0.0169,
-   "neighborGap": 1.3325,
-   "screen": false,
-   "modelPeak": 5.593999999999983,
-   "measPeak": 5.593999999999991,
+   "valueRatio": 1,
+   "plateauWidth95": 0.285,
+   "sharpPred": 7.34,
+   "sharpRatio": 1.063,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -205,12 +218,13 @@
    "sharp": 3.2,
    "nearestRef": -11.976074282559221,
    "refDist": 0.0349,
-   "neighborGap": 1.2334,
-   "screen": false,
-   "modelPeak": -11.995999999999873,
-   "measPeak": -12.011000000000008,
+   "valueRatio": 0.9994,
+   "plateauWidth95": 0.31,
+   "sharpPred": 3.34,
+   "sharpRatio": 1.045,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -220,12 +234,13 @@
    "sharp": 5.2,
    "nearestRef": -7.217702604029829,
    "refDist": 0.0123,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": -7.220000000000014,
-   "measPeak": -7.230000000000009,
+   "valueRatio": 0.9997,
+   "plateauWidth95": 0.325,
+   "sharpPred": 5.51,
+   "sharpRatio": 1.06,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -235,12 +250,13 @@
    "sharp": 5.9,
    "nearestRef": 6.809831069168944,
    "refDist": 0.0442,
-   "neighborGap": 1.1853,
-   "screen": true,
-   "modelPeak": 6.848999999999983,
-   "measPeak": 6.853999999999991,
+   "valueRatio": 1,
+   "plateauWidth95": 0.38,
+   "sharpPred": 4.16,
+   "sharpRatio": 0.705,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -250,12 +266,13 @@
    "sharp": 5,
    "nearestRef": 7.995128424848011,
    "refDist": 0.0611,
-   "neighborGap": 1.1853,
-   "screen": true,
-   "modelPeak": 7.933999999999983,
-   "measPeak": 7.933999999999991,
+   "valueRatio": 0.9402,
+   "plateauWidth95": 0.085,
+   "sharpPred": 3.78,
+   "sharpRatio": 0.756,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -265,12 +282,13 @@
    "sharp": 3.1,
    "nearestRef": -11.995043926377823,
    "refDist": 0.087,
-   "neighborGap": 0.8705,
-   "screen": true,
-   "modelPeak": -12.076999999999876,
-   "measPeak": -12.08200000000001,
+   "valueRatio": 1,
+   "plateauWidth95": 0.315,
+   "sharpPred": 2.2,
+   "sharpRatio": 0.71,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -280,12 +298,13 @@
    "sharp": 3.4,
    "nearestRef": -11.124526050471548,
    "refDist": 0.0735,
-   "neighborGap": 0.8705,
-   "screen": true,
-   "modelPeak": -11.050999999999876,
-   "measPeak": -11.051000000000009,
+   "valueRatio": 1,
+   "plateauWidth95": 0.31,
+   "sharpPred": 2.39,
+   "sharpRatio": 0.703,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -295,12 +314,13 @@
    "sharp": 4.7,
    "nearestRef": -8.482698533078771,
    "refDist": 0.2253,
-   "neighborGap": 1.1161,
-   "screen": false,
-   "modelPeak": -8.712999999999877,
-   "measPeak": -8.708000000000009,
+   "valueRatio": 1,
+   "plateauWidth95": 0.72,
+   "sharpPred": 4.01,
+   "sharpRatio": 0.852,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -310,12 +330,13 @@
    "sharp": 4,
    "nearestRef": 9.414175909214345,
    "refDist": 0.0558,
-   "neighborGap": 1.0435,
-   "screen": true,
-   "modelPeak": 9.470000000000125,
-   "measPeak": 9.469999999999992,
+   "valueRatio": 1,
+   "plateauWidth95": 0.41,
+   "sharpPred": 4.79,
+   "sharpRatio": 1.197,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -325,12 +346,13 @@
    "sharp": 3.6,
    "nearestRef": 10.457720324996851,
    "refDist": 0.0887,
-   "neighborGap": 1.0435,
-   "screen": true,
-   "modelPeak": 10.369000000000124,
-   "measPeak": 10.368999999999991,
+   "valueRatio": 0.9176,
+   "plateauWidth95": 0.155,
+   "sharpPred": 4.73,
+   "sharpRatio": 1.315,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -340,12 +362,13 @@
    "sharp": 3,
    "nearestRef": -12.325779168648483,
    "refDist": 0.0592,
-   "neighborGap": 1.185,
-   "screen": true,
-   "modelPeak": -12.369999999999873,
-   "measPeak": -12.385000000000009,
+   "valueRatio": 0.9997,
+   "plateauWidth95": 0.39,
+   "sharpPred": 3.6,
+   "sharpRatio": 1.199,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -355,12 +378,13 @@
    "sharp": 6.7,
    "nearestRef": 5.834668789168686,
    "refDist": 0.0153,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": 5.834999999999983,
-   "measPeak": 5.849999999999991,
+   "valueRatio": 0.9996,
+   "plateauWidth95": 0.33,
+   "sharpPred": 7.05,
+   "sharpRatio": 1.052,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 13,
@@ -370,12 +394,13 @@
    "sharp": 5.2,
    "nearestRef": 7.542564791218095,
    "refDist": 0.0346,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": 7.542999999999982,
-   "measPeak": 7.507999999999991,
+   "valueRatio": 0.9978,
+   "plateauWidth95": 0.33,
+   "sharpPred": 5.46,
+   "sharpRatio": 1.051,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 16,
@@ -385,12 +410,13 @@
    "sharp": 6.8,
    "nearestRef": 5.564109410897189,
    "refDist": 0.0121,
-   "neighborGap": 1000000000,
-   "screen": false,
-   "modelPeak": 5.5619999999999825,
-   "measPeak": 5.551999999999991,
+   "valueRatio": 0.9997,
+   "plateauWidth95": 0.325,
+   "sharpPred": 5.83,
+   "sharpRatio": 0.858,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   },
   {
    "q": 16,
@@ -400,12 +426,13 @@
    "sharp": 3.8,
    "nearestRef": 10.249860909418858,
    "refDist": 0.2111,
-   "neighborGap": 1.1349,
-   "screen": false,
-   "modelPeak": 10.451000000000123,
-   "measPeak": 10.460999999999991,
+   "valueRatio": 0.9999,
+   "plateauWidth95": 0.725,
+   "sharpPred": 3.32,
+   "sharpRatio": 0.873,
    "contrib": 1,
-   "pairVerdict": "단일선 변위 확인"
+   "pairVerdict": "단일선 변위 확인",
+   "kernel": "discrete Hann grid M=131072 (shared with measurement pipeline)"
   }
  ]
 }
